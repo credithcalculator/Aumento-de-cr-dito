@@ -13,7 +13,7 @@
         }
 
         body {
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            background: linear-gradient(135deg, #0f2027, #203a43, #2c5364);
             min-height: 100vh;
             padding: 20px;
         }
@@ -23,22 +23,22 @@
             max-width: 1400px;
             margin: 0 auto;
             background: white;
-            border-radius: 20px;
-            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+            border-radius: 24px;
+            box-shadow: 0 25px 50px -12px rgba(0,0,0,0.25);
             overflow: hidden;
         }
 
         /* Header */
         .header {
-            background: linear-gradient(135deg, #1a237e, #283593);
+            background: linear-gradient(135deg, #1e3c72, #2a5298);
             color: white;
-            padding: 25px 30px;
+            padding: 30px;
             text-align: center;
         }
 
         .header h1 {
-            font-size: 28px;
-            margin-bottom: 5px;
+            font-size: 32px;
+            margin-bottom: 8px;
         }
 
         .header p {
@@ -46,629 +46,709 @@
             font-size: 14px;
         }
 
-        /* Panel de usuario */
-        .user-panel {
-            background: #f8f9fa;
-            padding: 20px 30px;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            border-bottom: 1px solid #e0e0e0;
-            flex-wrap: wrap;
-            gap: 15px;
+        /* Pantalla de login */
+        .login-screen {
+            padding: 40px;
+            text-align: center;
+            background: #f8fafc;
         }
 
-        .user-info {
-            display: flex;
-            align-items: center;
-            gap: 15px;
+        .login-title {
+            color: #1e3c72;
+            font-size: 28px;
+            margin-bottom: 30px;
+        }
+
+        .users-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 20px;
+            max-width: 900px;
+            margin: 0 auto 30px;
+        }
+
+        .user-card {
+            background: white;
+            border-radius: 16px;
+            padding: 24px;
+            cursor: pointer;
+            transition: all 0.3s;
+            border: 2px solid #e2e8f0;
+            text-align: center;
+        }
+
+        .user-card:hover {
+            transform: translateY(-5px);
+            border-color: #2a5298;
+            box-shadow: 0 10px 25px -5px rgba(0,0,0,0.1);
         }
 
         .user-avatar {
-            width: 50px;
-            height: 50px;
-            background: linear-gradient(135deg, #667eea, #764ba2);
+            width: 70px;
+            height: 70px;
+            background: linear-gradient(135deg, #1e3c72, #2a5298);
             border-radius: 50%;
             display: flex;
             align-items: center;
             justify-content: center;
-            font-size: 24px;
+            margin: 0 auto 15px;
+            font-size: 32px;
             color: white;
         }
 
-        .user-details h3 {
-            font-size: 16px;
-            color: #333;
+        .user-name {
+            font-size: 18px;
+            font-weight: 600;
+            color: #1e293b;
+            margin-bottom: 5px;
         }
 
-        .user-details p {
+        .user-email {
             font-size: 12px;
-            color: #666;
+            color: #64748b;
+            margin-bottom: 10px;
+        }
+
+        .user-badge {
+            display: inline-block;
+            padding: 4px 12px;
+            border-radius: 20px;
+            font-size: 11px;
+            font-weight: 600;
+        }
+
+        .badge-admin { background: #fef3c7; color: #d97706; }
+        .badge-user { background: #dbeafe; color: #2563eb; }
+        .badge-readonly { background: #dcfce7; color: #16a34a; }
+
+        .login-form {
+            max-width: 400px;
+            margin: 0 auto;
+            background: white;
+            padding: 30px;
+            border-radius: 16px;
+            box-shadow: 0 4px 6px -1px rgba(0,0,0,0.1);
+        }
+
+        .login-form.hidden {
+            display: none;
+        }
+
+        /* Panel superior */
+        .top-panel {
+            background: #f1f5f9;
+            padding: 20px 30px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 15px;
+            border-bottom: 1px solid #e2e8f0;
+        }
+
+        .user-info-panel {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .user-avatar-sm {
+            width: 45px;
+            height: 45px;
+            background: linear-gradient(135deg, #1e3c72, #2a5298);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 20px;
+            color: white;
+        }
+
+        .user-text h3 {
+            font-size: 16px;
+            color: #1e293b;
+        }
+
+        .user-text p {
+            font-size: 12px;
+            color: #64748b;
         }
 
         .btn-logout {
-            background: #dc3545;
+            background: #ef4444;
             color: white;
             border: none;
-            padding: 10px 20px;
-            border-radius: 8px;
+            padding: 10px 24px;
+            border-radius: 40px;
             cursor: pointer;
             font-weight: 600;
             transition: all 0.3s;
         }
 
         .btn-logout:hover {
-            background: #c82333;
+            background: #dc2626;
             transform: translateY(-2px);
         }
 
-        /* Estadísticas */
-        .stats-grid {
+        /* Tarjetas de estadísticas */
+        .stats-cards {
             display: grid;
             grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
             gap: 20px;
             padding: 30px;
-            background: #f8f9fa;
+            background: #f8fafc;
         }
 
         .stat-card {
             background: white;
             padding: 20px;
-            border-radius: 15px;
+            border-radius: 16px;
             text-align: center;
-            box-shadow: 0 2px 10px rgba(0,0,0,0.05);
-            border-left: 4px solid #1a237e;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+            border-left: 4px solid #2a5298;
         }
 
-        .stat-value {
+        .stat-number {
             font-size: 32px;
-            font-weight: bold;
-            color: #1a237e;
+            font-weight: 700;
+            color: #1e3c72;
         }
 
         .stat-label {
             font-size: 12px;
-            color: #666;
+            color: #64748b;
             margin-top: 5px;
         }
 
-        /* Menú de iconos */
-        .menu-icons {
-            display: flex;
-            gap: 15px;
-            padding: 20px 30px;
+        /* Menú de iconos - ESTILOS COMPLETAMENTE DIFERENTES */
+        .feature-menu {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 20px;
+            padding: 30px;
             background: white;
-            border-bottom: 2px solid #f0f0f0;
-            flex-wrap: wrap;
+            border-bottom: 1px solid #e2e8f0;
         }
 
-        .menu-icon {
-            flex: 1;
-            min-width: 150px;
-            background: #f8f9fa;
-            border-radius: 12px;
-            padding: 20px;
+        .feature-card {
+            background: linear-gradient(135deg, #f8fafc, #f1f5f9);
+            border-radius: 20px;
+            padding: 28px 20px;
             text-align: center;
             cursor: pointer;
             transition: all 0.3s;
             border: 2px solid transparent;
+            position: relative;
+            overflow: hidden;
         }
 
-        .menu-icon:hover {
-            transform: translateY(-5px);
-            background: #e9ecef;
+        .feature-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.5), transparent);
+            transition: 0.5s;
         }
 
-        .menu-icon.active {
-            background: linear-gradient(135deg, #1a237e, #283593);
+        .feature-card:hover::before {
+            left: 100%;
+        }
+
+        .feature-card:hover {
+            transform: translateY(-8px);
+            box-shadow: 0 20px 30px -12px rgba(0,0,0,0.2);
+        }
+
+        .feature-card.active {
+            border-color: #2a5298;
+            background: linear-gradient(135deg, #1e3c72, #2a5298);
+        }
+
+        .feature-card.active .feature-icon,
+        .feature-card.active .feature-title,
+        .feature-card.active .feature-count {
             color: white;
-            border-color: #1a237e;
         }
 
-        .menu-icon.active .menu-icon-title {
-            color: white;
+        .feature-icon {
+            font-size: 56px;
+            margin-bottom: 15px;
+            display: inline-block;
         }
 
-        .menu-icon-emoji {
-            font-size: 48px;
-            margin-bottom: 10px;
+        .feature-title {
+            font-size: 22px;
+            font-weight: 700;
+            color: #1e293b;
+            margin-bottom: 8px;
         }
 
-        .menu-icon-title {
-            font-size: 18px;
-            font-weight: 600;
-            color: #333;
-            margin-bottom: 5px;
+        .feature-count {
+            font-size: 13px;
+            color: #64748b;
         }
 
-        .menu-icon-count {
-            font-size: 12px;
-            color: #666;
-        }
-
-        .menu-icon.active .menu-icon-count {
-            color: rgba(255,255,255,0.8);
-        }
-
-        /* Contenido de las secciones */
-        .section-content {
+        /* Contenido de secciones */
+        .section-panel {
             padding: 30px;
             display: none;
             animation: fadeIn 0.3s ease;
         }
 
-        .section-content.active {
+        .section-panel.active {
             display: block;
         }
 
         @keyframes fadeIn {
-            from {
-                opacity: 0;
-                transform: translateY(10px);
-            }
-            to {
-                opacity: 1;
-                transform: translateY(0);
-            }
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
         }
 
         /* Barra de herramientas */
-        .toolbar {
+        .toolbar-section {
             display: flex;
             justify-content: space-between;
             align-items: center;
-            margin-bottom: 20px;
             flex-wrap: wrap;
             gap: 15px;
+            margin-bottom: 25px;
+            padding-bottom: 15px;
+            border-bottom: 2px solid #e2e8f0;
         }
 
-        .toolbar h2 {
-            color: #1a237e;
+        .toolbar-section h2 {
             font-size: 24px;
+            color: #1e3c72;
+            display: flex;
+            align-items: center;
+            gap: 10px;
         }
 
-        .search-box {
+        .search-wrapper {
             display: flex;
             gap: 10px;
             flex-wrap: wrap;
         }
 
         .search-input {
-            padding: 10px 15px;
-            border: 2px solid #ddd;
-            border-radius: 8px;
+            padding: 12px 18px;
+            border: 2px solid #e2e8f0;
+            border-radius: 40px;
+            width: 280px;
             font-size: 14px;
-            width: 250px;
+            transition: all 0.3s;
+        }
+
+        .search-input:focus {
+            border-color: #2a5298;
+            outline: none;
         }
 
         .btn {
             padding: 10px 20px;
             border: none;
-            border-radius: 8px;
-            cursor: pointer;
+            border-radius: 40px;
             font-weight: 600;
+            cursor: pointer;
             transition: all 0.3s;
         }
 
         .btn-primary {
-            background: linear-gradient(135deg, #1a237e, #283593);
+            background: linear-gradient(135deg, #1e3c72, #2a5298);
             color: white;
         }
 
         .btn-success {
-            background: #28a745;
+            background: #10b981;
             color: white;
         }
 
-        .btn-warning {
-            background: #ffc107;
-            color: #333;
-        }
-
         .btn-danger {
-            background: #dc3545;
+            background: #ef4444;
             color: white;
         }
 
         .btn-sm {
-            padding: 6px 12px;
+            padding: 6px 14px;
             font-size: 12px;
         }
 
         .btn:hover {
             transform: translateY(-2px);
-            box-shadow: 0 4px 10px rgba(0,0,0,0.2);
-        }
-
-        /* Tablas */
-        .table-container {
-            overflow-x: auto;
-            margin-top: 20px;
-        }
-
-        .data-table {
-            width: 100%;
-            border-collapse: collapse;
-        }
-
-        .data-table th {
-            background: #f8f9fa;
-            padding: 12px;
-            text-align: left;
-            font-weight: 600;
-            border-bottom: 2px solid #e0e0e0;
-        }
-
-        .data-table td {
-            padding: 12px;
-            border-bottom: 1px solid #eee;
-        }
-
-        .data-table tr:hover {
-            background: #f5f5f5;
+            filter: brightness(105%);
         }
 
         /* Formulario para agregar */
-        .add-form {
-            background: #f8f9fa;
+        .add-item-form {
+            background: #f8fafc;
             padding: 20px;
-            border-radius: 12px;
-            margin-bottom: 20px;
+            border-radius: 16px;
+            margin-bottom: 25px;
             display: flex;
-            gap: 10px;
             flex-wrap: wrap;
+            gap: 12px;
             align-items: flex-end;
         }
 
-        .form-group {
+        .form-field {
             flex: 1;
             min-width: 150px;
         }
 
-        .form-group label {
+        .form-field label {
             display: block;
-            font-size: 12px;
+            font-size: 11px;
             font-weight: 600;
-            color: #666;
+            color: #64748b;
             margin-bottom: 5px;
+            text-transform: uppercase;
         }
 
-        .form-group input, .form-group select {
+        .form-field input,
+        .form-field select {
             width: 100%;
-            padding: 8px 12px;
-            border: 1px solid #ddd;
-            border-radius: 6px;
+            padding: 10px 12px;
+            border: 1px solid #e2e8f0;
+            border-radius: 10px;
             font-size: 14px;
         }
 
+        /* Tabla de datos */
+        .table-wrapper {
+            overflow-x: auto;
+            margin-top: 20px;
+        }
+
+        .data-grid {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        .data-grid th {
+            background: #f1f5f9;
+            padding: 14px;
+            text-align: left;
+            font-weight: 600;
+            color: #1e293b;
+            border-bottom: 2px solid #e2e8f0;
+        }
+
+        .data-grid td {
+            padding: 14px;
+            border-bottom: 1px solid #e2e8f0;
+        }
+
+        .data-grid tr:hover {
+            background: #f8fafc;
+        }
+
         /* Historial */
-        .history-item {
-            background: #f8f9fa;
-            border-radius: 10px;
-            padding: 15px;
-            margin-bottom: 10px;
-            border-left: 4px solid #1a237e;
+        .history-timeline {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+
+        .history-entry {
+            background: #f8fafc;
+            border-radius: 12px;
+            padding: 16px;
+            border-left: 4px solid #10b981;
             transition: all 0.2s;
         }
 
-        .history-item:hover {
-            background: #f0f0f0;
+        .history-entry:hover {
+            background: #f1f5f9;
             transform: translateX(5px);
         }
 
         .history-header {
             display: flex;
             justify-content: space-between;
-            margin-bottom: 8px;
             flex-wrap: wrap;
+            margin-bottom: 8px;
         }
 
         .history-entity {
-            font-weight: bold;
-            color: #1a237e;
+            font-weight: 700;
+            color: #1e3c72;
         }
 
         .history-amount {
             font-size: 18px;
-            font-weight: bold;
-            color: #28a745;
+            font-weight: 700;
+            color: #10b981;
         }
 
-        .history-details {
+        .history-detail {
             font-size: 12px;
-            color: #666;
+            color: #64748b;
             margin-top: 8px;
         }
 
+        /* Alertas */
+        .alert-toast {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            padding: 12px 24px;
+            border-radius: 40px;
+            background: white;
+            box-shadow: 0 10px 25px -5px rgba(0,0,0,0.2);
+            display: none;
+            z-index: 1000;
+            animation: slideIn 0.3s ease;
+        }
+
+        @keyframes slideIn {
+            from { transform: translateX(100%); opacity: 0; }
+            to { transform: translateX(0); opacity: 1; }
+        }
+
+        .alert-success { border-left: 4px solid #10b981; color: #065f46; }
+        .alert-error { border-left: 4px solid #ef4444; color: #991b1b; }
+
         /* Modal */
-        .modal {
+        .modal-overlay {
             position: fixed;
             top: 0;
             left: 0;
             right: 0;
             bottom: 0;
-            background: rgba(0,0,0,0.7);
+            background: rgba(0,0,0,0.5);
             display: flex;
-            justify-content: center;
             align-items: center;
-            z-index: 1000;
+            justify-content: center;
+            z-index: 2000;
         }
 
-        .modal-content {
+        .modal-container {
             background: white;
+            border-radius: 24px;
             padding: 30px;
-            border-radius: 15px;
             max-width: 500px;
             width: 90%;
         }
 
-        .modal-content h3 {
-            color: #1a237e;
+        .modal-container h3 {
+            color: #1e3c72;
             margin-bottom: 20px;
-        }
-
-        .alert {
-            padding: 12px;
-            border-radius: 8px;
-            margin-bottom: 15px;
-            display: none;
-        }
-
-        .alert-success {
-            background: #d4edda;
-            color: #155724;
-            border: 1px solid #c3e6cb;
-        }
-
-        .alert-error {
-            background: #f8d7da;
-            color: #721c24;
-            border: 1px solid #f5c6cb;
         }
 
         .hidden {
             display: none;
         }
-
-        @media (max-width: 768px) {
-            .menu-icons {
-                flex-direction: column;
-            }
-            .menu-icon {
-                min-width: auto;
-            }
-            .add-form {
-                flex-direction: column;
-            }
-            .form-group {
-                width: 100%;
-            }
-        }
     </style>
 </head>
 <body>
     <div class="main-container">
-        <!-- Header -->
         <div class="header">
             <h1>🏦 Nuko Capital</h1>
-            <p>Gestión de Límites de Crédito</p>
+            <p>Sistema de Gestión de Límites de Crédito</p>
         </div>
 
-        <!-- Pantalla de selección de usuario -->
-        <div id="loginScreen">
-            <div style="padding: 40px; text-align: center;">
-                <h2 style="color: #1a237e; margin-bottom: 20px;">Selecciona tu usuario</h2>
-                <div id="usersList" style="display: grid; gap: 15px; max-width: 400px; margin: 0 auto;"></div>
+        <!-- Pantalla de Login -->
+        <div id="loginContainer">
+            <div class="login-screen">
+                <h2 class="login-title">🔐 Acceso al Sistema</h2>
+                <div class="users-grid" id="usersGrid"></div>
+                <div id="passwordForm" class="login-form hidden">
+                    <h3 style="margin-bottom: 20px;">🔑 Ingrese su clave</h3>
+                    <input type="password" id="userPassword" class="search-input" style="width: 100%; margin-bottom: 15px;" placeholder="Contraseña">
+                    <div style="display: flex; gap: 10px;">
+                        <button class="btn btn-primary" onclick="validatePassword()">✅ Validar</button>
+                        <button class="btn" onclick="cancelPassword()">↩️ Cancelar</button>
+                    </div>
+                </div>
             </div>
         </div>
 
-        <!-- Dashboard principal -->
-        <div id="dashboard" style="display: none;">
-            <!-- Panel de usuario -->
-            <div class="user-panel">
-                <div class="user-info">
-                    <div class="user-avatar" id="userAvatar">👤</div>
-                    <div class="user-details">
-                        <h3 id="userName">Usuario</h3>
-                        <p id="userEmail">correo@ejemplo.com</p>
+        <!-- Dashboard Principal -->
+        <div id="dashboardContainer" style="display: none;">
+            <!-- Panel Superior -->
+            <div class="top-panel">
+                <div class="user-info-panel">
+                    <div class="user-avatar-sm" id="dashboardAvatar">👤</div>
+                    <div class="user-text">
+                        <h3 id="dashboardUserName">Usuario</h3>
+                        <p id="dashboardUserEmail">correo@ejemplo.com</p>
                     </div>
                 </div>
                 <button class="btn-logout" onclick="logout()">🚪 Cerrar Sesión</button>
             </div>
 
             <!-- Estadísticas -->
-            <div class="stats-grid">
+            <div class="stats-cards">
                 <div class="stat-card">
-                    <div class="stat-value" id="totalBrokers">0</div>
-                    <div class="stat-label">Total Brokers</div>
+                    <div class="stat-number" id="statBrokers">0</div>
+                    <div class="stat-label">Brokers Registrados</div>
                 </div>
                 <div class="stat-card">
-                    <div class="stat-value" id="totalCarriers">0</div>
-                    <div class="stat-label">Total Carriers</div>
+                    <div class="stat-number" id="statCarriers">0</div>
+                    <div class="stat-label">Carriers Registrados</div>
                 </div>
                 <div class="stat-card">
-                    <div class="stat-value" id="totalLimit">$0</div>
+                    <div class="stat-number" id="statTotalLimit">$0</div>
                     <div class="stat-label">Límite Total</div>
                 </div>
                 <div class="stat-card">
-                    <div class="stat-value" id="totalHistory">0</div>
-                    <div class="stat-label">Registros Historial</div>
+                    <div class="stat-number" id="statHistory">0</div>
+                    <div class="stat-label">Movimientos</div>
                 </div>
             </div>
 
-            <!-- Menú de iconos -->
-            <div class="menu-icons">
-                <div class="menu-icon" onclick="switchSection('brokers')" id="menuBrokers">
-                    <div class="menu-icon-emoji">🏢</div>
-                    <div class="menu-icon-title">Brokers</div>
-                    <div class="menu-icon-count" id="brokersCount">0 brokers</div>
+            <!-- Menú de características - ICONOS COMPLETAMENTE DIFERENTES -->
+            <div class="feature-menu">
+                <div class="feature-card" onclick="switchSection('brokers')" id="featureBrokers">
+                    <div class="feature-icon">📊</div>
+                    <div class="feature-title">Brokers</div>
+                    <div class="feature-count" id="featureBrokersCount">0 registros</div>
                 </div>
-                <div class="menu-icon" onclick="switchSection('carriers')" id="menuCarriers">
-                    <div class="menu-icon-emoji">🚚</div>
-                    <div class="menu-icon-title">Carriers</div>
-                    <div class="menu-icon-count" id="carriersCount">0 carriers</div>
+                <div class="feature-card" onclick="switchSection('carriers')" id="featureCarriers">
+                    <div class="feature-icon">🚛</div>
+                    <div class="feature-title">Carriers</div>
+                    <div class="feature-count" id="featureCarriersCount">0 registros</div>
                 </div>
-                <div class="menu-icon" onclick="switchSection('history')" id="menuHistory">
-                    <div class="menu-icon-emoji">📜</div>
-                    <div class="menu-icon-title">Historial</div>
-                    <div class="menu-icon-count" id="historyCount">0 registros</div>
+                <div class="feature-card" onclick="switchSection('history')" id="featureHistory">
+                    <div class="feature-icon">📋</div>
+                    <div class="feature-title">Historial</div>
+                    <div class="feature-count" id="featureHistoryCount">0 registros</div>
                 </div>
             </div>
 
             <!-- Sección Brokers -->
-            <div id="brokersSection" class="section-content">
-                <div class="toolbar">
-                    <h2>🏢 Gestión de Brokers</h2>
-                    <div class="search-box">
-                        <input type="text" id="brokerSearch" class="search-input" placeholder="🔍 Buscar broker..." onkeyup="filterBrokers()">
+            <div id="brokersPanel" class="section-panel">
+                <div class="toolbar-section">
+                    <h2>📊 Gestión de Brokers</h2>
+                    <div class="search-wrapper">
+                        <input type="text" id="brokerSearch" class="search-input" placeholder="🔍 Buscar por nombre o MC..." onkeyup="filterBrokers()">
                         <button class="btn btn-success" onclick="exportBrokersCSV()">📥 Exportar CSV</button>
                     </div>
                 </div>
-
-                <!-- Formulario para agregar broker -->
-                <div class="add-form" id="brokerAddForm">
-                    <div class="form-group">
-                        <label>Nombre del Broker</label>
-                        <input type="text" id="newBrokerName" placeholder="Ej: Global Logistics">
-                    </div>
-                    <div class="form-group">
-                        <label>MC Number</label>
-                        <input type="text" id="newBrokerMC" placeholder="Ej: MC123456">
-                    </div>
-                    <div class="form-group">
-                        <label>Límite Inicial (USD)</label>
-                        <input type="number" id="newBrokerLimit" placeholder="0">
-                    </div>
-                    <button class="btn btn-primary" onclick="addBroker()">➕ Agregar Broker</button>
+                <div class="add-item-form">
+                    <div class="form-field"><label>🏢 Nombre Broker</label><input type="text" id="newBrokerName" placeholder="Ej: Global Logistics"></div>
+                    <div class="form-field"><label>🔢 MC Number</label><input type="text" id="newBrokerMC" placeholder="Ej: MC123456"></div>
+                    <div class="form-field"><label>💰 Límite (USD)</label><input type="number" id="newBrokerLimit" placeholder="0"></div>
+                    <button class="btn btn-primary" onclick="addBroker()">➕ Agregar</button>
                 </div>
-
-                <div id="brokerAlert" class="alert"></div>
-                <div class="table-container">
-                    <div id="brokersList"></div>
-                </div>
+                <div class="table-wrapper" id="brokersTable"></div>
             </div>
 
             <!-- Sección Carriers -->
-            <div id="carriersSection" class="section-content">
-                <div class="toolbar">
-                    <h2>🚚 Gestión de Carriers</h2>
-                    <div class="search-box">
-                        <input type="text" id="carrierSearch" class="search-input" placeholder="🔍 Buscar carrier..." onkeyup="filterCarriers()">
+            <div id="carriersPanel" class="section-panel">
+                <div class="toolbar-section">
+                    <h2>🚛 Gestión de Carriers</h2>
+                    <div class="search-wrapper">
+                        <input type="text" id="carrierSearch" class="search-input" placeholder="🔍 Buscar por nombre..." onkeyup="filterCarriers()">
                         <button class="btn btn-success" onclick="exportCarriersCSV()">📥 Exportar CSV</button>
                     </div>
                 </div>
-
-                <!-- Formulario para agregar carrier -->
-                <div class="add-form" id="carrierAddForm">
-                    <div class="form-group">
-                        <label>Nombre del Carrier</label>
-                        <input type="text" id="newCarrierName" placeholder="Ej: Carrier Express">
-                    </div>
-                    <div class="form-group">
-                        <label>Unidades de Poder</label>
-                        <input type="number" id="newCarrierUnits" placeholder="0">
-                    </div>
-                    <div class="form-group">
-                        <label>Fecha Contrato</label>
-                        <input type="date" id="newCarrierDate">
-                    </div>
-                    <div class="form-group">
-                        <label>Tipo Contrato</label>
-                        <select id="newCarrierType">
-                            <option value="viejo">Viejo (50k por unidad)</option>
-                            <option value="nuevo">Nuevo (30k por unidad)</option>
-                        </select>
-                    </div>
-                    <div class="form-group">
-                        <label>Límite Inicial (USD)</label>
-                        <input type="number" id="newCarrierLimit" placeholder="0">
-                    </div>
-                    <button class="btn btn-primary" onclick="addCarrier()">➕ Agregar Carrier</button>
+                <div class="add-item-form">
+                    <div class="form-field"><label>🚛 Nombre Carrier</label><input type="text" id="newCarrierName" placeholder="Ej: Carrier Express"></div>
+                    <div class="form-field"><label>⚡ Unidades Poder</label><input type="number" id="newCarrierUnits" placeholder="0"></div>
+                    <div class="form-field"><label>📅 Fecha Contrato</label><input type="date" id="newCarrierDate"></div>
+                    <div class="form-field"><label>📋 Tipo</label><select id="newCarrierType"><option value="viejo">Viejo (50k/unidad)</option><option value="nuevo">Nuevo (30k/unidad)</option></select></div>
+                    <div class="form-field"><label>💰 Límite (USD)</label><input type="number" id="newCarrierLimit" placeholder="0"></div>
+                    <button class="btn btn-primary" onclick="addCarrier()">➕ Agregar</button>
                 </div>
-
-                <div id="carrierAlert" class="alert"></div>
-                <div class="table-container">
-                    <div id="carriersList"></div>
-                </div>
+                <div class="table-wrapper" id="carriersTable"></div>
             </div>
 
             <!-- Sección Historial -->
-            <div id="historySection" class="section-content">
-                <div class="toolbar">
-                    <h2>📜 Historial de Aumentos</h2>
-                    <div class="search-box">
-                        <input type="text" id="historySearch" class="search-input" placeholder="🔍 Buscar en historial..." onkeyup="filterHistory()">
+            <div id="historyPanel" class="section-panel">
+                <div class="toolbar-section">
+                    <h2>📋 Historial de Aumentos</h2>
+                    <div class="search-wrapper">
+                        <input type="text" id="historySearch" class="search-input" placeholder="🔍 Buscar..." onkeyup="filterHistory()">
                         <button class="btn btn-success" onclick="exportHistoryCSV()">📥 Exportar CSV</button>
-                        <button class="btn btn-danger" onclick="clearHistory()" id="clearHistoryBtn">🗑️ Limpiar Historial</button>
+                        <button class="btn btn-danger" onclick="clearHistory()" id="clearHistoryBtn">🗑️ Limpiar</button>
                     </div>
                 </div>
-                <div id="historyList"></div>
+                <div id="historyList" class="history-timeline"></div>
             </div>
         </div>
     </div>
 
-    <!-- Modal para aumentar crédito -->
-    <div id="increaseModal" class="modal" style="display: none;">
-        <div class="modal-content">
+    <!-- Modal para aumentar -->
+    <div id="increaseModal" class="modal-overlay hidden">
+        <div class="modal-container">
             <h3>💰 Aumentar Crédito</h3>
-            <div class="form-group">
-                <label>Entidad</label>
-                <input type="text" id="modalEntity" readonly style="background: #f5f5f5;">
-            </div>
-            <div class="form-group">
-                <label>Límite Actual</label>
-                <input type="text" id="modalCurrentLimit" readonly style="background: #f5f5f5;">
-            </div>
-            <div class="form-group">
-                <label>Monto a Aumentar (USD)</label>
-                <input type="number" id="modalAmount" placeholder="Ingrese el monto">
-            </div>
-            <div class="form-group">
-                <label>Motivo</label>
-                <textarea id="modalReason" rows="3" placeholder="Motivo del aumento..."></textarea>
-            </div>
-            <div style="display: flex; gap: 10px; justify-content: flex-end; margin-top: 20px;">
+            <div class="form-field" style="margin-bottom: 15px;"><label>Entidad</label><input type="text" id="modalEntity" readonly style="background:#f1f5f9;"></div>
+            <div class="form-field" style="margin-bottom: 15px;"><label>Límite Actual</label><input type="text" id="modalCurrentLimit" readonly style="background:#f1f5f9;"></div>
+            <div class="form-field" style="margin-bottom: 15px;"><label>Monto a Aumentar (USD)</label><input type="number" id="modalAmount" placeholder="Ingrese el monto"></div>
+            <div class="form-field" style="margin-bottom: 20px;"><label>Motivo</label><textarea id="modalReason" rows="3" style="width:100%; padding:10px; border:1px solid #e2e8f0; border-radius:10px;"></textarea></div>
+            <div style="display: flex; gap: 10px; justify-content: flex-end;">
                 <button class="btn" onclick="closeModal()">Cancelar</button>
                 <button class="btn btn-primary" onclick="applyIncrease()">Aplicar Aumento</button>
             </div>
         </div>
     </div>
 
+    <div id="toastMessage" class="alert-toast"></div>
+
     <script>
         // ============================================
-        // DATOS INICIALES (SE GUARDAN EN LOCALSTORAGE)
+        // CONFIGURACIÓN - TODOS LOS USUARIOS CON CLAVE
         // ============================================
         
+        const USERS_WITH_PASSWORDS = {
+            "admin@nukocapital.com": { name: "Administrador", password: "YRAC26", role: "admin", soloLectura: false },
+            "valeria.romero@nukocapital.com": { name: "Valeria Romero", password: "VALERIA2024", role: "auditor", soloLectura: true },
+            "yeimy.gaviria@nukocapital.com": { name: "Yeimy Gaviria", password: "YEIMY2024", role: "user", soloLectura: false },
+            "andres.acosta@nukocapital.com": { name: "Andres Acosta", password: "ANDRES2024", role: "user", soloLectura: false },
+            "roberto.morante@nukocapital.com": { name: "Roberto Morante", password: "ROBERTO2024", role: "user", soloLectura: false }
+        };
+        
+        // DATOS - Pueden ser miles de registros
         let brokers = [];
         let carriers = [];
         let history = [];
         let currentUser = null;
+        let selectedUserEmail = null;
         let pendingIncrease = null;
         
-        // Cargar datos guardados o usar datos por defecto
+        // Cargar datos desde localStorage
         function loadData() {
-            const savedBrokers = localStorage.getItem('nuko_brokers');
-            const savedCarriers = localStorage.getItem('nuko_carriers');
-            const savedHistory = localStorage.getItem('nuko_history');
+            const savedBrokers = localStorage.getItem('nuko_brokers_v2');
+            const savedCarriers = localStorage.getItem('nuko_carriers_v2');
+            const savedHistory = localStorage.getItem('nuko_history_v2');
             
             if (savedBrokers) {
                 brokers = JSON.parse(savedBrokers);
             } else {
-                brokers = [
-                    { id: 1, nombre: "Global Logistics", mc: "MC123456", limite: 50000 },
-                    { id: 2, nombre: "Express Freight", mc: "MC789012", limite: 75000 },
-                    { id: 3, nombre: "Pacific Transport", mc: "MC345678", limite: 100000 }
-                ];
+                // Datos de ejemplo - puedes agregar miles
+                brokers = [];
+                for (let i = 1; i <= 50; i++) {
+                    brokers.push({
+                        id: i,
+                        nombre: `Broker ${i}`,
+                        mc: `MC${String(i).padStart(6, '0')}`,
+                        limite: Math.floor(Math.random() * 100000) + 50000
+                    });
+                }
             }
             
             if (savedCarriers) {
                 carriers = JSON.parse(savedCarriers);
             } else {
-                carriers = [
-                    { id: 1, nombre: "Carrier A", powerUnits: 3, fechaContrato: "2024-08-15", tipoContrato: "nuevo", limitePorUnidad: 30000, limite: 90000 },
-                    { id: 2, nombre: "Carrier B", powerUnits: 4, fechaContrato: "2023-05-20", tipoContrato: "viejo", limitePorUnidad: 50000, limite: 200000 },
-                    { id: 3, nombre: "Carrier C", powerUnits: 2, fechaContrato: "2024-09-10", tipoContrato: "nuevo", limitePorUnidad: 30000, limite: 60000 }
-                ];
+                carriers = [];
+                for (let i = 1; i <= 50; i++) {
+                    const tipo = i % 2 === 0 ? 'nuevo' : 'viejo';
+                    const limitePorUnidad = tipo === 'nuevo' ? 30000 : 50000;
+                    const powerUnits = Math.floor(Math.random() * 10) + 1;
+                    carriers.push({
+                        id: i,
+                        nombre: `Carrier ${i}`,
+                        powerUnits: powerUnits,
+                        fechaContrato: `2024-${String(Math.floor(Math.random() * 12) + 1).padStart(2, '0')}-${String(Math.floor(Math.random() * 28) + 1).padStart(2, '0')}`,
+                        tipoContrato: tipo,
+                        limitePorUnidad: limitePorUnidad,
+                        limite: powerUnits * limitePorUnidad
+                    });
+                }
             }
             
             if (savedHistory) {
@@ -681,48 +761,152 @@
         }
         
         function saveData() {
-            localStorage.setItem('nuko_brokers', JSON.stringify(brokers));
-            localStorage.setItem('nuko_carriers', JSON.stringify(carriers));
-            localStorage.setItem('nuko_history', JSON.stringify(history));
+            localStorage.setItem('nuko_brokers_v2', JSON.stringify(brokers));
+            localStorage.setItem('nuko_carriers_v2', JSON.stringify(carriers));
+            localStorage.setItem('nuko_history_v2', JSON.stringify(history));
         }
         
-        // Formatear números
         function formatNumber(num) {
             return num.toLocaleString('es-CO');
         }
         
-        // Mostrar alerta
-        function showAlert(alertId, message, type) {
-            const alertDiv = document.getElementById(alertId);
-            if (alertDiv) {
-                alertDiv.textContent = message;
-                alertDiv.className = `alert alert-${type}`;
-                alertDiv.style.display = 'block';
-                setTimeout(() => {
-                    alertDiv.style.display = 'none';
-                }, 3000);
-            }
+        function showToast(message, type) {
+            const toast = document.getElementById('toastMessage');
+            toast.textContent = message;
+            toast.className = `alert-toast alert-${type}`;
+            toast.style.display = 'block';
+            setTimeout(() => {
+                toast.style.display = 'none';
+            }, 3000);
         }
         
-        // Actualizar estadísticas
         function updateStats() {
             const totalBrokers = brokers.length;
             const totalCarriers = carriers.length;
-            const totalLimit = [...brokers, ...carriers].reduce((sum, item) => sum + item.limite, 0);
+            const totalLimit = [...brokers, ...carriers].reduce((sum, i) => sum + i.limite, 0);
             const totalHistory = history.length;
             
-            document.getElementById('totalBrokers').textContent = totalBrokers;
-            document.getElementById('totalCarriers').textContent = totalCarriers;
-            document.getElementById('totalLimit').textContent = '$' + formatNumber(totalLimit);
-            document.getElementById('totalHistory').textContent = totalHistory;
+            document.getElementById('statBrokers').textContent = formatNumber(totalBrokers);
+            document.getElementById('statCarriers').textContent = formatNumber(totalCarriers);
+            document.getElementById('statTotalLimit').textContent = '$' + formatNumber(totalLimit);
+            document.getElementById('statHistory').textContent = formatNumber(totalHistory);
             
-            document.getElementById('brokersCount').textContent = totalBrokers + ' brokers';
-            document.getElementById('carriersCount').textContent = totalCarriers + ' carriers';
-            document.getElementById('historyCount').textContent = totalHistory + ' registros';
+            document.getElementById('featureBrokersCount').textContent = formatNumber(totalBrokers) + ' registros';
+            document.getElementById('featureCarriersCount').textContent = formatNumber(totalCarriers) + ' registros';
+            document.getElementById('featureHistoryCount').textContent = formatNumber(totalHistory) + ' registros';
         }
         
         // ============================================
-        // SECCIÓN BROKERS
+        // LOGIN
+        // ============================================
+        
+        function loadUsersList() {
+            const container = document.getElementById('usersGrid');
+            container.innerHTML = '';
+            
+            Object.keys(USERS_WITH_PASSWORDS).forEach(email => {
+                const user = USERS_WITH_PASSWORDS[email];
+                const card = document.createElement('div');
+                card.className = 'user-card';
+                card.onclick = () => showPasswordForm(email, user);
+                card.innerHTML = `
+                    <div class="user-avatar">${user.role === 'admin' ? '👑' : (user.soloLectura ? '👀' : '👤')}</div>
+                    <div class="user-name">${user.name}</div>
+                    <div class="user-email">${email}</div>
+                    <div class="user-badge ${user.role === 'admin' ? 'badge-admin' : (user.soloLectura ? 'badge-readonly' : 'badge-user')}">
+                        ${user.role === 'admin' ? 'Administrador' : (user.soloLectura ? 'Solo Lectura' : 'Usuario')}
+                    </div>
+                `;
+                container.appendChild(card);
+            });
+        }
+        
+        function showPasswordForm(email, user) {
+            selectedUserEmail = email;
+            document.getElementById('passwordForm').classList.remove('hidden');
+            document.getElementById('userPassword').value = '';
+            document.getElementById('userPassword').focus();
+        }
+        
+        function validatePassword() {
+            const password = document.getElementById('userPassword').value;
+            const user = USERS_WITH_PASSWORDS[selectedUserEmail];
+            
+            if (user && user.password === password) {
+                currentUser = {
+                    name: user.name,
+                    email: selectedUserEmail,
+                    role: user.role,
+                    soloLectura: user.soloLectura || false,
+                    isAdmin: user.role === 'admin'
+                };
+                
+                document.getElementById('dashboardUserName').textContent = currentUser.name;
+                document.getElementById('dashboardUserEmail').textContent = currentUser.email;
+                document.getElementById('dashboardAvatar').textContent = currentUser.isAdmin ? '👑' : (currentUser.soloLectura ? '👀' : '👤');
+                
+                document.getElementById('loginContainer').style.display = 'none';
+                document.getElementById('dashboardContainer').style.display = 'block';
+                
+                if (currentUser.soloLectura) {
+                    document.getElementById('clearHistoryBtn')?.classList.add('hidden');
+                }
+                
+                loadData();
+                updateStats();
+                renderBrokers();
+                renderCarriers();
+                renderHistory();
+                switchSection('brokers');
+                
+                showToast(`✅ Bienvenido ${currentUser.name}`, 'success');
+            } else {
+                showToast('❌ Contraseña incorrecta', 'error');
+                document.getElementById('userPassword').value = '';
+                document.getElementById('userPassword').focus();
+            }
+        }
+        
+        function cancelPassword() {
+            document.getElementById('passwordForm').classList.add('hidden');
+            selectedUserEmail = null;
+        }
+        
+        function logout() {
+            if (confirm('¿Cerrar sesión?')) {
+                currentUser = null;
+                document.getElementById('loginContainer').style.display = 'block';
+                document.getElementById('dashboardContainer').style.display = 'none';
+                document.getElementById('passwordForm').classList.add('hidden');
+                loadUsersList();
+            }
+        }
+        
+        // ============================================
+        // NAVEGACIÓN
+        // ============================================
+        
+        function switchSection(section) {
+            document.querySelectorAll('.feature-card').forEach(card => card.classList.remove('active'));
+            document.querySelectorAll('.section-panel').forEach(panel => panel.classList.remove('active'));
+            
+            if (section === 'brokers') {
+                document.getElementById('featureBrokers').classList.add('active');
+                document.getElementById('brokersPanel').classList.add('active');
+                renderBrokers();
+            } else if (section === 'carriers') {
+                document.getElementById('featureCarriers').classList.add('active');
+                document.getElementById('carriersPanel').classList.add('active');
+                renderCarriers();
+            } else if (section === 'history') {
+                document.getElementById('featureHistory').classList.add('active');
+                document.getElementById('historyPanel').classList.add('active');
+                renderHistory();
+            }
+        }
+        
+        // ============================================
+        // BROKERS
         // ============================================
         
         function renderBrokers() {
@@ -732,119 +916,119 @@
                 b.mc.toLowerCase().includes(searchTerm)
             );
             
-            const container = document.getElementById('brokersList');
+            const container = document.getElementById('brokersTable');
             if (!filtered.length) {
-                container.innerHTML = '<p style="text-align:center; padding:40px;">No hay brokers registrados</p>';
+                container.innerHTML = '<div style="text-align:center; padding:40px;">📭 No hay brokers registrados</div>';
                 return;
             }
             
-            let html = '<table class="data-table"><thead><tr><th>#</th><th>Nombre</th><th>MC</th><th>Límite Actual</th><th>Acciones</th></tr></thead><tbody>';
-            filtered.forEach((broker, index) => {
-                html += `
-                    <tr>
-                        <td>${index + 1}</td>
-                        <td><strong>${broker.nombre}</strong></td>
-                        <td><code>${broker.mc}</code></td>
-                        <td>$${formatNumber(broker.limite)}</td>
-                        <td>
-                            <button class="btn btn-success btn-sm" onclick="openIncreaseModal('broker', ${broker.id}, '${broker.nombre}', ${broker.limite})">➕ Aumentar</button>
-                            <button class="btn btn-danger btn-sm" onclick="deleteBroker(${broker.id})">🗑️ Eliminar</button>
-                        </td>
-                    </tr>
-                `;
+            let html = `<table class="data-grid"><thead><tr><th>#</th><th>Nombre</th><th>MC Number</th><th>Límite Actual</th>`;
+            if (!currentUser?.soloLectura) html += `<th>Acciones</th>`;
+            html += `</tr></thead><tbody>`;
+            
+            filtered.forEach((b, idx) => {
+                html += `<tr>
+                    <td>${idx + 1}</td>
+                    <td><strong>${b.nombre}</strong></td>
+                    <td><code>${b.mc}</code></td>
+                    <td><strong>$${formatNumber(b.limite)}</strong></td>`;
+                if (!currentUser?.soloLectura) {
+                    html += `<td>
+                        <button class="btn btn-success btn-sm" onclick="openIncreaseModal('broker', ${b.id}, '${b.nombre}', ${b.limite})">➕ Aumentar</button>
+                        <button class="btn btn-danger btn-sm" onclick="deleteBroker(${b.id})">🗑️ Eliminar</button>
+                    </td>`;
+                }
+                html += `</tr>`;
             });
-            html += '</tbody></table>';
+            html += `</tbody></table>`;
             container.innerHTML = html;
         }
         
-        function filterBrokers() {
-            renderBrokers();
-        }
+        function filterBrokers() { renderBrokers(); }
         
         function addBroker() {
+            if (currentUser?.soloLectura) { showToast('No tienes permisos', 'error'); return; }
+            
             const nombre = document.getElementById('newBrokerName').value.trim();
             const mc = document.getElementById('newBrokerMC').value.trim();
             const limite = parseFloat(document.getElementById('newBrokerLimit').value);
             
             if (!nombre || !mc || !limite) {
-                showAlert('brokerAlert', 'Complete todos los campos', 'error');
+                showToast('Complete todos los campos', 'error');
                 return;
             }
             
             const newId = brokers.length > 0 ? Math.max(...brokers.map(b => b.id)) + 1 : 1;
-            brokers.push({
-                id: newId,
-                nombre: nombre,
-                mc: mc,
-                limite: limite
-            });
-            
+            brokers.push({ id: newId, nombre, mc, limite });
             saveData();
-            renderBrokers();
-            updateStats();
             
             document.getElementById('newBrokerName').value = '';
             document.getElementById('newBrokerMC').value = '';
             document.getElementById('newBrokerLimit').value = '';
             
-            showAlert('brokerAlert', `✅ Broker "${nombre}" agregado correctamente`, 'success');
+            renderBrokers();
+            updateStats();
+            showToast(`✅ Broker "${nombre}" agregado`, 'success');
         }
         
         function deleteBroker(id) {
+            if (currentUser?.soloLectura) { showToast('No tienes permisos', 'error'); return; }
             if (confirm('¿Eliminar este broker?')) {
                 const broker = brokers.find(b => b.id === id);
                 brokers = brokers.filter(b => b.id !== id);
                 saveData();
                 renderBrokers();
                 updateStats();
-                showAlert('brokerAlert', `✅ Broker "${broker.nombre}" eliminado`, 'success');
+                showToast(`✅ Broker "${broker.nombre}" eliminado`, 'success');
             }
         }
         
         // ============================================
-        // SECCIÓN CARRIERS
+        // CARRIERS
         // ============================================
         
         function renderCarriers() {
             const searchTerm = document.getElementById('carrierSearch')?.value.toLowerCase() || '';
             const filtered = carriers.filter(c => c.nombre.toLowerCase().includes(searchTerm));
             
-            const container = document.getElementById('carriersList');
+            const container = document.getElementById('carriersTable');
             if (!filtered.length) {
-                container.innerHTML = '<p style="text-align:center; padding:40px;">No hay carriers registrados</p>';
+                container.innerHTML = '<div style="text-align:center; padding:40px;">📭 No hay carriers registrados</div>';
                 return;
             }
             
-            let html = '<table class="data-table"><thead><tr><th>#</th><th>Nombre</th><th>Unidades</th><th>Fecha Contrato</th><th>Tipo</th><th>Límite/Unidad</th><th>Límite Actual</th><th>Acciones</th></tr></thead><tbody>';
-            filtered.forEach((carrier, index) => {
-                const fecha = carrier.fechaContrato ? new Date(carrier.fechaContrato).toLocaleDateString('es-ES') : '-';
-                const tipoLabel = carrier.tipoContrato === 'nuevo' ? 'Nuevo (30k)' : 'Viejo (50k)';
-                const tipoColor = carrier.tipoContrato === 'nuevo' ? '#4CAF50' : '#FF9800';
-                html += `
-                    <tr>
-                        <td>${index + 1}</td>
-                        <td><strong>${carrier.nombre}</strong></td>
-                        <td>${carrier.powerUnits || '-'}</td>
-                        <td>${fecha}</td>
-                        <td><span style="color:${tipoColor}">${tipoLabel}</span></td>
-                        <td>$${formatNumber(carrier.limitePorUnidad)}</td>
-                        <td>$${formatNumber(carrier.limite)}</td>
-                        <td>
-                            <button class="btn btn-success btn-sm" onclick="openIncreaseModal('carrier', ${carrier.id}, '${carrier.nombre}', ${carrier.limite})">➕ Aumentar</button>
-                            <button class="btn btn-danger btn-sm" onclick="deleteCarrier(${carrier.id})">🗑️ Eliminar</button>
-                        </td>
-                    </tr>
-                `;
+            let html = `<table class="data-grid"><thead><tr><th>#</th><th>Nombre</th><th>Unidades</th><th>Fecha</th><th>Tipo</th><th>Límite/Unidad</th><th>Límite Total</th>`;
+            if (!currentUser?.soloLectura) html += `<th>Acciones</th>`;
+            html += `</tr></thead><tbody>`;
+            
+            filtered.forEach((c, idx) => {
+                const fecha = c.fechaContrato ? new Date(c.fechaContrato).toLocaleDateString('es-ES') : '-';
+                const tipoColor = c.tipoContrato === 'nuevo' ? '#10b981' : '#f59e0b';
+                html += `<tr>
+                    <td>${idx + 1}</td>
+                    <td><strong>${c.nombre}</strong></td>
+                    <td>${c.powerUnits}</td>
+                    <td>${fecha}</td>
+                    <td style="color:${tipoColor}">${c.tipoContrato === 'nuevo' ? 'Nuevo (30k)' : 'Viejo (50k)'}</td>
+                    <td>$${formatNumber(c.limitePorUnidad)}</td>
+                    <td><strong>$${formatNumber(c.limite)}</strong></td>`;
+                if (!currentUser?.soloLectura) {
+                    html += `<td>
+                        <button class="btn btn-success btn-sm" onclick="openIncreaseModal('carrier', ${c.id}, '${c.nombre}', ${c.limite})">➕ Aumentar</button>
+                        <button class="btn btn-danger btn-sm" onclick="deleteCarrier(${c.id})">🗑️ Eliminar</button>
+                    </td>`;
+                }
+                html += `</tr>`;
             });
-            html += '</tbody></table>';
+            html += `</tbody></table>`;
             container.innerHTML = html;
         }
         
-        function filterCarriers() {
-            renderCarriers();
-        }
+        function filterCarriers() { renderCarriers(); }
         
         function addCarrier() {
+            if (currentUser?.soloLectura) { showToast('No tienes permisos', 'error'); return; }
+            
             const nombre = document.getElementById('newCarrierName').value.trim();
             const powerUnits = parseFloat(document.getElementById('newCarrierUnits').value);
             const fechaContrato = document.getElementById('newCarrierDate').value;
@@ -852,54 +1036,49 @@
             const limite = parseFloat(document.getElementById('newCarrierLimit').value);
             
             if (!nombre || !powerUnits || !limite) {
-                showAlert('carrierAlert', 'Complete los campos obligatorios (Nombre, Unidades, Límite)', 'error');
+                showToast('Complete los campos obligatorios', 'error');
                 return;
             }
             
             const limitePorUnidad = tipoContrato === 'nuevo' ? 30000 : 50000;
-            
             const newId = carriers.length > 0 ? Math.max(...carriers.map(c => c.id)) + 1 : 1;
+            
             carriers.push({
-                id: newId,
-                nombre: nombre,
-                powerUnits: powerUnits,
-                fechaContrato: fechaContrato || null,
-                tipoContrato: tipoContrato,
-                limitePorUnidad: limitePorUnidad,
-                limite: limite
+                id: newId, nombre, powerUnits, fechaContrato: fechaContrato || null,
+                tipoContrato, limitePorUnidad, limite
             });
             
             saveData();
-            renderCarriers();
-            updateStats();
             
             document.getElementById('newCarrierName').value = '';
             document.getElementById('newCarrierUnits').value = '';
             document.getElementById('newCarrierDate').value = '';
-            document.getElementById('newCarrierType').value = 'viejo';
             document.getElementById('newCarrierLimit').value = '';
             
-            showAlert('carrierAlert', `✅ Carrier "${nombre}" agregado correctamente`, 'success');
+            renderCarriers();
+            updateStats();
+            showToast(`✅ Carrier "${nombre}" agregado`, 'success');
         }
         
         function deleteCarrier(id) {
+            if (currentUser?.soloLectura) { showToast('No tienes permisos', 'error'); return; }
             if (confirm('¿Eliminar este carrier?')) {
                 const carrier = carriers.find(c => c.id === id);
                 carriers = carriers.filter(c => c.id !== id);
                 saveData();
                 renderCarriers();
                 updateStats();
-                showAlert('carrierAlert', `✅ Carrier "${carrier.nombre}" eliminado`, 'success');
+                showToast(`✅ Carrier "${carrier.nombre}" eliminado`, 'success');
             }
         }
         
         // ============================================
-        // AUMENTOS Y HISTORIAL
+        // AUMENTOS E HISTORIAL
         // ============================================
         
         function openIncreaseModal(type, id, name, currentLimit) {
             if (currentUser?.soloLectura) {
-                showAlert('brokerAlert', 'No tienes permisos para realizar aumentos', 'error');
+                showToast('No tienes permisos para realizar aumentos', 'error');
                 return;
             }
             pendingIncrease = { type, id, name, currentLimit };
@@ -907,11 +1086,11 @@
             document.getElementById('modalCurrentLimit').value = '$' + formatNumber(currentLimit);
             document.getElementById('modalAmount').value = '';
             document.getElementById('modalReason').value = '';
-            document.getElementById('increaseModal').style.display = 'flex';
+            document.getElementById('increaseModal').classList.remove('hidden');
         }
         
         function closeModal() {
-            document.getElementById('increaseModal').style.display = 'none';
+            document.getElementById('increaseModal').classList.add('hidden');
             pendingIncrease = null;
         }
         
@@ -922,7 +1101,7 @@
             const reason = document.getElementById('modalReason').value;
             
             if (!amount || amount <= 0) {
-                alert('Ingrese un monto válido');
+                showToast('Ingrese un monto válido', 'error');
                 return;
             }
             
@@ -945,14 +1124,13 @@
             }
             
             if (entity) {
-                // Guardar en historial
                 history.unshift({
                     id: Date.now(),
                     fecha: new Date().toISOString(),
                     tipo: pendingIncrease.type,
                     entidad: pendingIncrease.name,
                     monto: amount,
-                    usuario: currentUser?.email || 'admin',
+                    usuario: currentUser.email,
                     motivo: reason || 'Sin motivo',
                     limiteAnterior: oldLimit,
                     limiteNuevo: newLimit
@@ -961,22 +1139,14 @@
                 saveData();
                 closeModal();
                 
-                if (pendingIncrease.type === 'broker') {
-                    renderBrokers();
-                } else {
-                    renderCarriers();
-                }
+                if (pendingIncrease.type === 'broker') renderBrokers();
+                else renderCarriers();
                 renderHistory();
                 updateStats();
                 
-                showAlert(pendingIncrease.type === 'broker' ? 'brokerAlert' : 'carrierAlert', 
-                    `✅ Aumento de $${formatNumber(amount)} aplicado a ${pendingIncrease.name}`, 'success');
+                showToast(`✅ Aumento de $${formatNumber(amount)} aplicado a ${pendingIncrease.name}`, 'success');
             }
         }
-        
-        // ============================================
-        // HISTORIAL
-        // ============================================
         
         function renderHistory() {
             const searchTerm = document.getElementById('historySearch')?.value.toLowerCase() || '';
@@ -988,7 +1158,7 @@
             
             const container = document.getElementById('historyList');
             if (!filtered.length) {
-                container.innerHTML = '<p style="text-align:center; padding:40px;">No hay registros en el historial</p>';
+                container.innerHTML = '<div style="text-align:center; padding:40px;">📭 No hay registros en el historial</div>';
                 return;
             }
             
@@ -996,14 +1166,14 @@
             filtered.forEach(h => {
                 const fecha = new Date(h.fecha).toLocaleString('es-ES');
                 html += `
-                    <div class="history-item">
+                    <div class="history-entry">
                         <div class="history-header">
-                            <span class="history-entity">${h.tipo === 'broker' ? '🏢' : '🚚'} ${h.entidad}</span>
+                            <span class="history-entity">${h.tipo === 'broker' ? '📊' : '🚛'} ${h.entidad}</span>
                             <span class="history-amount">+$${formatNumber(h.monto)}</span>
                         </div>
                         <div>💰 $${formatNumber(h.limiteAnterior)} → $${formatNumber(h.limiteNuevo)}</div>
-                        <div class="history-details">
-                            📅 ${fecha} | 👤 ${h.usuario} | 📝 ${h.motivo || 'Sin motivo'}
+                        <div class="history-detail">
+                            📅 ${fecha} | 👤 ${h.usuario} | 📝 ${h.motivo}
                         </div>
                     </div>
                 `;
@@ -1011,13 +1181,11 @@
             container.innerHTML = html;
         }
         
-        function filterHistory() {
-            renderHistory();
-        }
+        function filterHistory() { renderHistory(); }
         
         function clearHistory() {
             if (currentUser?.soloLectura) {
-                showAlert('historyAlert', 'No tienes permisos', 'error');
+                showToast('No tienes permisos', 'error');
                 return;
             }
             if (confirm('¿Eliminar todo el historial? Esta acción no se puede deshacer.')) {
@@ -1025,7 +1193,7 @@
                 saveData();
                 renderHistory();
                 updateStats();
-                showAlert('historyAlert', '✅ Historial limpiado', 'success');
+                showToast('✅ Historial limpiado', 'success');
             }
         }
         
@@ -1035,11 +1203,9 @@
         
         function exportBrokersCSV() {
             let csv = "Nombre,MC,Límite (USD)\n";
-            brokers.forEach(b => {
-                csv += `"${b.nombre}","${b.mc}",${b.limite}\n`;
-            });
+            brokers.forEach(b => csv += `"${b.nombre}","${b.mc}",${b.limite}\n`);
             downloadCSV(csv, `brokers_${new Date().toISOString().split('T')[0]}.csv`);
-            showAlert('brokerAlert', '✅ Brokers exportados', 'success');
+            showToast('✅ Brokers exportados', 'success');
         }
         
         function exportCarriersCSV() {
@@ -1047,20 +1213,20 @@
             carriers.forEach(c => {
                 const fecha = c.fechaContrato ? new Date(c.fechaContrato).toLocaleDateString('es-ES') : '';
                 const tipo = c.tipoContrato === 'nuevo' ? 'Nuevo (30k)' : 'Viejo (50k)';
-                csv += `"${c.nombre}",${c.powerUnits || 0},"${fecha}","${tipo}",${c.limitePorUnidad},${c.limite}\n`;
+                csv += `"${c.nombre}",${c.powerUnits},"${fecha}","${tipo}",${c.limitePorUnidad},${c.limite}\n`;
             });
             downloadCSV(csv, `carriers_${new Date().toISOString().split('T')[0]}.csv`);
-            showAlert('carrierAlert', '✅ Carriers exportados', 'success');
+            showToast('✅ Carriers exportados', 'success');
         }
         
         function exportHistoryCSV() {
             let csv = "Fecha,Tipo,Entidad,Monto,Usuario,Motivo,Límite Anterior,Límite Nuevo\n";
             history.forEach(h => {
                 const fecha = new Date(h.fecha).toLocaleString('es-ES');
-                csv += `"${fecha}","${h.tipo}","${h.entidad}",${h.monto},"${h.usuario}","${h.motivo || ''}",${h.limiteAnterior},${h.limiteNuevo}\n`;
+                csv += `"${fecha}","${h.tipo}","${h.entidad}",${h.monto},"${h.usuario}","${h.motivo}",${h.limiteAnterior},${h.limiteNuevo}\n`;
             });
             downloadCSV(csv, `historial_${new Date().toISOString().split('T')[0]}.csv`);
-            showAlert('historyAlert', '✅ Historial exportado', 'success');
+            showToast('✅ Historial exportado', 'success');
         }
         
         function downloadCSV(content, filename) {
@@ -1070,112 +1236,6 @@
             link.download = filename;
             link.click();
             URL.revokeObjectURL(link.href);
-        }
-        
-        // ============================================
-        // NAVEGACIÓN Y USUARIOS
-        // ============================================
-        
-        function switchSection(section) {
-            // Ocultar todas las secciones
-            document.querySelectorAll('.section-content').forEach(s => s.classList.remove('active'));
-            // Quitar clase active de todos los iconos
-            document.querySelectorAll('.menu-icon').forEach(icon => icon.classList.remove('active'));
-            
-            // Mostrar la sección seleccionada
-            if (section === 'brokers') {
-                document.getElementById('brokersSection').classList.add('active');
-                document.getElementById('menuBrokers').classList.add('active');
-                renderBrokers();
-            } else if (section === 'carriers') {
-                document.getElementById('carriersSection').classList.add('active');
-                document.getElementById('menuCarriers').classList.add('active');
-                renderCarriers();
-            } else if (section === 'history') {
-                document.getElementById('historySection').classList.add('active');
-                document.getElementById('menuHistory').classList.add('active');
-                renderHistory();
-            }
-        }
-        
-        const USERS = {
-            "admin@nukocapital.com": { name: "Administrador", role: "admin", soloLectura: false, password: "YRAC26" },
-            "valeria.romero@nukocapital.com": { name: "Valeria Romero", role: "lectura", soloLectura: true },
-            "yeimy.gaviria@nukocapital.com": { name: "Yeimy Gaviria", role: "user", soloLectura: false },
-            "andres.acosta@nukocapital.com": { name: "Andres Acosta", role: "user", soloLectura: false },
-            "roberto.morante@nukocapital.com": { name: "Roberto Morante", role: "user", soloLectura: false }
-        };
-        
-        function loadUsersList() {
-            const container = document.getElementById('usersList');
-            container.innerHTML = '';
-            
-            Object.keys(USERS).forEach(email => {
-                const user = USERS[email];
-                const card = document.createElement('div');
-                card.style.cssText = `
-                    background: white;
-                    padding: 20px;
-                    border-radius: 12px;
-                    cursor: pointer;
-                    transition: all 0.3s;
-                    border: 2px solid #e0e0e0;
-                    text-align: center;
-                `;
-                card.onmouseover = () => card.style.transform = 'translateY(-3px)';
-                card.onmouseout = () => card.style.transform = 'translateY(0)';
-                card.onclick = () => selectUser(email, user);
-                card.innerHTML = `
-                    <div style="font-size: 40px; margin-bottom: 10px;">${user.soloLectura ? '👀' : (user.role === 'admin' ? '👑' : '👤')}</div>
-                    <div style="font-weight: bold;">${user.name}</div>
-                    <div style="font-size: 12px; color: #666;">${email}</div>
-                    <div style="font-size: 11px; margin-top: 8px; padding: 4px 8px; background: ${user.soloLectura ? '#e8f5e9' : (user.role === 'admin' ? '#fff3e0' : '#e3f2fd')}; border-radius: 20px; display: inline-block;">
-                        ${user.soloLectura ? '👀 Solo Lectura' : (user.role === 'admin' ? '👑 SuperAdmin' : '👤 Usuario')}
-                    </div>
-                `;
-                container.appendChild(card);
-            });
-        }
-        
-        function selectUser(email, user) {
-            if (user.role === 'admin') {
-                const pwd = prompt('Ingrese la contraseña de SuperAdmin:');
-                if (pwd !== 'YRAC26') {
-                    alert('Contraseña incorrecta');
-                    return;
-                }
-            }
-            
-            currentUser = {
-                name: user.name,
-                email: email,
-                soloLectura: user.soloLectura || false,
-                isAdmin: user.role === 'admin'
-            };
-            
-            document.getElementById('userName').textContent = currentUser.name;
-            document.getElementById('userEmail').textContent = currentUser.email;
-            document.getElementById('userAvatar').textContent = currentUser.soloLectura ? '👀' : (currentUser.isAdmin ? '👑' : '👤');
-            
-            if (currentUser.soloLectura) {
-                document.getElementById('clearHistoryBtn')?.classList.add('hidden');
-            }
-            
-            document.getElementById('loginScreen').style.display = 'none';
-            document.getElementById('dashboard').style.display = 'block';
-            
-            loadData();
-            updateStats();
-            switchSection('brokers');
-        }
-        
-        function logout() {
-            if (confirm('¿Cerrar sesión?')) {
-                currentUser = null;
-                document.getElementById('loginScreen').style.display = 'block';
-                document.getElementById('dashboard').style.display = 'none';
-                loadUsersList();
-            }
         }
         
         // Inicializar
