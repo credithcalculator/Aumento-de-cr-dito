@@ -18,7 +18,6 @@
             padding: 20px;
         }
 
-        /* Contenedor principal */
         .main-container {
             max-width: 1400px;
             margin: 0 auto;
@@ -28,7 +27,6 @@
             overflow: hidden;
         }
 
-        /* Header */
         .header {
             background: linear-gradient(135deg, #1e3c72, #2a5298);
             color: white;
@@ -220,7 +218,7 @@
             margin-top: 5px;
         }
 
-        /* Menú de iconos - ESTILOS COMPLETAMENTE DIFERENTES */
+        /* Menú de iconos */
         .feature-menu {
             display: grid;
             grid-template-columns: repeat(3, 1fr);
@@ -238,23 +236,6 @@
             cursor: pointer;
             transition: all 0.3s;
             border: 2px solid transparent;
-            position: relative;
-            overflow: hidden;
-        }
-
-        .feature-card::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: -100%;
-            width: 100%;
-            height: 100%;
-            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.5), transparent);
-            transition: 0.5s;
-        }
-
-        .feature-card:hover::before {
-            left: 100%;
         }
 
         .feature-card:hover {
@@ -600,7 +581,7 @@
                 </div>
             </div>
 
-            <!-- Menú de características - ICONOS COMPLETAMENTE DIFERENTES -->
+            <!-- Menú de características - ICONOS CON LOS NOMBRES CORRECTOS -->
             <div class="feature-menu">
                 <div class="feature-card" onclick="switchSection('brokers')" id="featureBrokers">
                     <div class="feature-icon">📊</div>
@@ -691,15 +672,46 @@
 
     <script>
         // ============================================
-        // CONFIGURACIÓN - TODOS LOS USUARIOS CON CLAVE
+        // CONFIGURACIÓN DE USUARIOS
+        // TODOS LOS USUARIOS (MENOS VALERIA) TIENEN CONTRASEÑA
         // ============================================
         
-        const USERS_WITH_PASSWORDS = {
-            "admin@nukocapital.com": { name: "Administrador", password: "YRAC26", role: "admin", soloLectura: false },
-            "valeria.romero@nukocapital.com": { name: "Valeria Romero", password: "VALERIA2024", role: "auditor", soloLectura: true },
-            "yeimy.gaviria@nukocapital.com": { name: "Yeimy Gaviria", password: "YEIMY2024", role: "user", soloLectura: false },
-            "andres.acosta@nukocapital.com": { name: "Andres Acosta", password: "ANDRES2024", role: "user", soloLectura: false },
-            "roberto.morante@nukocapital.com": { name: "Roberto Morante", password: "ROBERTO2024", role: "user", soloLectura: false }
+        const USERS_CONFIG = {
+            "admin@nukocapital.com": { 
+                name: "Administrador", 
+                password: "YRAC26", 
+                role: "admin", 
+                soloLectura: false,
+                requierePassword: true
+            },
+            "valeria.romero@nukocapital.com": { 
+                name: "Valeria Romero - Auditora", 
+                password: null, 
+                role: "auditor", 
+                soloLectura: true,
+                requierePassword: false  // Valeria NO necesita contraseña
+            },
+            "yeimy.gaviria@nukocapital.com": { 
+                name: "Yeimy Gaviria", 
+                password: "YEIMY2024", 
+                role: "user", 
+                soloLectura: false,
+                requierePassword: true
+            },
+            "andres.acosta@nukocapital.com": { 
+                name: "Andres Acosta", 
+                password: "ANDRES2024", 
+                role: "user", 
+                soloLectura: false,
+                requierePassword: true
+            },
+            "roberto.morante@nukocapital.com": { 
+                name: "Roberto Morante", 
+                password: "ROBERTO2024", 
+                role: "user", 
+                soloLectura: false,
+                requierePassword: true
+            }
         };
         
         // DATOS - Pueden ser miles de registros
@@ -712,9 +724,9 @@
         
         // Cargar datos desde localStorage
         function loadData() {
-            const savedBrokers = localStorage.getItem('nuko_brokers_v2');
-            const savedCarriers = localStorage.getItem('nuko_carriers_v2');
-            const savedHistory = localStorage.getItem('nuko_history_v2');
+            const savedBrokers = localStorage.getItem('nuko_brokers_v3');
+            const savedCarriers = localStorage.getItem('nuko_carriers_v3');
+            const savedHistory = localStorage.getItem('nuko_history_v3');
             
             if (savedBrokers) {
                 brokers = JSON.parse(savedBrokers);
@@ -761,9 +773,9 @@
         }
         
         function saveData() {
-            localStorage.setItem('nuko_brokers_v2', JSON.stringify(brokers));
-            localStorage.setItem('nuko_carriers_v2', JSON.stringify(carriers));
-            localStorage.setItem('nuko_history_v2', JSON.stringify(history));
+            localStorage.setItem('nuko_brokers_v3', JSON.stringify(brokers));
+            localStorage.setItem('nuko_carriers_v3', JSON.stringify(carriers));
+            localStorage.setItem('nuko_history_v3', JSON.stringify(history));
         }
         
         function formatNumber(num) {
@@ -804,17 +816,26 @@
             const container = document.getElementById('usersGrid');
             container.innerHTML = '';
             
-            Object.keys(USERS_WITH_PASSWORDS).forEach(email => {
-                const user = USERS_WITH_PASSWORDS[email];
+            Object.keys(USERS_CONFIG).forEach(email => {
+                const user = USERS_CONFIG[email];
                 const card = document.createElement('div');
                 card.className = 'user-card';
-                card.onclick = () => showPasswordForm(email, user);
+                card.onclick = () => {
+                    selectedUserEmail = email;
+                    // Si el usuario NO requiere password (Valeria), entra directo
+                    if (!user.requierePassword) {
+                        loginUser(email, user);
+                    } else {
+                        showPasswordForm(email, user);
+                    }
+                };
                 card.innerHTML = `
                     <div class="user-avatar">${user.role === 'admin' ? '👑' : (user.soloLectura ? '👀' : '👤')}</div>
                     <div class="user-name">${user.name}</div>
                     <div class="user-email">${email}</div>
                     <div class="user-badge ${user.role === 'admin' ? 'badge-admin' : (user.soloLectura ? 'badge-readonly' : 'badge-user')}">
                         ${user.role === 'admin' ? 'Administrador' : (user.soloLectura ? 'Solo Lectura' : 'Usuario')}
+                        ${user.requierePassword ? ' 🔒' : ' 🔓'}
                     </div>
                 `;
                 container.appendChild(card);
@@ -828,38 +849,43 @@
             document.getElementById('userPassword').focus();
         }
         
+        function loginUser(email, user) {
+            currentUser = {
+                name: user.name,
+                email: email,
+                role: user.role,
+                soloLectura: user.soloLectura || false,
+                isAdmin: user.role === 'admin'
+            };
+            
+            document.getElementById('dashboardUserName').textContent = currentUser.name;
+            document.getElementById('dashboardUserEmail').textContent = currentUser.email;
+            document.getElementById('dashboardAvatar').textContent = currentUser.isAdmin ? '👑' : (currentUser.soloLectura ? '👀' : '👤');
+            
+            document.getElementById('loginContainer').style.display = 'none';
+            document.getElementById('dashboardContainer').style.display = 'block';
+            
+            if (currentUser.soloLectura) {
+                document.getElementById('clearHistoryBtn')?.classList.add('hidden');
+            }
+            
+            loadData();
+            updateStats();
+            renderBrokers();
+            renderCarriers();
+            renderHistory();
+            switchSection('brokers');
+            
+            showToast(`✅ Bienvenido ${currentUser.name}`, 'success');
+        }
+        
         function validatePassword() {
             const password = document.getElementById('userPassword').value;
-            const user = USERS_WITH_PASSWORDS[selectedUserEmail];
+            const user = USERS_CONFIG[selectedUserEmail];
             
             if (user && user.password === password) {
-                currentUser = {
-                    name: user.name,
-                    email: selectedUserEmail,
-                    role: user.role,
-                    soloLectura: user.soloLectura || false,
-                    isAdmin: user.role === 'admin'
-                };
-                
-                document.getElementById('dashboardUserName').textContent = currentUser.name;
-                document.getElementById('dashboardUserEmail').textContent = currentUser.email;
-                document.getElementById('dashboardAvatar').textContent = currentUser.isAdmin ? '👑' : (currentUser.soloLectura ? '👀' : '👤');
-                
-                document.getElementById('loginContainer').style.display = 'none';
-                document.getElementById('dashboardContainer').style.display = 'block';
-                
-                if (currentUser.soloLectura) {
-                    document.getElementById('clearHistoryBtn')?.classList.add('hidden');
-                }
-                
-                loadData();
-                updateStats();
-                renderBrokers();
-                renderCarriers();
-                renderHistory();
-                switchSection('brokers');
-                
-                showToast(`✅ Bienvenido ${currentUser.name}`, 'success');
+                loginUser(selectedUserEmail, user);
+                document.getElementById('passwordForm').classList.add('hidden');
             } else {
                 showToast('❌ Contraseña incorrecta', 'error');
                 document.getElementById('userPassword').value = '';
