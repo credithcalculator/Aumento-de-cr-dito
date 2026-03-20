@@ -402,82 +402,130 @@
             font-size: 14px;
         }
 
-        /* Área de carga masiva - NUEVA */
-        .mass-add-area {
-            background: linear-gradient(135deg, #dbeafe, #eff6ff);
-            border-radius: 16px;
-            padding: 25px;
-            margin-bottom: 25px;
-            border: 2px solid #3b82f6;
-        }
-
-        .mass-add-header {
+        /* Iconos para agregar masivamente */
+        .mass-icons {
             display: flex;
-            align-items: center;
             gap: 15px;
-            margin-bottom: 20px;
+            margin-bottom: 25px;
+            flex-wrap: wrap;
         }
 
-        .mass-add-icon {
-            font-size: 40px;
+        .mass-icon-card {
+            flex: 1;
+            min-width: 200px;
+            background: linear-gradient(135deg, #fef3c7, #fde68a);
+            border-radius: 16px;
+            padding: 20px;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.3s;
+            border: 2px solid #f59e0b;
         }
 
-        .mass-add-title {
+        .mass-icon-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 25px -5px rgba(245, 158, 11, 0.3);
+        }
+
+        .mass-icon {
+            font-size: 48px;
+            margin-bottom: 10px;
+        }
+
+        .mass-icon-title {
             font-size: 18px;
             font-weight: 700;
-            color: #1e40af;
+            color: #92400e;
+            margin-bottom: 5px;
         }
 
-        .mass-add-desc {
-            font-size: 12px;
-            color: #2563eb;
-            margin-top: 5px;
+        .mass-icon-desc {
+            font-size: 11px;
+            color: #b45309;
         }
 
-        .mass-controls {
+        /* Modal para agregar masivamente */
+        .mass-modal {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0,0,0,0.7);
             display: flex;
-            flex-wrap: wrap;
-            gap: 15px;
-            align-items: flex-end;
+            align-items: center;
+            justify-content: center;
+            z-index: 3000;
+        }
+
+        .mass-modal-content {
+            background: white;
+            border-radius: 24px;
+            padding: 30px;
+            max-width: 600px;
+            width: 90%;
+            max-height: 85vh;
+            overflow-y: auto;
+        }
+
+        .mass-modal-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+            padding-bottom: 15px;
+            border-bottom: 2px solid #e2e8f0;
+        }
+
+        .mass-modal-header h3 {
+            color: #1e3c72;
+            font-size: 24px;
+        }
+
+        .close-modal {
+            font-size: 28px;
+            cursor: pointer;
+            color: #64748b;
+        }
+
+        .close-modal:hover {
+            color: #ef4444;
+        }
+
+        .mass-form-field {
             margin-bottom: 20px;
         }
 
-        .mass-field {
-            flex: 1;
-            min-width: 180px;
-        }
-
-        .mass-field label {
+        .mass-form-field label {
             display: block;
-            font-size: 11px;
+            font-size: 12px;
             font-weight: 600;
-            color: #1e40af;
-            margin-bottom: 5px;
-            text-transform: uppercase;
+            color: #1e3c72;
+            margin-bottom: 8px;
         }
 
-        .mass-field input {
+        .mass-form-field input,
+        .mass-form-field select {
             width: 100%;
-            padding: 10px 12px;
-            border: 1px solid #3b82f6;
+            padding: 12px;
+            border: 1px solid #e2e8f0;
             border-radius: 10px;
             font-size: 14px;
         }
 
-        .preview-area {
-            background: white;
+        .preview-list {
+            background: #f8fafc;
             border-radius: 12px;
             padding: 15px;
-            margin-top: 15px;
             max-height: 200px;
             overflow-y: auto;
-            font-family: monospace;
+            margin: 15px 0;
             font-size: 12px;
-            border: 1px solid #e2e8f0;
+            font-family: monospace;
         }
 
         .preview-item {
-            padding: 4px 8px;
+            padding: 4px 0;
             border-bottom: 1px solid #e2e8f0;
         }
 
@@ -576,7 +624,7 @@
         .alert-success { border-left: 4px solid #10b981; color: #065f46; }
         .alert-error { border-left: 4px solid #ef4444; color: #991b1b; }
 
-        /* Modal */
+        /* Modal para aumentar */
         .modal-overlay {
             position: fixed;
             top: 0;
@@ -605,16 +653,6 @@
 
         .hidden {
             display: none;
-        }
-
-        .badge-count {
-            display: inline-block;
-            background: #10b981;
-            color: white;
-            padding: 2px 8px;
-            border-radius: 20px;
-            font-size: 11px;
-            margin-left: 8px;
         }
     </style>
 </head>
@@ -704,47 +742,12 @@
                     </div>
                 </div>
 
-                <!-- ÁREA DE AGREGAR MÚLTIPLES BROKERS A LA VEZ -->
-                <div class="mass-add-area">
-                    <div class="mass-add-header">
-                        <div class="mass-add-icon">➕📊</div>
-                        <div>
-                            <div class="mass-add-title">Agregar Múltiples Brokers</div>
-                            <div class="mass-add-desc">Agrega varios brokers de una sola vez - define el rango y patrón</div>
-                        </div>
-                    </div>
-                    <div class="mass-controls">
-                        <div class="mass-field">
-                            <label>Nombre Base</label>
-                            <input type="text" id="brokerNameBase" placeholder="Ej: Broker, Logistics, Transport" value="Broker">
-                        </div>
-                        <div class="mass-field">
-                            <label>Desde #</label>
-                            <input type="number" id="brokerStartNum" value="1" min="1">
-                        </div>
-                        <div class="mass-field">
-                            <label>Hasta #</label>
-                            <input type="number" id="brokerEndNum" value="100" min="1">
-                        </div>
-                        <div class="mass-field">
-                            <label>MC Base</label>
-                            <input type="text" id="brokerMCBase" placeholder="Ej: MC" value="MC">
-                        </div>
-                        <div class="mass-field">
-                            <label>Límite Mínimo</label>
-                            <input type="number" id="brokerMinLimit" value="50000">
-                        </div>
-                        <div class="mass-field">
-                            <label>Límite Máximo</label>
-                            <input type="number" id="brokerMaxLimit" value="200000">
-                        </div>
-                    </div>
-                    <div class="preview-area" id="brokerPreview">
-                        <div class="preview-item">📋 Vista previa de los brokers a agregar</div>
-                    </div>
-                    <div style="display: flex; gap: 10px; margin-top: 15px;">
-                        <button class="btn btn-primary" onclick="previewBrokersMass()">👁️ Vista Previa</button>
-                        <button class="btn btn-success" onclick="addMultipleBrokers()">✅ Agregar {0} Brokers</button>
+                <!-- ICONOS PARA AGREGAR MASIVAMENTE BROKERS -->
+                <div class="mass-icons">
+                    <div class="mass-icon-card" onclick="openMassBrokerModal()">
+                        <div class="mass-icon">📊➕</div>
+                        <div class="mass-icon-title">Agregar Múltiples Brokers</div>
+                        <div class="mass-icon-desc">Agrega varios brokers de una vez</div>
                     </div>
                 </div>
 
@@ -767,50 +770,12 @@
                     </div>
                 </div>
 
-                <!-- ÁREA DE AGREGAR MÚLTIPLES CARRIERS A LA VEZ -->
-                <div class="mass-add-area">
-                    <div class="mass-add-header">
-                        <div class="mass-add-icon">➕🚛</div>
-                        <div>
-                            <div class="mass-add-title">Agregar Múltiples Carriers</div>
-                            <div class="mass-add-desc">Agrega varios carriers de una sola vez - define el rango y patrón</div>
-                        </div>
-                    </div>
-                    <div class="mass-controls">
-                        <div class="mass-field">
-                            <label>Nombre Base</label>
-                            <input type="text" id="carrierNameBase" placeholder="Ej: Carrier, Transport, Logistics" value="Carrier">
-                        </div>
-                        <div class="mass-field">
-                            <label>Desde #</label>
-                            <input type="number" id="carrierStartNum" value="1" min="1">
-                        </div>
-                        <div class="mass-field">
-                            <label>Hasta #</label>
-                            <input type="number" id="carrierEndNum" value="100" min="1">
-                        </div>
-                        <div class="mass-field">
-                            <label>Unidades Poder</label>
-                            <input type="number" id="carrierPowerUnits" value="3" min="1">
-                        </div>
-                        <div class="mass-field">
-                            <label>Tipo Contrato</label>
-                            <select id="carrierType">
-                                <option value="viejo">Viejo (50k por unidad)</option>
-                                <option value="nuevo">Nuevo (30k por unidad)</option>
-                            </select>
-                        </div>
-                        <div class="mass-field">
-                            <label>Fecha Contrato</label>
-                            <input type="date" id="carrierContractDate" value="2024-01-01">
-                        </div>
-                    </div>
-                    <div class="preview-area" id="carrierPreview">
-                        <div class="preview-item">📋 Vista previa de los carriers a agregar</div>
-                    </div>
-                    <div style="display: flex; gap: 10px; margin-top: 15px;">
-                        <button class="btn btn-primary" onclick="previewCarriersMass()">👁️ Vista Previa</button>
-                        <button class="btn btn-success" onclick="addMultipleCarriers()">✅ Agregar {0} Carriers</button>
+                <!-- ICONOS PARA AGREGAR MASIVAMENTE CARRIERS -->
+                <div class="mass-icons">
+                    <div class="mass-icon-card" onclick="openMassCarrierModal()">
+                        <div class="mass-icon">🚛➕</div>
+                        <div class="mass-icon-title">Agregar Múltiples Carriers</div>
+                        <div class="mass-icon-desc">Agrega varios carriers de una vez</div>
                     </div>
                 </div>
 
@@ -836,6 +801,91 @@
                     </div>
                 </div>
                 <div id="historyList" class="history-timeline"></div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal para agregar múltiples Brokers -->
+    <div id="massBrokerModal" class="mass-modal hidden">
+        <div class="mass-modal-content">
+            <div class="mass-modal-header">
+                <h3>📊 Agregar Múltiples Brokers</h3>
+                <span class="close-modal" onclick="closeMassBrokerModal()">&times;</span>
+            </div>
+            <div class="mass-form-field">
+                <label>Nombre Base</label>
+                <input type="text" id="massBrokerNameBase" placeholder="Ej: Broker, Logistics, Transport" value="Broker">
+            </div>
+            <div class="mass-form-field">
+                <label>Desde #</label>
+                <input type="number" id="massBrokerStartNum" value="1" min="1">
+            </div>
+            <div class="mass-form-field">
+                <label>Hasta #</label>
+                <input type="number" id="massBrokerEndNum" value="100" min="1">
+            </div>
+            <div class="mass-form-field">
+                <label>MC Base</label>
+                <input type="text" id="massBrokerMCBase" placeholder="Ej: MC" value="MC">
+            </div>
+            <div class="mass-form-field">
+                <label>Límite Mínimo (USD)</label>
+                <input type="number" id="massBrokerMinLimit" value="50000">
+            </div>
+            <div class="mass-form-field">
+                <label>Límite Máximo (USD)</label>
+                <input type="number" id="massBrokerMaxLimit" value="200000">
+            </div>
+            <div id="massBrokerPreview" class="preview-list">
+                <div class="preview-item">📋 Vista previa</div>
+            </div>
+            <div style="display: flex; gap: 10px;">
+                <button class="btn btn-primary" onclick="previewMassBrokers()">👁️ Vista Previa</button>
+                <button class="btn btn-success" onclick="addMassBrokers()">✅ Agregar Brokers</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal para agregar múltiples Carriers -->
+    <div id="massCarrierModal" class="mass-modal hidden">
+        <div class="mass-modal-content">
+            <div class="mass-modal-header">
+                <h3>🚛 Agregar Múltiples Carriers</h3>
+                <span class="close-modal" onclick="closeMassCarrierModal()">&times;</span>
+            </div>
+            <div class="mass-form-field">
+                <label>Nombre Base</label>
+                <input type="text" id="massCarrierNameBase" placeholder="Ej: Carrier, Transport, Logistics" value="Carrier">
+            </div>
+            <div class="mass-form-field">
+                <label>Desde #</label>
+                <input type="number" id="massCarrierStartNum" value="1" min="1">
+            </div>
+            <div class="mass-form-field">
+                <label>Hasta #</label>
+                <input type="number" id="massCarrierEndNum" value="100" min="1">
+            </div>
+            <div class="mass-form-field">
+                <label>Unidades de Poder</label>
+                <input type="number" id="massCarrierPowerUnits" value="3" min="1">
+            </div>
+            <div class="mass-form-field">
+                <label>Tipo de Contrato</label>
+                <select id="massCarrierType">
+                    <option value="viejo">Viejo (50k por unidad)</option>
+                    <option value="nuevo">Nuevo (30k por unidad)</option>
+                </select>
+            </div>
+            <div class="mass-form-field">
+                <label>Fecha de Contrato</label>
+                <input type="date" id="massCarrierDate" value="2024-01-01">
+            </div>
+            <div id="massCarrierPreview" class="preview-list">
+                <div class="preview-item">📋 Vista previa</div>
+            </div>
+            <div style="display: flex; gap: 10px;">
+                <button class="btn btn-primary" onclick="previewMassCarriers()">👁️ Vista Previa</button>
+                <button class="btn btn-success" onclick="addMassCarriers()">✅ Agregar Carriers</button>
             </div>
         </div>
     </div>
@@ -908,11 +958,10 @@
         let selectedUserEmail = null;
         let pendingIncrease = null;
         
-        // Cargar datos desde localStorage
         function loadData() {
-            const savedBrokers = localStorage.getItem('nuko_brokers_v5');
-            const savedCarriers = localStorage.getItem('nuko_carriers_v5');
-            const savedHistory = localStorage.getItem('nuko_history_v5');
+            const savedBrokers = localStorage.getItem('nuko_brokers_v6');
+            const savedCarriers = localStorage.getItem('nuko_carriers_v6');
+            const savedHistory = localStorage.getItem('nuko_history_v6');
             
             if (savedBrokers) {
                 brokers = JSON.parse(savedBrokers);
@@ -958,9 +1007,9 @@
         }
         
         function saveData() {
-            localStorage.setItem('nuko_brokers_v5', JSON.stringify(brokers));
-            localStorage.setItem('nuko_carriers_v5', JSON.stringify(carriers));
-            localStorage.setItem('nuko_history_v5', JSON.stringify(history));
+            localStorage.setItem('nuko_brokers_v6', JSON.stringify(brokers));
+            localStorage.setItem('nuko_carriers_v6', JSON.stringify(carriers));
+            localStorage.setItem('nuko_history_v6', JSON.stringify(history));
         }
         
         function formatNumber(num) {
@@ -994,16 +1043,46 @@
         }
         
         // ============================================
+        // MODALES PARA AGREGAR MASIVAMENTE
+        // ============================================
+        
+        function openMassBrokerModal() {
+            if (currentUser?.soloLectura) {
+                showToast('No tienes permisos', 'error');
+                return;
+            }
+            document.getElementById('massBrokerModal').classList.remove('hidden');
+            previewMassBrokers();
+        }
+        
+        function closeMassBrokerModal() {
+            document.getElementById('massBrokerModal').classList.add('hidden');
+        }
+        
+        function openMassCarrierModal() {
+            if (currentUser?.soloLectura) {
+                showToast('No tienes permisos', 'error');
+                return;
+            }
+            document.getElementById('massCarrierModal').classList.remove('hidden');
+            previewMassCarriers();
+        }
+        
+        function closeMassCarrierModal() {
+            document.getElementById('massCarrierModal').classList.add('hidden');
+        }
+        
+        // ============================================
         // AGREGAR MÚLTIPLES BROKERS
         // ============================================
         
-        function previewBrokersMass() {
-            const nameBase = document.getElementById('brokerNameBase').value.trim();
-            const startNum = parseInt(document.getElementById('brokerStartNum').value);
-            const endNum = parseInt(document.getElementById('brokerEndNum').value);
-            const mcBase = document.getElementById('brokerMCBase').value.trim();
-            const minLimit = parseFloat(document.getElementById('brokerMinLimit').value);
-            const maxLimit = parseFloat(document.getElementById('brokerMaxLimit').value);
+        function previewMassBrokers() {
+            const nameBase = document.getElementById('massBrokerNameBase').value.trim();
+            const startNum = parseInt(document.getElementById('massBrokerStartNum').value);
+            const endNum = parseInt(document.getElementById('massBrokerEndNum').value);
+            const mcBase = document.getElementById('massBrokerMCBase').value.trim();
+            const minLimit = parseFloat(document.getElementById('massBrokerMinLimit').value);
+            const maxLimit = parseFloat(document.getElementById('massBrokerMaxLimit').value);
             
             if (isNaN(startNum) || isNaN(endNum) || startNum > endNum) {
                 showToast('Rango inválido', 'error');
@@ -1011,7 +1090,7 @@
             }
             
             const count = endNum - startNum + 1;
-            const previewDiv = document.getElementById('brokerPreview');
+            const previewDiv = document.getElementById('massBrokerPreview');
             let html = `<div class="preview-item" style="background:#e6f7e6; padding:8px;">📊 Se agregarán ${count} brokers:</div>`;
             
             for (let i = startNum; i <= Math.min(endNum, startNum + 9); i++) {
@@ -1026,23 +1105,15 @@
             }
             
             previewDiv.innerHTML = html;
-            
-            const addBtn = document.querySelector('#brokersPanel .mass-add-area .btn-success');
-            addBtn.innerHTML = `✅ Agregar ${count} Brokers`;
         }
         
-        function addMultipleBrokers() {
-            if (currentUser?.soloLectura) {
-                showToast('No tienes permisos', 'error');
-                return;
-            }
-            
-            const nameBase = document.getElementById('brokerNameBase').value.trim();
-            const startNum = parseInt(document.getElementById('brokerStartNum').value);
-            const endNum = parseInt(document.getElementById('brokerEndNum').value);
-            const mcBase = document.getElementById('brokerMCBase').value.trim();
-            const minLimit = parseFloat(document.getElementById('brokerMinLimit').value);
-            const maxLimit = parseFloat(document.getElementById('brokerMaxLimit').value);
+        function addMassBrokers() {
+            const nameBase = document.getElementById('massBrokerNameBase').value.trim();
+            const startNum = parseInt(document.getElementById('massBrokerStartNum').value);
+            const endNum = parseInt(document.getElementById('massBrokerEndNum').value);
+            const mcBase = document.getElementById('massBrokerMCBase').value.trim();
+            const minLimit = parseFloat(document.getElementById('massBrokerMinLimit').value);
+            const maxLimit = parseFloat(document.getElementById('massBrokerMaxLimit').value);
             
             if (!nameBase || isNaN(startNum) || isNaN(endNum) || startNum > endNum) {
                 showToast('Complete todos los campos correctamente', 'error');
@@ -1070,21 +1141,21 @@
             saveData();
             renderBrokers();
             updateStats();
+            closeMassBrokerModal();
             showToast(`✅ Se agregaron ${addedCount} brokers exitosamente`, 'success');
-            previewBrokersMass();
         }
         
         // ============================================
         // AGREGAR MÚLTIPLES CARRIERS
         // ============================================
         
-        function previewCarriersMass() {
-            const nameBase = document.getElementById('carrierNameBase').value.trim();
-            const startNum = parseInt(document.getElementById('carrierStartNum').value);
-            const endNum = parseInt(document.getElementById('carrierEndNum').value);
-            const powerUnits = parseInt(document.getElementById('carrierPowerUnits').value);
-            const tipoContrato = document.getElementById('carrierType').value;
-            const fechaContrato = document.getElementById('carrierContractDate').value;
+        function previewMassCarriers() {
+            const nameBase = document.getElementById('massCarrierNameBase').value.trim();
+            const startNum = parseInt(document.getElementById('massCarrierStartNum').value);
+            const endNum = parseInt(document.getElementById('massCarrierEndNum').value);
+            const powerUnits = parseInt(document.getElementById('massCarrierPowerUnits').value);
+            const tipoContrato = document.getElementById('massCarrierType').value;
+            const fechaContrato = document.getElementById('massCarrierDate').value;
             
             if (isNaN(startNum) || isNaN(endNum) || startNum > endNum) {
                 showToast('Rango inválido', 'error');
@@ -1095,7 +1166,7 @@
             const limite = powerUnits * limitePorUnidad;
             const count = endNum - startNum + 1;
             
-            const previewDiv = document.getElementById('carrierPreview');
+            const previewDiv = document.getElementById('massCarrierPreview');
             let html = `<div class="preview-item" style="background:#e6f7e6; padding:8px;">🚛 Se agregarán ${count} carriers:</div>`;
             
             for (let i = startNum; i <= Math.min(endNum, startNum + 9); i++) {
@@ -1110,23 +1181,15 @@
             }
             
             previewDiv.innerHTML = html;
-            
-            const addBtn = document.querySelector('#carriersPanel .mass-add-area .btn-success');
-            addBtn.innerHTML = `✅ Agregar ${count} Carriers`;
         }
         
-        function addMultipleCarriers() {
-            if (currentUser?.soloLectura) {
-                showToast('No tienes permisos', 'error');
-                return;
-            }
-            
-            const nameBase = document.getElementById('carrierNameBase').value.trim();
-            const startNum = parseInt(document.getElementById('carrierStartNum').value);
-            const endNum = parseInt(document.getElementById('carrierEndNum').value);
-            const powerUnits = parseInt(document.getElementById('carrierPowerUnits').value);
-            const tipoContrato = document.getElementById('carrierType').value;
-            const fechaContrato = document.getElementById('carrierContractDate').value;
+        function addMassCarriers() {
+            const nameBase = document.getElementById('massCarrierNameBase').value.trim();
+            const startNum = parseInt(document.getElementById('massCarrierStartNum').value);
+            const endNum = parseInt(document.getElementById('massCarrierEndNum').value);
+            const powerUnits = parseInt(document.getElementById('massCarrierPowerUnits').value);
+            const tipoContrato = document.getElementById('massCarrierType').value;
+            const fechaContrato = document.getElementById('massCarrierDate').value;
             
             if (!nameBase || isNaN(startNum) || isNaN(endNum) || startNum > endNum || isNaN(powerUnits) || powerUnits <= 0) {
                 showToast('Complete todos los campos correctamente', 'error');
@@ -1158,8 +1221,8 @@
             saveData();
             renderCarriers();
             updateStats();
+            closeMassCarrierModal();
             showToast(`✅ Se agregaron ${addedCount} carriers exitosamente`, 'success');
-            previewCarriersMass();
         }
         
         // ============================================
@@ -1179,7 +1242,7 @@
                 return;
             }
             
-            let html = `<table class="data-grid"><thead> highway<th>#</th><th>Nombre</th><th>MC Number</th><th>Límite Actual</th>`;
+            let html = `<table class="data-grid"><thead><th>#</th><th>Nombre</th><th>MC Number</th><th>Límite Actual</th>`;
             if (!currentUser?.soloLectura) html += `<th>Acciones</th>`;
             html += `</thead><tbody>`;
             
