@@ -1,0 +1,898 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <base target="_top">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>index</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Segoe UI', sans-serif; }
+        body { background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); min-height: 100vh; display: flex; justify-content: center; align-items: center; padding: 20px; }
+        .container { background: white; border-radius: 20px; box-shadow: 0 20px 60px rgba(0,0,0,0.3); overflow: hidden; width: 100%; max-width: 1400px; }
+        .header { background: linear-gradient(to right, #1a237e, #283593); color: white; padding: 25px 40px; text-align: center; }
+        .header h1 { font-size: 28px; font-weight: 600; }
+        
+        .user-selection-screen { padding: 40px; text-align: center; }
+        .login-title { color: #1a237e; font-size: 32px; margin-bottom: 10px; }
+        .login-subtitle { color: #666; margin-bottom: 30px; font-size: 16px; }
+        
+        .users-container { display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: 20px; margin: 30px 0; }
+        .user-card { background: white; border-radius: 15px; padding: 25px; box-shadow: 0 5px 20px rgba(0,0,0,0.1); border: 2px solid #e0e0e0; transition: all 0.3s ease; cursor: pointer; text-align: center; }
+        .user-card:hover:not(.solo-lectura-card) { transform: translateY(-3px); border-color: #667eea; box-shadow: 0 10px 30px rgba(102, 126, 234, 0.2); }
+        .user-card.coordinador { border-top: 4px solid #FF9800; }
+        .user-card.usuario { border-top: 4px solid #2196F3; }
+        
+        /* Estilos para usuario solo lectura */
+        .solo-lectura-card {
+            border-top: 4px solid #4CAF50 !important;
+            background-color: #f1f8e9;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .solo-lectura-card::before {
+            content: "👀";
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            font-size: 24px;
+            opacity: 0.3;
+        }
+        
+        .solo-lectura-card:hover {
+            transform: translateY(-3px);
+            border-color: #4CAF50 !important;
+            box-shadow: 0 10px 30px rgba(76, 175, 80, 0.2) !important;
+        }
+        
+        .user-avatar { width: 60px; height: 60px; border-radius: 50%; background: #f0f0f0; display: flex; align-items: center; justify-content: center; margin: 0 auto 15px; font-size: 24px; }
+        .user-name { font-size: 18px; font-weight: 600; color: #333; margin-bottom: 5px; }
+        .user-email { font-size: 13px; color: #666; margin-bottom: 10px; }
+        .user-role { font-size: 12px; color: #666; padding: 4px 12px; border-radius: 12px; display: inline-block; }
+        .role-coordinador { background: #FFF3E0; color: #EF6C00; }
+        .role-usuario { background: #E3F2FD; color: #1565C0; }
+        .role-solo-lectura { background: #E8F5E9; color: #2E7D32; }
+        
+        .login-form { max-width: 400px; margin: 30px auto 0; padding: 30px; background: #f8f9fa; border-radius: 10px; display: none; }
+        .form-group { margin-bottom: 20px; text-align: left; }
+        .form-group label { display: block; color: #333; margin-bottom: 8px; font-weight: 500; }
+        .form-control { width: 100%; padding: 12px 15px; border: 2px solid #ddd; border-radius: 8px; font-size: 14px; }
+        .form-control:focus { border-color: #667eea; outline: none; }
+        
+        .btn { background: linear-gradient(to right, #667eea, #764ba2); color: white; border: none; padding: 12px 25px; border-radius: 8px; font-size: 16px; font-weight: 600; cursor: pointer; transition: all 0.3s; margin: 5px; }
+        .btn:hover { transform: translateY(-2px); box-shadow: 0 7px 20px rgba(102, 126, 234, 0.4); }
+        .btn-success { background: linear-gradient(to right, #4CAF50, #45a049); }
+        .btn-danger { background: linear-gradient(to right, #f44336, #d32f2f); }
+        .btn-info { background: linear-gradient(to right, #17a2b8, #138496); }
+        .btn-warning { background: linear-gradient(to right, #FF9800, #F57C00); }
+        .btn-sm { padding: 8px 15px; font-size: 14px; }
+        .btn:disabled { opacity: 0.5; cursor: not-allowed; }
+        
+        .dashboard-content { padding: 30px; }
+        .user-info { background: linear-gradient(to right, #4CAF50, #45a049); color: white; padding: 15px 25px; border-radius: 10px; margin-bottom: 30px; display: flex; justify-content: space-between; align-items: center; }
+        .user-info.admin { background: linear-gradient(to right, #FF9800, #F57C00); }
+        .user-info.solo-lectura { background: linear-gradient(to right, #2E7D32, #1B5E20); }
+        
+        .main-menu { display: flex; gap: 10px; margin-bottom: 30px; flex-wrap: wrap; }
+        .menu-btn { padding: 12px 20px; border-radius: 8px; background: #f8f9fa; border: 1px solid #dee2e6; cursor: pointer; font-weight: 500; transition: all 0.3s; }
+        .menu-btn:hover { background: #e9ecef; }
+        .menu-btn.active { background: #1a237e; color: white; }
+        
+        .section { background: white; border-radius: 15px; padding: 25px; box-shadow: 0 5px 20px rgba(0,0,0,0.05); border: 1px solid #eaeaea; margin-bottom: 30px; display: none; }
+        .section.active { display: block; }
+        .section-title { display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; padding-bottom: 15px; border-bottom: 2px solid #f0f0f0; }
+        .section-title h3 { color: #1a237e; font-size: 18px; margin: 0; }
+        
+        .search-container { margin: 15px 0; display: flex; gap: 10px; align-items: center; flex-wrap: wrap; }
+        .search-input { flex: 1; padding: 12px 15px; border: 2px solid #ddd; border-radius: 8px; font-size: 14px; }
+        .search-input:focus { border-color: #667eea; outline: none; }
+        
+        .record-count { font-size: 12px; color: #666; background: #f8f9fa; padding: 8px 15px; border-radius: 20px; white-space: nowrap; }
+        
+        .data-table { width: 100%; border-collapse: collapse; margin-top: 15px; }
+        .data-table th { background: #f8f9fa; color: #333; font-weight: 600; text-align: left; padding: 12px 15px; border-bottom: 2px solid #e0e0e0; }
+        .data-table td { padding: 12px 15px; border-bottom: 1px solid #eee; vertical-align: middle; }
+        .data-table tr:hover { background: #f9f9f9; }
+        
+        .increase-form { background: #f8f9fa; padding: 25px; border-radius: 10px; margin-top: 20px; }
+        
+        .alert { padding: 15px; border-radius: 8px; margin: 15px 0; display: none; }
+        .alert-success { background: #E8F5E9; color: #2E7D32; border: 1px solid #C8E6C9; }
+        .alert-error { background: #FFEBEE; color: #C62828; border: 1px solid #FFCDD2; }
+        .alert-info { background: #E3F2FD; color: #1565C0; border: 1px solid #BBDEFB; }
+        .alert-warning { background: #FFF3E0; color: #EF6C00; border: 1px solid #FFCC80; }
+        
+        .loading { text-align: center; padding: 40px; color: #666; }
+        .loader { border: 4px solid #f3f3f3; border-top: 4px solid #3498db; border-radius: 50%; width: 40px; height: 40px; animation: spin 2s linear infinite; margin: 0 auto 15px; }
+        @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
+        
+        .badge { display: inline-block; padding: 4px 8px; border-radius: 4px; font-size: 12px; font-weight: 500; margin-left: 10px; }
+        .badge-coordinador { background: #FFF3E0; color: #EF6C00; }
+        .badge-solo-lectura { background: #E8F5E9; color: #2E7D32; }
+        
+        .hidden { display: none !important; }
+        
+        .stats-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 15px; margin-bottom: 20px; }
+        .stat-card { background: #f8f9fa; padding: 15px; border-radius: 10px; text-align: center; border-left: 4px solid #1a237e; }
+        .stat-value { font-size: 24px; font-weight: bold; color: #1a237e; }
+        .stat-label { font-size: 12px; color: #666; }
+        
+        .power-unit-cell { background: #f0f7ff; border-left: 3px solid #2196F3; padding: 8px; border-radius: 4px; text-align: center; }
+        .contract-nuevo { color: #4CAF50; font-weight: bold; }
+        .contract-viejo { color: #FF9800; font-weight: bold; }
+        
+        .fast-indicator { position: fixed; bottom: 20px; right: 20px; background: #4CAF50; color: white; padding: 8px 12px; border-radius: 20px; font-size: 12px; z-index: 1000; }
+        
+        .modal-overlay { position: fixed; top: 0; left: 0; right: 0; bottom: 0; background: rgba(0,0,0,0.7); display: flex; justify-content: center; align-items: center; z-index: 10000; }
+        .modal-content { background: white; padding: 30px; border-radius: 15px; max-width: 400px; width: 90%; }
+        .modal-title { color: #1a237e; margin-bottom: 20px; text-align: center; font-size: 20px; }
+        .password-input { width: 100%; padding: 12px; border: 2px solid #ddd; border-radius: 8px; margin-bottom: 20px; }
+        
+        .superadmin-indicator { position: fixed; top: 20px; right: 20px; background: linear-gradient(to right, #FF9800, #F57C00); color: white; padding: 6px 12px; border-radius: 20px; font-size: 12px; font-weight: bold; z-index: 1000; }
+        .solo-lectura-indicator { position: fixed; top: 20px; right: 20px; background: linear-gradient(to right, #2E7D32, #1B5E20); color: white; padding: 6px 12px; border-radius: 20px; font-size: 12px; font-weight: bold; z-index: 1000; }
+        
+        .modo-vista-banner { background: #E8F5E9; color: #2E7D32; padding: 10px; border-radius: 5px; margin-bottom: 15px; text-align: center; font-weight: bold; border-left: 4px solid #4CAF50; }
+        
+        .btn-group { display: flex; gap: 5px; flex-wrap: wrap; }
+        .table-container { overflow-x: auto; }
+        
+        @media (max-width: 768px) {
+            .stats-grid { grid-template-columns: repeat(2, 1fr); }
+            .section-title { flex-direction: column; gap: 10px; align-items: stretch; }
+            .btn-group { justify-content: center; }
+        }
+    </style>
+</head>
+<body>
+    <div class="container" id="userSelectionScreen">
+        <div class="header">
+            <h1>🏦 GESTOR DE LÍMITES</h1>
+        </div>
+        <div class="user-selection-screen">
+            <h2 class="login-title">Nuko Capital</h2>
+            <p class="login-subtitle">Selecciona tu usuario</p>
+            
+            <div class="alert" id="loginAlert"></div>
+            <div id="usersContainer">
+                <div class="loading"><div class="loader"></div><p>Cargando usuarios...</p></div>
+            </div>
+            
+            <div class="login-form" id="loginForm">
+                <div class="form-group">
+                    <label>Usuario:</label>
+                    <input type="text" id="userDisplay" class="form-control" readonly>
+                </div>
+                <div class="form-group">
+                    <label>Correo:</label>
+                    <input type="email" id="userEmail" class="form-control" onkeypress="if(event.key==='Enter') confirmLogin()">
+                </div>
+                <button onclick="confirmLogin()" class="btn btn-success">✅ Acceder</button>
+                <button onclick="cancelLogin()" class="btn">↩️ Cancelar</button>
+            </div>
+        </div>
+    </div>
+    
+    <div class="container hidden" id="dashboard">
+        <div class="header">
+            <h1>📊 Gestión de Límites</h1>
+        </div>
+        <div class="dashboard-content">
+            <div id="modoVistaBanner" class="modo-vista-banner hidden">
+                👀 MODO VISTA - Solo puedes visualizar la información, no realizar modificaciones
+            </div>
+            
+            <div class="user-info" id="userInfo">
+                <div>
+                    <strong id="userNameDisplay">Usuario</strong><br>
+                    <small id="userEmailDisplay"></small>
+                    <span id="userRoleBadge" class="badge"></span>
+                </div>
+                <div>
+                    <button onclick="showSection('limits')" class="btn btn-sm">📈 Límites</button>
+                    <button id="increaseMenuBtn" onclick="showSection('increase')" class="btn btn-sm">💰 Aumentos</button>
+                    <button onclick="logout()" class="btn btn-sm btn-danger">🚪 Salir</button>
+                </div>
+            </div>
+            
+            <div class="stats-grid">
+                <div class="stat-card"><div class="stat-value" id="totalBrokers">0</div><div class="stat-label">BROKERS</div></div>
+                <div class="stat-card"><div class="stat-value" id="totalCarriers">0</div><div class="stat-label">CARRIERS</div></div>
+                <div class="stat-card"><div class="stat-value" id="totalLimits">$0</div><div class="stat-label">LÍMITE TOTAL</div></div>
+                <div class="stat-card"><div class="stat-value" id="totalPowerUnits">0</div><div class="stat-label">UNIDADES PODER</div></div>
+            </div>
+            
+            <div class="main-menu">
+                <div class="menu-btn active" onclick="showSection('limits')">📈 Límites</div>
+                <div id="increaseMenuBtn2" class="menu-btn" onclick="showSection('increase')">💰 Aumentos</div>
+            </div>
+            
+            <div class="section active" id="limitsSection">
+                <div class="section-title">
+                    <h3>📈 Límites Actuales</h3>
+                    <div style="display: flex; gap: 10px; align-items: center; flex-wrap: wrap;">
+                        <select id="dataType" onchange="loadData()" style="padding: 8px; border-radius: 5px; border: 1px solid #ddd;">
+                            <option value="brokers">Brokers</option>
+                            <option value="carriers">Carriers</option>
+                        </select>
+                        
+                        <div class="btn-group">
+                            <button onclick="downloadCSV()" class="btn btn-sm btn-success" title="Descargar CSV de la vista actual">
+                                📥 CSV Actual
+                            </button>
+                            <button onclick="downloadCompleteReport()" class="btn btn-sm btn-info" title="Descargar reporte completo">
+                                📊 Reporte Completo
+                            </button>
+                        </div>
+                        
+                        <button onclick="loadAllDataFast()" class="btn btn-sm btn-success">
+                            ⚡ Actualizar
+                        </button>
+                    </div>
+                </div>
+                
+                <div class="search-container">
+                    <input type="text" id="searchInput" class="search-input" placeholder="🔍 Buscar por nombre, MC, fecha..." onkeyup="filterData()">
+                    <span class="record-count" id="recordCount">
+                        Registros: <span id="countDisplay">0</span>
+                    </span>
+                </div>
+                
+                <div class="alert" id="dataAlert"></div>
+                
+                <div class="table-container">
+                    <div id="dataContent"><div class="loading"><div class="loader"></div><p>Cargando...</p></div></div>
+                </div>
+            </div>
+            
+            <div class="section" id="increaseSection">
+                <div class="section-title"><h3>💰 Aplicar Aumento</h3></div>
+                
+                <div id="soloLecturaWarning" class="alert alert-warning hidden">
+                    👀 Estás en modo vista - No puedes realizar aumentos
+                </div>
+                
+                <div class="increase-form">
+                    <div class="form-group">
+                        <label>Tipo</label>
+                        <select id="increaseType" class="form-control" onchange="updateEntities()">
+                            <option value="">Seleccionar...</option>
+                            <option value="broker">Broker</option>
+                            <option value="carrier">Carrier</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label>Entidad</label>
+                        <select id="entitySelect" class="form-control" disabled></select>
+                    </div>
+                    <div class="form-group">
+                        <label>Límite Actual</label>
+                        <input type="text" id="currentLimit" class="form-control" readonly>
+                    </div>
+                    <div class="form-group">
+                        <label>Unidades de Poder</label>
+                        <input type="text" id="currentPowerUnits" class="form-control" readonly>
+                    </div>
+                    <div class="form-group">
+                        <label>Monto Aumento ($)</label>
+                        <input type="number" id="increaseAmount" class="form-control" min="1">
+                    </div>
+                    <div class="form-group">
+                        <label>Motivo</label>
+                        <textarea id="increaseReason" class="form-control" rows="2"></textarea>
+                    </div>
+                    <div class="alert" id="formAlert"></div>
+                    <button onclick="applyIncrease()" id="applyIncreaseBtn" class="btn btn-success">✅ Aplicar</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal SuperAdmin -->
+    <div class="modal-overlay hidden" id="adminPasswordModal">
+        <div class="modal-content">
+            <h3 class="modal-title">🔐 Acceso SuperAdmin</h3>
+            <input type="password" id="adminPasswordInput" class="password-input" placeholder="Contraseña" onkeypress="if(event.key==='Enter') verifyAdminPassword()">
+            <div class="alert" id="passwordAlert"></div>
+            <div style="display: flex; justify-content: space-between;">
+                <button onclick="cancelAdminLogin()" class="btn">Cancelar</button>
+                <button onclick="verifyAdminPassword()" class="btn btn-warning">Acceder</button>
+            </div>
+        </div>
+    </div>
+
+    <div class="superadmin-indicator hidden" id="superadminIndicator">👑 SUPERADMIN</div>
+    <div class="solo-lectura-indicator hidden" id="soloLecturaIndicator">👀 MODO VISTA</div>
+    <div class="fast-indicator" id="fastIndicator" style="display:none;">⚡ Modo rápido</div>
+
+    <script>
+        // ==============================================
+        // CONFIGURACIÓN LOCAL (VERSIÓN STANDALONE)
+        // ==============================================
+        
+        const ADMIN_PASSWORD = "YRAC26";
+        
+        const SOLO_LECTURA = {
+            "valeria.romero@nukocapital.com": {
+                nombre: "Valeria Romero - Auditora",
+                motivo: "Usuario con permisos de solo lectura",
+                soloLectura: true
+            }
+        };
+        
+        // Datos de usuarios (versión local)
+        const USERS_DATA = {
+            "valeria.romero@nukocapital.com": { 
+                name: "Valeria Romero - Auditora", 
+                role: "usuario", 
+                active: true,
+                requiresPassword: false,
+                soloLectura: true
+            },
+            "yeimy.gaviria@nukocapital.com": { 
+                name: "Yeimy Gaviria", 
+                role: "usuario", 
+                active: true,
+                requiresPassword: true,
+                soloLectura: false
+            },
+            "andres.acosta@nukocapital.com": { 
+                name: "Andres Acosta", 
+                role: "usuario", 
+                active: true,
+                requiresPassword: true,
+                soloLectura: false
+            },
+            "roberto.morante@nukocapital.com": { 
+                name: "Roberto Morante", 
+                role: "usuario", 
+                active: true,
+                requiresPassword: true,
+                soloLectura: false
+            },
+            "admin@nukocapital.com": { 
+                name: "Administrador", 
+                role: "superadmin", 
+                active: true,
+                requiresPassword: true,
+                isSuperAdmin: true,
+                soloLectura: false
+            }
+        };
+        
+        // Datos de ejemplo (puedes reemplazar con datos reales)
+        let brokersList = [
+            { nombre: "Broker 1", mc: "MC001", limite: 50000, tipo: "broker" },
+            { nombre: "Broker 2", mc: "MC002", limite: 75000, tipo: "broker" },
+            { nombre: "Broker 3", mc: "MC003", limite: 100000, tipo: "broker" }
+        ];
+        
+        let carriersList = [
+            { nombre: "Carrier A", mc: "", limite: 150000, powerUnits: 3, fechaContrato: "2024-08-15", tipoContrato: "nuevo", contratoLabel: "Contrato Nuevo (30k por unidad)", limitePorUnidad: 30000, tipo: "carrier" },
+            { nombre: "Carrier B", mc: "", limite: 200000, powerUnits: 4, fechaContrato: "2023-05-20", tipoContrato: "viejo", contratoLabel: "Contrato Viejo (50k por unidad)", limitePorUnidad: 50000, tipo: "carrier" },
+            { nombre: "Carrier C", mc: "", limite: 100000, powerUnits: 2, fechaContrato: "2024-09-10", tipoContrato: "nuevo", contratoLabel: "Contrato Nuevo (30k por unidad)", limitePorUnidad: 30000, tipo: "carrier" }
+        ];
+        
+        let currentUser = null;
+        let adminPasswordAttempts = 0;
+        const MAX_PASSWORD_ATTEMPTS = 3;
+        
+        function cleanNumber(value) {
+            if (!value) return 0;
+            let str = value.toString().replace(/[$USD\s,]/g, '');
+            return isNaN(parseFloat(str)) ? 0 : parseFloat(str);
+        }
+        
+        function formatNumber(num) {
+            return num.toLocaleString('es-ES');
+        }
+        
+        function showAlert(id, message, type) {
+            const el = document.getElementById(id);
+            if (el) {
+                el.innerHTML = message;
+                el.className = `alert alert-${type}`;
+                el.style.display = 'block';
+                if (type !== 'info') setTimeout(() => el.style.display = 'none', 5000);
+            }
+        }
+        
+        // ==============================================
+        // FUNCIONES DE VERIFICACIÓN LOCAL
+        // ==============================================
+        
+        function verificarPermisosUsuario(email) {
+            return new Promise((resolve) => {
+                if (SOLO_LECTURA[email]) {
+                    const alertDiv = document.getElementById('loginAlert');
+                    alertDiv.innerHTML = 
+                        `<div style="text-align: center;">
+                            <span style="font-size: 40px; display: block; margin-bottom: 10px;">👀</span>
+                            <strong style="color: #2E7D32; font-size: 18px;">ACCESO EN MODO VISTA</strong><br>
+                            <p style="margin-top: 10px;">${SOLO_LECTURA[email].motivo}</p>
+                            <div style="font-size: 12px; color: #666; margin-top: 10px;">
+                                Se ha notificado tu acceso al área de crédito.
+                            </div>
+                            <button onclick="document.getElementById('loginAlert').style.display='none'" 
+                                    style="margin-top: 15px; padding: 8px 20px; background: #4CAF50; color: white; border: none; border-radius: 5px; cursor: pointer;">
+                                Continuar
+                            </button>
+                        </div>`;
+                    alertDiv.className = 'alert alert-success';
+                    alertDiv.style.display = 'block';
+                    resolve({ soloLectura: true, nombre: SOLO_LECTURA[email].nombre });
+                } else {
+                    resolve({ soloLectura: false });
+                }
+            });
+        }
+        
+        function verifyAdminPasswordLocal(password) {
+            if (password === ADMIN_PASSWORD) {
+                return { success: true, message: "Autenticación exitosa" };
+            } else {
+                return { 
+                    success: false, 
+                    message: "Contraseña incorrecta",
+                    error: "La contraseña proporcionada no es válida para el administrador."
+                };
+            }
+        }
+        
+        function loadUsersForLogin() {
+            displayUsers(USERS_DATA);
+        }
+        
+        function displayUsers(users) {
+            const container = document.getElementById('usersContainer');
+            container.innerHTML = '';
+            
+            Object.keys(users).sort().forEach(email => {
+                const user = users[email];
+                if (!user.active) return;
+                
+                const card = document.createElement('div');
+                
+                if (user.soloLectura) {
+                    card.className = 'user-card usuario solo-lectura-card';
+                    card.onclick = () => selectNormalUserForLogin(user.name, email);
+                    card.innerHTML = `
+                        <div class="user-avatar" style="background: #E8F5E9; color: #2E7D32;">👀</div>
+                        <div class="user-name" style="color: #2E7D32;">
+                            ${user.name}
+                            <span style="font-size: 11px; background: #E8F5E9; padding: 2px 6px; border-radius: 10px; margin-left: 5px;">MODO VISTA</span>
+                        </div>
+                        <div class="user-email">${email}</div>
+                        <div class="user-role role-solo-lectura">
+                            👀 Solo Lectura
+                        </div>
+                    `;
+                } else {
+                    card.className = `user-card ${user.role === 'superadmin' ? 'coordinador' : 'usuario'}`;
+                    card.onclick = () => user.requiresPassword ? selectAdminForLogin(user.name, email) : selectNormalUserForLogin(user.name, email);
+                    card.innerHTML = `
+                        <div class="user-avatar">${user.role === 'superadmin' ? '👑' : '👤'}</div>
+                        <div class="user-name">${user.name}</div>
+                        <div class="user-email">${email}</div>
+                        <div class="user-role ${user.role === 'superadmin' ? 'role-coordinador' : 'role-usuario'}">
+                            ${user.role === 'superadmin' ? 'SuperAdmin' : 'Usuario'} ${user.requiresPassword ? '🔒' : ''}
+                        </div>
+                    `;
+                }
+                container.appendChild(card);
+            });
+        }
+        
+        function selectNormalUserForLogin(name, email) {
+            document.getElementById('userDisplay').value = name;
+            document.getElementById('userEmail').value = email;
+            document.getElementById('loginForm').style.display = 'block';
+        }
+        
+        function selectAdminForLogin(name, email) {
+            document.getElementById('userDisplay').value = name;
+            document.getElementById('userEmail').value = email;
+            document.getElementById('adminPasswordModal').classList.remove('hidden');
+            adminPasswordAttempts = 0;
+        }
+        
+        function verifyAdminPassword() {
+            const password = document.getElementById('adminPasswordInput').value;
+            if (!password) return showAlert('passwordAlert', 'Ingresa la contraseña', 'error');
+            
+            adminPasswordAttempts++;
+            if (adminPasswordAttempts > MAX_PASSWORD_ATTEMPTS) {
+                showAlert('passwordAlert', 'Demasiados intentos', 'error');
+                return setTimeout(cancelAdminLogin, 2000);
+            }
+            
+            const res = verifyAdminPasswordLocal(password);
+            if (res.success) {
+                document.getElementById('adminPasswordModal').classList.add('hidden');
+                document.getElementById('loginForm').style.display = 'block';
+                showAlert('loginAlert', '✅ Contraseña correcta', 'success');
+            } else {
+                showAlert('passwordAlert', `❌ ${res.error} (${adminPasswordAttempts}/${MAX_PASSWORD_ATTEMPTS})`, 'error');
+            }
+        }
+        
+        function cancelAdminLogin() {
+            document.getElementById('adminPasswordModal').classList.add('hidden');
+            document.getElementById('loginForm').style.display = 'none';
+            document.getElementById('adminPasswordInput').value = '';
+            adminPasswordAttempts = 0;
+        }
+        
+        function cancelLogin() {
+            document.getElementById('loginForm').style.display = 'none';
+        }
+        
+        async function confirmLogin() {
+            const email = document.getElementById('userEmail').value.trim().toLowerCase();
+            if (!email) return showAlert('loginAlert', 'Ingresa tu correo', 'error');
+            
+            const permisos = await verificarPermisosUsuario(email);
+            
+            if (USERS_DATA[email]) {
+                const user = USERS_DATA[email];
+                
+                currentUser = { 
+                    name: user.name, 
+                    email, 
+                    role: user.role, 
+                    isSuperAdmin: user.isSuperAdmin || false,
+                    soloLectura: user.soloLectura || false
+                };
+                
+                document.getElementById('userSelectionScreen').classList.add('hidden');
+                document.getElementById('dashboard').classList.remove('hidden');
+                
+                document.getElementById('userNameDisplay').textContent = currentUser.name;
+                document.getElementById('userEmailDisplay').textContent = currentUser.email;
+                
+                const badge = document.getElementById('userRoleBadge');
+                
+                if (currentUser.soloLectura) {
+                    badge.textContent = 'Modo Vista';
+                    badge.className = 'badge badge-solo-lectura';
+                    document.getElementById('userInfo').classList.add('solo-lectura');
+                    document.getElementById('soloLecturaIndicator').classList.remove('hidden');
+                    document.getElementById('modoVistaBanner').classList.remove('hidden');
+                    document.getElementById('soloLecturaWarning').classList.remove('hidden');
+                    
+                    document.getElementById('increaseMenuBtn').disabled = true;
+                    document.getElementById('increaseMenuBtn2').style.opacity = '0.5';
+                    document.getElementById('increaseMenuBtn2').style.cursor = 'not-allowed';
+                    document.getElementById('applyIncreaseBtn').disabled = true;
+                    document.getElementById('increaseType').disabled = true;
+                    document.getElementById('entitySelect').disabled = true;
+                    document.getElementById('increaseAmount').disabled = true;
+                    document.getElementById('increaseReason').disabled = true;
+                } else {
+                    badge.textContent = currentUser.role === 'superadmin' ? 'SuperAdmin' : 'Usuario';
+                    badge.className = currentUser.role === 'superadmin' ? 'badge badge-coordinador' : 'badge';
+                    
+                    if (currentUser.isSuperAdmin) {
+                        document.getElementById('userInfo').classList.add('admin');
+                        document.getElementById('superadminIndicator').classList.remove('hidden');
+                    }
+                }
+                
+                loadAllDataFast();
+            } else {
+                showAlert('loginAlert', 'Usuario no autorizado', 'error');
+            }
+        }
+        
+        function logout() {
+            if (confirm('¿Cerrar sesión?')) {
+                currentUser = null;
+                document.getElementById('dashboard').classList.add('hidden');
+                document.getElementById('userSelectionScreen').classList.remove('hidden');
+                document.getElementById('loginForm').style.display = 'none';
+                document.getElementById('adminPasswordModal').classList.add('hidden');
+                document.getElementById('superadminIndicator').classList.add('hidden');
+                document.getElementById('soloLecturaIndicator').classList.add('hidden');
+                document.getElementById('modoVistaBanner').classList.add('hidden');
+                document.getElementById('soloLecturaWarning').classList.add('hidden');
+                loadUsersForLogin();
+            }
+        }
+        
+        function showSection(section) {
+            if (section === 'increase' && currentUser?.soloLectura) {
+                showAlert('formAlert', '👀 No tienes permisos para realizar aumentos. Estás en modo vista.', 'warning');
+                return;
+            }
+            
+            document.querySelectorAll('.section').forEach(s => s.classList.remove('active'));
+            document.querySelectorAll('.menu-btn').forEach(b => b.classList.remove('active'));
+            document.getElementById(section + 'Section').classList.add('active');
+            document.querySelectorAll('.menu-btn').forEach(b => {
+                if (b.textContent.includes(section === 'limits' ? 'Límites' : 'Aumentos'))
+                    b.classList.add('active');
+            });
+        }
+        
+        function loadAllDataFast() {
+            showAlert('dataAlert', '⚡ Cargando datos...', 'info');
+            
+            const totalLimits = [...brokersList, ...carriersList].reduce((sum, item) => sum + item.limite, 0);
+            const totalPowerUnits = carriersList.reduce((sum, item) => sum + (item.powerUnits || 0), 0);
+            
+            document.getElementById('totalBrokers').textContent = formatNumber(brokersList.length);
+            document.getElementById('totalCarriers').textContent = formatNumber(carriersList.length);
+            document.getElementById('totalLimits').textContent = '$' + formatNumber(totalLimits);
+            document.getElementById('totalPowerUnits').textContent = formatNumber(totalPowerUnits);
+            
+            document.getElementById('fastIndicator').style.display = 'block';
+            setTimeout(() => document.getElementById('fastIndicator').style.display = 'none', 2000);
+            
+            loadData();
+            showAlert('dataAlert', `✅ ${brokersList.length} brokers, ${carriersList.length} carriers`, 'success');
+        }
+        
+        function loadData() {
+            const type = document.getElementById('dataType').value;
+            renderDataTable(type === 'brokers' ? brokersList : carriersList, type);
+        }
+        
+        function renderDataTable(data, type) {
+            const container = document.getElementById('dataContent');
+            if (!data || !data.length) {
+                container.innerHTML = '<p style="padding:40px;text-align:center;">No hay datos</p>';
+                document.getElementById('countDisplay').textContent = '0';
+                return;
+            }
+            
+            document.getElementById('countDisplay').textContent = data.length;
+            
+            let html = '<table class="data-table"><thead><tr>';
+            
+            if (type === 'brokers') {
+                html += '<th>#</th><th>Nombre</th><th>MC</th><th>Límite</th>';
+                if (!currentUser?.soloLectura) html += '<th>Acción</th>';
+                html += '</tr></thead><tbody>';
+                data.forEach((item, i) => {
+                    html += `
+                        <tr>
+                            <td>${i+1}</td>
+                            <td><strong>${item.nombre}</strong></td>
+                            <td><code>${item.mc || '-'}</code></td>
+                            <td>$${formatNumber(item.limite)}</td>`;
+                    if (!currentUser?.soloLectura) {
+                        html += `<td><button onclick="quickIncrease('broker','${item.nombre.replace(/'/g,"\\'")}',${item.limite})" class="btn btn-sm btn-success">➕</button></td>`;
+                    }
+                    html += `</tr>`;
+                });
+            } else {
+                html += '<th>#</th><th>Nombre</th><th>Unidades</th><th>Fecha Contrato</th><th>Tipo</th><th>Límite/Unidad</th><th>Límite</th>';
+                if (!currentUser?.soloLectura) html += '<th>Acción</th>';
+                html += '</tr></thead><tbody>';
+                data.forEach((item, i) => {
+                    const fecha = item.fechaContrato ? new Date(item.fechaContrato).toLocaleDateString('es-ES') : '-';
+                    const tipoClass = item.tipoContrato === 'nuevo' ? 'contract-nuevo' : 'contract-viejo';
+                    html += `
+                        <tr>
+                            <td>${i+1}</td>
+                            <td><strong>${item.nombre}</strong></td>
+                            <td><div class="power-unit-cell">${item.powerUnits || '-'}</div></td>
+                            <td>${fecha}</td>
+                            <td><span class="${tipoClass}">${item.contratoLabel}</span></td>
+                            <td>$${formatNumber(item.limitePorUnidad)}</td>
+                            <td>$${formatNumber(item.limite)}</td>`;
+                    if (!currentUser?.soloLectura) {
+                        html += `<td><button onclick="quickIncrease('carrier','${item.nombre.replace(/'/g,"\\'")}',${item.limite},${item.powerUnits})" class="btn btn-sm btn-success">➕</button></td>`;
+                    }
+                    html += `</tr>`;
+                });
+            }
+            
+            html += '</tbody></table>';
+            container.innerHTML = html;
+        }
+        
+        function filterData() {
+            const term = document.getElementById('searchInput').value.toLowerCase();
+            const type = document.getElementById('dataType').value;
+            const data = type === 'brokers' ? brokersList : carriersList;
+            
+            if (!term) {
+                document.getElementById('countDisplay').textContent = data.length;
+                return renderDataTable(data, type);
+            }
+            
+            const filtered = data.filter(item => 
+                item.nombre.toLowerCase().includes(term) ||
+                (item.mc && item.mc.toLowerCase().includes(term)) ||
+                item.limite.toString().includes(term) ||
+                (item.fechaContrato && item.fechaContrato.toString().toLowerCase().includes(term))
+            );
+            
+            document.getElementById('countDisplay').textContent = filtered.length;
+            renderDataTable(filtered, type);
+        }
+        
+        function quickIncrease(type, name, limit, units = 0) {
+            if (currentUser?.soloLectura) {
+                showAlert('formAlert', '👀 No tienes permisos para realizar aumentos', 'warning');
+                return;
+            }
+            document.getElementById('increaseType').value = type;
+            updateEntities();
+            setTimeout(() => {
+                document.getElementById('entitySelect').value = name;
+                document.getElementById('currentLimit').value = '$' + formatNumber(limit);
+                document.getElementById('currentPowerUnits').value = units || 'Sin unidades';
+                showSection('increase');
+            }, 100);
+        }
+        
+        function updateEntities() {
+            if (currentUser?.soloLectura) return;
+            
+            const type = document.getElementById('increaseType').value;
+            const select = document.getElementById('entitySelect');
+            
+            if (!type) {
+                select.disabled = true;
+                select.innerHTML = '<option>Selecciona tipo primero</option>';
+                return;
+            }
+            
+            const list = type === 'broker' ? brokersList : carriersList;
+            select.disabled = false;
+            select.innerHTML = '<option value="">Seleccionar...</option>';
+            
+            list.sort((a,b) => a.nombre.localeCompare(b.nombre)).forEach(item => {
+                const opt = document.createElement('option');
+                opt.value = item.nombre;
+                opt.textContent = `${item.nombre} ($${formatNumber(item.limite)})${type==='carrier' && item.powerUnits ? ` - ${item.powerUnits} unidades` : ''}`;
+                select.appendChild(opt);
+            });
+            
+            select.onchange = () => {
+                const selected = list.find(i => i.nombre === select.value);
+                if (selected) {
+                    document.getElementById('currentLimit').value = '$' + formatNumber(selected.limite);
+                    if (type === 'carrier') {
+                        document.getElementById('currentPowerUnits').value = selected.powerUnits || 'Sin unidades';
+                        showAlert('formAlert', `📋 ${selected.contratoLabel}`, 'info');
+                    } else {
+                        document.getElementById('currentPowerUnits').value = 'No aplica';
+                    }
+                }
+            };
+        }
+        
+        function applyIncrease() {
+            if (currentUser?.soloLectura) {
+                showAlert('formAlert', '❌ No tienes permisos para realizar aumentos. Estás en modo vista.', 'error');
+                return;
+            }
+            
+            const type = document.getElementById('increaseType').value;
+            const entity = document.getElementById('entitySelect').value;
+            const amount = parseFloat(document.getElementById('increaseAmount').value);
+            const reason = document.getElementById('increaseReason').value;
+            
+            if (!type || !entity || !amount) {
+                return showAlert('formAlert', 'Completa todos los campos', 'error');
+            }
+            
+            const currentLimit = cleanNumber(document.getElementById('currentLimit').value);
+            const newLimit = currentLimit + amount;
+            
+            if (!confirm(`¿Aplicar aumento de $${formatNumber(amount)} a ${entity}?\n\nActual: $${formatNumber(currentLimit)}\nNuevo: $${formatNumber(newLimit)}`)) return;
+            
+            // Actualizar datos localmente
+            if (type === 'broker') {
+                const broker = brokersList.find(b => b.nombre === entity);
+                if (broker) {
+                    broker.limite = newLimit;
+                }
+            } else {
+                const carrier = carriersList.find(c => c.nombre === entity);
+                if (carrier) {
+                    carrier.limite = newLimit;
+                }
+            }
+            
+            showAlert('formAlert', '✅ Aumento aplicado correctamente', 'success');
+            
+            // Limpiar campos
+            document.getElementById('increaseAmount').value = '';
+            document.getElementById('increaseReason').value = '';
+            
+            // Recargar datos
+            setTimeout(() => loadAllDataFast(), 1000);
+        }
+        
+        // Funciones CSV
+        function downloadCSV() {
+            const type = document.getElementById('dataType').value;
+            const data = type === 'brokers' ? brokersList : carriersList;
+            const searchTerm = document.getElementById('searchInput').value.toLowerCase();
+            
+            let dataToExport = data;
+            if (searchTerm) {
+                dataToExport = data.filter(item => 
+                    item.nombre.toLowerCase().includes(searchTerm) ||
+                    (item.mc && item.mc.toLowerCase().includes(searchTerm)) ||
+                    item.limite.toString().includes(searchTerm) ||
+                    (item.fechaContrato && item.fechaContrato.toString().toLowerCase().includes(searchTerm))
+                );
+            }
+            
+            if (!dataToExport.length) {
+                showAlert('dataAlert', 'No hay datos para exportar', 'warning');
+                return;
+            }
+            
+            let csvContent = "";
+            const fecha = new Date().toLocaleDateString('es-ES').replace(/\//g, '-');
+            
+            if (type === 'brokers') {
+                csvContent = "Nombre,MC,Límite (USD)\n";
+                dataToExport.forEach(item => {
+                    csvContent += `"${item.nombre}","${item.mc || ''}",${item.limite}\n`;
+                });
+            } else {
+                csvContent = "Nombre,Unidades Poder,Fecha Contrato,Tipo Contrato,Límite por Unidad,Límite Total (USD)\n";
+                dataToExport.forEach(item => {
+                    const fecha = item.fechaContrato ? new Date(item.fechaContrato).toLocaleDateString('es-ES') : '';
+                    csvContent += `"${item.nombre}",${item.powerUnits || 0},"${fecha}","${item.tipoContrato === 'nuevo' ? 'Nuevo (30k)' : 'Viejo (50k)'}",${item.limitePorUnidad},${item.limite}\n`;
+                });
+            }
+            
+            const blob = new Blob(["\uFEFF" + csvContent], { type: 'text/csv;charset=utf-8;' });
+            const link = document.createElement('a');
+            const url = URL.createObjectURL(blob);
+            const nombreArchivo = `Nuko_Capital_${type === 'brokers' ? 'Brokers' : 'Carriers'}_${fecha}.csv`;
+            
+            link.href = url;
+            link.setAttribute('download', nombreArchivo);
+            document.body.appendChild(link);
+            link.click();
+            document.body.removeChild(link);
+            URL.revokeObjectURL(url);
+            
+            showAlert('dataAlert', `✅ Reporte CSV descargado`, 'success');
+        }
+        
+        function downloadCompleteReport() {
+            const fecha = new Date().toLocaleDateString('es-ES').replace(/\//g, '-');
+            let csvContent = "";
+            
+            csvContent += "=== BROKERS ===\n";
+            csvContent += "Nombre,MC,Límite (USD)\n";
+            brokersList.forEach(item => {
+                csvContent += `"${item.nombre}","${item.mc || ''}",${item.limite}\n`;
+            });
+            
+            csvContent += "\n\n=== CARRIERS ===\n";
+            csvContent += "Nombre,Unidades Poder,Fecha Contrato,Tipo Contrato,Límite por Unidad,Límite Total (USD)\n";
+            carriersList.forEach(item => {
+                const fecha = item.fechaContrato ? new Date(item.fechaContrato).toLocaleDateString('es-ES') : '';
+                csvContent += `"${item.nombre}",${item.powerUnits || 0},"${fecha}","${item.tipoContrato === 'nuevo' ? 'Nuevo (30k)' : 'Viejo (50k)'}",${item.limitePorUnidad},${item.limite}\n`;
+            });
+            
+            const blob = new Blob(["\uFEFF" + csvContent], { type: 'text/csv;charset=utf-8;' });
+            const link = document.createElement('a');
+            const url = URL.createObjectURL(blob);
+            const nombreArchivo = `Nuko_Capital_Reporte_Completo_${fecha}.csv`;
+            
+            link.href = url;
+            link.setAttribute('download', nombreArchivo);
+            document.body.appendChild(link);
+            link.click();
+            document.body.removeChild(link);
+            URL.revokeObjectURL(url);
+            
+            showAlert('dataAlert', '✅ Reporte completo descargado', 'success');
+        }
+        
+        // Inicializar
+        document.addEventListener('DOMContentLoaded', loadUsersForLogin);
+    </script>
+</body>
+</html>
