@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>index</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            margin: 0;
+            padding: 20px;
+        }
+        .container {
+            background: white;
+            border-radius: 20px;
+            padding: 40px;
+            text-align: center;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.2);
+        }
+        h1 {
+            color: #1a237e;
+            margin-bottom: 20px;
+        }
+        .status {
+            color: green;
+            font-weight: bold;
+            margin: 20px 0;
+        }
+        button {
+            background: #1a237e;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 5px;
+            cursor: pointer;
+            margin: 5px;
+        }
+        button:hover {
+            background: #283593;
+        }
+        .hidden {
+            display: none;
+        }
+        .user-card {
+            background: #f5f5f5;
+            padding: 15px;
+            margin: 10px;
+            border-radius: 10px;
+            cursor: pointer;
+            transition: transform 0.2s;
+        }
+        .user-card:hover {
+            transform: translateY(-2px);
+            background: #e0e0e0;
+        }
+    </style>
+</head>
+<body>
+    <div class="container" id="mainScreen">
+        <h1>🏦 Nuko Capital</h1>
+        <h2>Gestor de Límites</h2>
+        <div id="usersList"></div>
+        <div id="loginPanel" class="hidden">
+            <input type="email" id="userEmail" placeholder="Correo electrónico" style="padding: 10px; width: 80%; margin: 10px;">
+            <br>
+            <button onclick="confirmLogin()">Acceder</button>
+            <button onclick="cancelLogin()">Cancelar</button>
+        </div>
+        <div id="dashboard" class="hidden">
+            <h3 id="userName"></h3>
+            <p id="userEmailDisplay"></p>
+            <button onclick="logout()">Salir</button>
+            <div id="dataDisplay"></div>
+        </div>
+        <div id="message"></div>
+    </div>
+
+    <script>
+        // Datos de usuarios
+        const users = {
+            "test@test.com": { name: "Usuario Test", role: "usuario" }
+        };
+        
+        let currentUser = null;
+        
+        function loadUsers() {
+            const container = document.getElementById('usersList');
+            container.innerHTML = '<div class="user-card" onclick="showLogin()">👤 Iniciar Sesión</div>';
+        }
+        
+        function showLogin() {
+            document.getElementById('loginPanel').classList.remove('hidden');
+        }
+        
+        function cancelLogin() {
+            document.getElementById('loginPanel').classList.add('hidden');
+            document.getElementById('userEmail').value = '';
+        }
+        
+        function confirmLogin() {
+            const email = document.getElementById('userEmail').value.trim();
+            if (!email) {
+                showMessage('Ingresa un correo', 'error');
+                return;
+            }
+            
+            if (users[email]) {
+                currentUser = { name: users[email].name, email: email };
+                document.getElementById('loginPanel').classList.add('hidden');
+                document.getElementById('dashboard').classList.remove('hidden');
+                document.getElementById('userName').textContent = 'Bienvenido ' + users[email].name;
+                document.getElementById('userEmailDisplay').textContent = email;
+                document.getElementById('dataDisplay').innerHTML = '<p>✅ Has iniciado sesión correctamente</p>';
+                showMessage('Acceso concedido', 'success');
+            } else {
+                showMessage('Usuario no autorizado', 'error');
+            }
+        }
+        
+        function logout() {
+            currentUser = null;
+            document.getElementById('dashboard').classList.add('hidden');
+            document.getElementById('userEmail').value = '';
+            showMessage('Sesión cerrada', 'info');
+        }
+        
+        function showMessage(msg, type) {
+            const msgDiv = document.getElementById('message');
+            msgDiv.textContent = msg;
+            msgDiv.style.color = type === 'error' ? 'red' : (type === 'success' ? 'green' : 'blue');
+            msgDiv.style.marginTop = '20px';
+            setTimeout(() => msgDiv.textContent = '', 3000);
+        }
+        
+        // Inicializar
+        loadUsers();
+    </script>
+</body>
+</html>
