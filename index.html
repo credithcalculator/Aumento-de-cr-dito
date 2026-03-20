@@ -288,7 +288,7 @@
             to { opacity: 1; transform: translateY(0); }
         }
 
-        /* Barra de herramientas */
+        /* Barra de herramientas con import/export */
         .toolbar-section {
             display: flex;
             justify-content: space-between;
@@ -367,6 +367,90 @@
             filter: brightness(105%);
         }
 
+        /* Área de importación */
+        .import-area {
+            background: linear-gradient(135deg, #e0f2fe, #bae6fd);
+            border-radius: 16px;
+            padding: 20px;
+            margin-bottom: 25px;
+            border: 2px solid #0ea5e9;
+        }
+
+        .import-header {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            margin-bottom: 15px;
+        }
+
+        .import-icon {
+            font-size: 32px;
+        }
+
+        .import-title {
+            font-size: 18px;
+            font-weight: 700;
+            color: #0369a1;
+        }
+
+        .import-desc {
+            font-size: 12px;
+            color: #0284c7;
+            margin-top: 5px;
+        }
+
+        .import-buttons {
+            display: flex;
+            gap: 15px;
+            flex-wrap: wrap;
+            align-items: center;
+        }
+
+        .file-input-label {
+            background: #0ea5e9;
+            color: white;
+            padding: 10px 20px;
+            border-radius: 40px;
+            cursor: pointer;
+            font-weight: 600;
+            transition: all 0.3s;
+            display: inline-block;
+        }
+
+        .file-input-label:hover {
+            background: #0284c7;
+            transform: translateY(-2px);
+        }
+
+        input[type="file"] {
+            display: none;
+        }
+
+        .template-btn {
+            background: #64748b;
+            color: white;
+        }
+
+        .template-btn:hover {
+            background: #475569;
+        }
+
+        .progress-bar {
+            width: 100%;
+            height: 8px;
+            background: #e2e8f0;
+            border-radius: 4px;
+            overflow: hidden;
+            margin-top: 15px;
+        }
+
+        .progress-fill {
+            height: 100%;
+            background: #10b981;
+            width: 0%;
+            transition: width 0.3s;
+        }
+
         /* Formulario para agregar individual */
         .add-item-form {
             background: #f8fafc;
@@ -402,137 +486,12 @@
             font-size: 14px;
         }
 
-        /* Iconos para agregar masivamente */
-        .mass-icons {
-            display: flex;
-            gap: 15px;
-            margin-bottom: 25px;
-            flex-wrap: wrap;
-        }
-
-        .mass-icon-card {
-            flex: 1;
-            min-width: 200px;
-            background: linear-gradient(135deg, #fef3c7, #fde68a);
-            border-radius: 16px;
-            padding: 20px;
-            text-align: center;
-            cursor: pointer;
-            transition: all 0.3s;
-            border: 2px solid #f59e0b;
-        }
-
-        .mass-icon-card:hover {
-            transform: translateY(-5px);
-            box-shadow: 0 10px 25px -5px rgba(245, 158, 11, 0.3);
-        }
-
-        .mass-icon {
-            font-size: 48px;
-            margin-bottom: 10px;
-        }
-
-        .mass-icon-title {
-            font-size: 18px;
-            font-weight: 700;
-            color: #92400e;
-            margin-bottom: 5px;
-        }
-
-        .mass-icon-desc {
-            font-size: 11px;
-            color: #b45309;
-        }
-
-        /* Modal para agregar masivamente */
-        .mass-modal {
-            position: fixed;
-            top: 0;
-            left: 0;
-            right: 0;
-            bottom: 0;
-            background: rgba(0,0,0,0.7);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            z-index: 3000;
-        }
-
-        .mass-modal-content {
-            background: white;
-            border-radius: 24px;
-            padding: 30px;
-            max-width: 600px;
-            width: 90%;
-            max-height: 85vh;
-            overflow-y: auto;
-        }
-
-        .mass-modal-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 20px;
-            padding-bottom: 15px;
-            border-bottom: 2px solid #e2e8f0;
-        }
-
-        .mass-modal-header h3 {
-            color: #1e3c72;
-            font-size: 24px;
-        }
-
-        .close-modal {
-            font-size: 28px;
-            cursor: pointer;
-            color: #64748b;
-        }
-
-        .close-modal:hover {
-            color: #ef4444;
-        }
-
-        .mass-form-field {
-            margin-bottom: 20px;
-        }
-
-        .mass-form-field label {
-            display: block;
-            font-size: 12px;
-            font-weight: 600;
-            color: #1e3c72;
-            margin-bottom: 8px;
-        }
-
-        .mass-form-field input,
-        .mass-form-field select {
-            width: 100%;
-            padding: 12px;
-            border: 1px solid #e2e8f0;
-            border-radius: 10px;
-            font-size: 14px;
-        }
-
-        .preview-list {
-            background: #f8fafc;
-            border-radius: 12px;
-            padding: 15px;
-            max-height: 200px;
-            overflow-y: auto;
-            margin: 15px 0;
-            font-size: 12px;
-            font-family: monospace;
-        }
-
-        .preview-item {
-            padding: 4px 0;
-            border-bottom: 1px solid #e2e8f0;
-        }
-
         /* Tabla de datos */
         .table-wrapper {
             overflow-x: auto;
             margin-top: 20px;
+            max-height: 500px;
+            overflow-y: auto;
         }
 
         .data-grid {
@@ -547,6 +506,9 @@
             font-weight: 600;
             color: #1e293b;
             border-bottom: 2px solid #e2e8f0;
+            position: sticky;
+            top: 0;
+            background: #f1f5f9;
         }
 
         .data-grid td {
@@ -563,6 +525,8 @@
             display: flex;
             flex-direction: column;
             gap: 12px;
+            max-height: 500px;
+            overflow-y: auto;
         }
 
         .history-entry {
@@ -623,8 +587,9 @@
 
         .alert-success { border-left: 4px solid #10b981; color: #065f46; }
         .alert-error { border-left: 4px solid #ef4444; color: #991b1b; }
+        .alert-info { border-left: 4px solid #0ea5e9; color: #0369a1; }
 
-        /* Modal para aumentar */
+        /* Modal */
         .modal-overlay {
             position: fixed;
             top: 0;
@@ -742,12 +707,24 @@
                     </div>
                 </div>
 
-                <!-- ICONOS PARA AGREGAR MASIVAMENTE BROKERS -->
-                <div class="mass-icons">
-                    <div class="mass-icon-card" onclick="openMassBrokerModal()">
-                        <div class="mass-icon">📊➕</div>
-                        <div class="mass-icon-title">Agregar Múltiples Brokers</div>
-                        <div class="mass-icon-desc">Agrega varios brokers de una vez</div>
+                <!-- Área de importación masiva -->
+                <div class="import-area">
+                    <div class="import-header">
+                        <div class="import-icon">📤</div>
+                        <div>
+                            <div class="import-title">Importar Brokers desde CSV</div>
+                            <div class="import-desc">Sube un archivo CSV con el formato: Nombre, MC, Límite</div>
+                        </div>
+                    </div>
+                    <div class="import-buttons">
+                        <label class="file-input-label" for="brokerFileInput">
+                            📂 Seleccionar archivo CSV
+                        </label>
+                        <input type="file" id="brokerFileInput" accept=".csv" onchange="importBrokersCSV(this)">
+                        <button class="btn template-btn" onclick="downloadBrokerTemplate()">📄 Descargar plantilla</button>
+                    </div>
+                    <div id="brokerProgress" class="progress-bar hidden">
+                        <div class="progress-fill" id="brokerProgressFill"></div>
                     </div>
                 </div>
 
@@ -770,12 +747,24 @@
                     </div>
                 </div>
 
-                <!-- ICONOS PARA AGREGAR MASIVAMENTE CARRIERS -->
-                <div class="mass-icons">
-                    <div class="mass-icon-card" onclick="openMassCarrierModal()">
-                        <div class="mass-icon">🚛➕</div>
-                        <div class="mass-icon-title">Agregar Múltiples Carriers</div>
-                        <div class="mass-icon-desc">Agrega varios carriers de una vez</div>
+                <!-- Área de importación masiva -->
+                <div class="import-area">
+                    <div class="import-header">
+                        <div class="import-icon">📤</div>
+                        <div>
+                            <div class="import-title">Importar Carriers desde CSV</div>
+                            <div class="import-desc">Sube un archivo CSV con el formato: Nombre, Unidades Poder, Fecha Contrato, Tipo Contrato, Límite</div>
+                        </div>
+                    </div>
+                    <div class="import-buttons">
+                        <label class="file-input-label" for="carrierFileInput">
+                            📂 Seleccionar archivo CSV
+                        </label>
+                        <input type="file" id="carrierFileInput" accept=".csv" onchange="importCarriersCSV(this)">
+                        <button class="btn template-btn" onclick="downloadCarrierTemplate()">📄 Descargar plantilla</button>
+                    </div>
+                    <div id="carrierProgress" class="progress-bar hidden">
+                        <div class="progress-fill" id="carrierProgressFill"></div>
                     </div>
                 </div>
 
@@ -801,91 +790,6 @@
                     </div>
                 </div>
                 <div id="historyList" class="history-timeline"></div>
-            </div>
-        </div>
-    </div>
-
-    <!-- Modal para agregar múltiples Brokers -->
-    <div id="massBrokerModal" class="mass-modal hidden">
-        <div class="mass-modal-content">
-            <div class="mass-modal-header">
-                <h3>📊 Agregar Múltiples Brokers</h3>
-                <span class="close-modal" onclick="closeMassBrokerModal()">&times;</span>
-            </div>
-            <div class="mass-form-field">
-                <label>Nombre Base</label>
-                <input type="text" id="massBrokerNameBase" placeholder="Ej: Broker, Logistics, Transport" value="Broker">
-            </div>
-            <div class="mass-form-field">
-                <label>Desde #</label>
-                <input type="number" id="massBrokerStartNum" value="1" min="1">
-            </div>
-            <div class="mass-form-field">
-                <label>Hasta #</label>
-                <input type="number" id="massBrokerEndNum" value="100" min="1">
-            </div>
-            <div class="mass-form-field">
-                <label>MC Base</label>
-                <input type="text" id="massBrokerMCBase" placeholder="Ej: MC" value="MC">
-            </div>
-            <div class="mass-form-field">
-                <label>Límite Mínimo (USD)</label>
-                <input type="number" id="massBrokerMinLimit" value="50000">
-            </div>
-            <div class="mass-form-field">
-                <label>Límite Máximo (USD)</label>
-                <input type="number" id="massBrokerMaxLimit" value="200000">
-            </div>
-            <div id="massBrokerPreview" class="preview-list">
-                <div class="preview-item">📋 Vista previa</div>
-            </div>
-            <div style="display: flex; gap: 10px;">
-                <button class="btn btn-primary" onclick="previewMassBrokers()">👁️ Vista Previa</button>
-                <button class="btn btn-success" onclick="addMassBrokers()">✅ Agregar Brokers</button>
-            </div>
-        </div>
-    </div>
-
-    <!-- Modal para agregar múltiples Carriers -->
-    <div id="massCarrierModal" class="mass-modal hidden">
-        <div class="mass-modal-content">
-            <div class="mass-modal-header">
-                <h3>🚛 Agregar Múltiples Carriers</h3>
-                <span class="close-modal" onclick="closeMassCarrierModal()">&times;</span>
-            </div>
-            <div class="mass-form-field">
-                <label>Nombre Base</label>
-                <input type="text" id="massCarrierNameBase" placeholder="Ej: Carrier, Transport, Logistics" value="Carrier">
-            </div>
-            <div class="mass-form-field">
-                <label>Desde #</label>
-                <input type="number" id="massCarrierStartNum" value="1" min="1">
-            </div>
-            <div class="mass-form-field">
-                <label>Hasta #</label>
-                <input type="number" id="massCarrierEndNum" value="100" min="1">
-            </div>
-            <div class="mass-form-field">
-                <label>Unidades de Poder</label>
-                <input type="number" id="massCarrierPowerUnits" value="3" min="1">
-            </div>
-            <div class="mass-form-field">
-                <label>Tipo de Contrato</label>
-                <select id="massCarrierType">
-                    <option value="viejo">Viejo (50k por unidad)</option>
-                    <option value="nuevo">Nuevo (30k por unidad)</option>
-                </select>
-            </div>
-            <div class="mass-form-field">
-                <label>Fecha de Contrato</label>
-                <input type="date" id="massCarrierDate" value="2024-01-01">
-            </div>
-            <div id="massCarrierPreview" class="preview-list">
-                <div class="preview-item">📋 Vista previa</div>
-            </div>
-            <div style="display: flex; gap: 10px;">
-                <button class="btn btn-primary" onclick="previewMassCarriers()">👁️ Vista Previa</button>
-                <button class="btn btn-success" onclick="addMassCarriers()">✅ Agregar Carriers</button>
             </div>
         </div>
     </div>
@@ -950,7 +854,7 @@
             }
         };
         
-        // DATOS
+        // Datos iniciales
         let brokers = [];
         let carriers = [];
         let history = [];
@@ -958,43 +862,38 @@
         let selectedUserEmail = null;
         let pendingIncrease = null;
         
+        // ============================================
+        // FUNCIONES DE PERSISTENCIA
+        // ============================================
+        
         function loadData() {
-            const savedBrokers = localStorage.getItem('nuko_brokers_v6');
-            const savedCarriers = localStorage.getItem('nuko_carriers_v6');
-            const savedHistory = localStorage.getItem('nuko_history_v6');
+            const savedBrokers = localStorage.getItem('nuko_brokers_import');
+            const savedCarriers = localStorage.getItem('nuko_carriers_import');
+            const savedHistory = localStorage.getItem('nuko_history_import');
             
             if (savedBrokers) {
                 brokers = JSON.parse(savedBrokers);
             } else {
-                brokers = [];
-                for (let i = 1; i <= 10; i++) {
-                    brokers.push({
-                        id: i,
-                        nombre: `Broker ${i}`,
-                        mc: `MC${String(i).padStart(6, '0')}`,
-                        limite: Math.floor(Math.random() * 100000) + 50000
-                    });
-                }
+                // Datos de ejemplo iniciales
+                brokers = [
+                    { id: 1, nombre: "DELTA DEDICATED LLC", mc: "704324", limite: 5000 },
+                    { id: 2, nombre: "1 SOLUTION LOGISTICS", mc: "157327", limite: 0 },
+                    { id: 3, nombre: "10-4 LOGISTICS LLC", mc: "27505", limite: 15000 },
+                    { id: 4, nombre: "1ST CHOICE FREIGHT LLC", mc: "1341565", limite: 10000 },
+                    { id: 5, nombre: "1ST CHOICE LOGISTICS LC", mc: "586997", limite: 26000 }
+                ];
             }
             
             if (savedCarriers) {
                 carriers = JSON.parse(savedCarriers);
             } else {
-                carriers = [];
-                for (let i = 1; i <= 10; i++) {
-                    const tipo = i % 2 === 0 ? 'nuevo' : 'viejo';
-                    const limitePorUnidad = tipo === 'nuevo' ? 30000 : 50000;
-                    const powerUnits = Math.floor(Math.random() * 10) + 1;
-                    carriers.push({
-                        id: i,
-                        nombre: `Carrier ${i}`,
-                        powerUnits: powerUnits,
-                        fechaContrato: `2024-${String(Math.floor(Math.random() * 12) + 1).padStart(2, '0')}-${String(Math.floor(Math.random() * 28) + 1).padStart(2, '0')}`,
-                        tipoContrato: tipo,
-                        limitePorUnidad: limitePorUnidad,
-                        limite: powerUnits * limitePorUnidad
-                    });
-                }
+                carriers = [
+                    { id: 1, nombre: "042 FREIGHT LLC", powerUnits: 1, fechaContrato: "2024-03-11", tipoContrato: "nuevo", limitePorUnidad: 30000, limite: 10000 },
+                    { id: 2, nombre: "1 HAUL INC", powerUnits: 2, fechaContrato: "2021-08-27", tipoContrato: "viejo", limitePorUnidad: 50000, limite: 5000 },
+                    { id: 3, nombre: "1STGEN LOGISTIC LLC", powerUnits: 1, fechaContrato: "2025-11-26", tipoContrato: "nuevo", limitePorUnidad: 30000, limite: 25000 },
+                    { id: 4, nombre: "2 BROTHER'S TRANSPORT LLC", powerUnits: 3, fechaContrato: "2025-08-26", tipoContrato: "nuevo", limitePorUnidad: 30000, limite: 25000 },
+                    { id: 5, nombre: "222 TRUCKING INC", powerUnits: 2, fechaContrato: "2023-11-20", tipoContrato: "nuevo", limitePorUnidad: 30000, limite: 26000 }
+                ];
             }
             
             if (savedHistory) {
@@ -1007,9 +906,9 @@
         }
         
         function saveData() {
-            localStorage.setItem('nuko_brokers_v6', JSON.stringify(brokers));
-            localStorage.setItem('nuko_carriers_v6', JSON.stringify(carriers));
-            localStorage.setItem('nuko_history_v6', JSON.stringify(history));
+            localStorage.setItem('nuko_brokers_import', JSON.stringify(brokers));
+            localStorage.setItem('nuko_carriers_import', JSON.stringify(carriers));
+            localStorage.setItem('nuko_history_import', JSON.stringify(history));
         }
         
         function formatNumber(num) {
@@ -1023,13 +922,13 @@
             toast.style.display = 'block';
             setTimeout(() => {
                 toast.style.display = 'none';
-            }, 3000);
+            }, 4000);
         }
         
         function updateStats() {
             const totalBrokers = brokers.length;
             const totalCarriers = carriers.length;
-            const totalLimit = [...brokers, ...carriers].reduce((sum, i) => sum + i.limite, 0);
+            const totalLimit = [...brokers, ...carriers].reduce((sum, i) => sum + (i.limite || 0), 0);
             const totalHistory = history.length;
             
             document.getElementById('statBrokers').textContent = formatNumber(totalBrokers);
@@ -1043,190 +942,296 @@
         }
         
         // ============================================
-        // MODALES PARA AGREGAR MASIVAMENTE
+        // IMPORTACIÓN DE BROKERS DESDE CSV
         // ============================================
         
-        function openMassBrokerModal() {
+        function downloadBrokerTemplate() {
+            const template = "Nombre,MC,Límite\n\"Global Logistics\",\"MC123456\",50000\n\"Express Freight\",\"MC789012\",75000\n\"Pacific Transport\",\"MC345678\",100000";
+            downloadCSV(template, "plantilla_brokers.csv");
+            showToast('📄 Plantilla descargada', 'info');
+        }
+        
+        function importBrokersCSV(input) {
             if (currentUser?.soloLectura) {
-                showToast('No tienes permisos', 'error');
-                return;
-            }
-            document.getElementById('massBrokerModal').classList.remove('hidden');
-            previewMassBrokers();
-        }
-        
-        function closeMassBrokerModal() {
-            document.getElementById('massBrokerModal').classList.add('hidden');
-        }
-        
-        function openMassCarrierModal() {
-            if (currentUser?.soloLectura) {
-                showToast('No tienes permisos', 'error');
-                return;
-            }
-            document.getElementById('massCarrierModal').classList.remove('hidden');
-            previewMassCarriers();
-        }
-        
-        function closeMassCarrierModal() {
-            document.getElementById('massCarrierModal').classList.add('hidden');
-        }
-        
-        // ============================================
-        // AGREGAR MÚLTIPLES BROKERS
-        // ============================================
-        
-        function previewMassBrokers() {
-            const nameBase = document.getElementById('massBrokerNameBase').value.trim();
-            const startNum = parseInt(document.getElementById('massBrokerStartNum').value);
-            const endNum = parseInt(document.getElementById('massBrokerEndNum').value);
-            const mcBase = document.getElementById('massBrokerMCBase').value.trim();
-            const minLimit = parseFloat(document.getElementById('massBrokerMinLimit').value);
-            const maxLimit = parseFloat(document.getElementById('massBrokerMaxLimit').value);
-            
-            if (isNaN(startNum) || isNaN(endNum) || startNum > endNum) {
-                showToast('Rango inválido', 'error');
+                showToast('No tienes permisos para importar datos', 'error');
                 return;
             }
             
-            const count = endNum - startNum + 1;
-            const previewDiv = document.getElementById('massBrokerPreview');
-            let html = `<div class="preview-item" style="background:#e6f7e6; padding:8px;">📊 Se agregarán ${count} brokers:</div>`;
+            const file = input.files[0];
+            if (!file) return;
             
-            for (let i = startNum; i <= Math.min(endNum, startNum + 9); i++) {
-                const nombre = `${nameBase} ${i}`;
-                const mc = `${mcBase}${String(i).padStart(6, '0')}`;
-                const limite = Math.floor(Math.random() * (maxLimit - minLimit + 1) + minLimit);
-                html += `<div class="preview-item">• ${nombre} | ${mc} | $${formatNumber(limite)}</div>`;
-            }
-            
-            if (count > 10) {
-                html += `<div class="preview-item">... y ${count - 10} brokers más</div>`;
-            }
-            
-            previewDiv.innerHTML = html;
-        }
-        
-        function addMassBrokers() {
-            const nameBase = document.getElementById('massBrokerNameBase').value.trim();
-            const startNum = parseInt(document.getElementById('massBrokerStartNum').value);
-            const endNum = parseInt(document.getElementById('massBrokerEndNum').value);
-            const mcBase = document.getElementById('massBrokerMCBase').value.trim();
-            const minLimit = parseFloat(document.getElementById('massBrokerMinLimit').value);
-            const maxLimit = parseFloat(document.getElementById('massBrokerMaxLimit').value);
-            
-            if (!nameBase || isNaN(startNum) || isNaN(endNum) || startNum > endNum) {
-                showToast('Complete todos los campos correctamente', 'error');
-                return;
-            }
-            
-            const existingIds = brokers.map(b => b.id);
-            let nextId = existingIds.length > 0 ? Math.max(...existingIds) + 1 : 1;
-            let addedCount = 0;
-            
-            for (let i = startNum; i <= endNum; i++) {
-                const nombre = `${nameBase} ${i}`;
-                const mc = `${mcBase}${String(i).padStart(6, '0')}`;
-                const limite = Math.floor(Math.random() * (maxLimit - minLimit + 1) + minLimit);
+            const reader = new FileReader();
+            reader.onload = function(e) {
+                const content = e.target.result;
+                const lines = content.split('\n');
                 
-                brokers.push({
-                    id: nextId++,
-                    nombre: nombre,
-                    mc: mc,
-                    limite: limite
-                });
-                addedCount++;
+                let added = 0;
+                let errors = 0;
+                let skipped = 0;
+                
+                const progressBar = document.getElementById('brokerProgress');
+                const progressFill = document.getElementById('brokerProgressFill');
+                progressBar.classList.remove('hidden');
+                
+                const existingIds = brokers.map(b => b.id);
+                let nextId = existingIds.length > 0 ? Math.max(...existingIds) + 1 : 1;
+                
+                for (let i = 1; i < lines.length; i++) {
+                    const line = lines[i].trim();
+                    if (!line) continue;
+                    
+                    const parts = line.split(',').map(p => p.replace(/^"|"$/g, '').trim());
+                    if (parts.length >= 3) {
+                        const nombre = parts[0];
+                        const mc = parts[1];
+                        const limite = parseFloat(parts[2]);
+                        
+                        if (nombre && mc && !isNaN(limite) && limite >= 0) {
+                            // Verificar si ya existe por MC
+                            const exists = brokers.some(b => b.mc === mc);
+                            if (!exists) {
+                                brokers.push({ id: nextId++, nombre, mc, limite });
+                                added++;
+                            } else {
+                                skipped++;
+                            }
+                        } else {
+                            errors++;
+                        }
+                    } else {
+                        errors++;
+                    }
+                    
+                    const progress = (i / lines.length) * 100;
+                    progressFill.style.width = progress + '%';
+                }
+                
+                saveData();
+                renderBrokers();
+                updateStats();
+                
+                progressBar.classList.add('hidden');
+                progressFill.style.width = '0%';
+                input.value = '';
+                
+                showToast(`✅ Importación completada: ${added} brokers agregados, ${skipped} duplicados omitidos, ${errors} errores`, 'success');
+            };
+            reader.readAsText(file, 'UTF-8');
+        }
+        
+        // ============================================
+        // IMPORTACIÓN DE CARRIERS DESDE CSV
+        // ============================================
+        
+        function downloadCarrierTemplate() {
+            const template = "Nombre,Unidades Poder,Fecha Contrato,Tipo Contrato,Límite\n\"Carrier Express\",3,\"2024-08-15\",\"nuevo\",90000\n\"Carrier Plus\",5,\"2023-05-20\",\"viejo\",250000\n\"Carrier Logistics\",2,\"2024-09-10\",\"nuevo\",60000";
+            downloadCSV(template, "plantilla_carriers.csv");
+            showToast('📄 Plantilla descargada', 'info');
+        }
+        
+        function importCarriersCSV(input) {
+            if (currentUser?.soloLectura) {
+                showToast('No tienes permisos para importar datos', 'error');
+                return;
             }
             
-            saveData();
+            const file = input.files[0];
+            if (!file) return;
+            
+            const reader = new FileReader();
+            reader.onload = function(e) {
+                const content = e.target.result;
+                const lines = content.split('\n');
+                
+                let added = 0;
+                let errors = 0;
+                let skipped = 0;
+                
+                const progressBar = document.getElementById('carrierProgress');
+                const progressFill = document.getElementById('carrierProgressFill');
+                progressBar.classList.remove('hidden');
+                
+                const existingIds = carriers.map(c => c.id);
+                let nextId = existingIds.length > 0 ? Math.max(...existingIds) + 1 : 1;
+                
+                for (let i = 1; i < lines.length; i++) {
+                    const line = lines[i].trim();
+                    if (!line) continue;
+                    
+                    const parts = line.split(',').map(p => p.replace(/^"|"$/g, '').trim());
+                    if (parts.length >= 5) {
+                        const nombre = parts[0];
+                        const powerUnits = parseFloat(parts[1]);
+                        const fechaContrato = parts[2];
+                        const tipoContrato = parts[3].toLowerCase();
+                        const limite = parseFloat(parts[4]);
+                        
+                        if (nombre && !isNaN(powerUnits) && !isNaN(limite) && (tipoContrato === 'nuevo' || tipoContrato === 'viejo')) {
+                            // Verificar si ya existe por nombre
+                            const exists = carriers.some(c => c.nombre === nombre);
+                            if (!exists) {
+                                const limitePorUnidad = tipoContrato === 'nuevo' ? 30000 : 50000;
+                                carriers.push({
+                                    id: nextId++,
+                                    nombre: nombre,
+                                    powerUnits: powerUnits,
+                                    fechaContrato: fechaContrato || null,
+                                    tipoContrato: tipoContrato,
+                                    limitePorUnidad: limitePorUnidad,
+                                    limite: limite
+                                });
+                                added++;
+                            } else {
+                                skipped++;
+                            }
+                        } else {
+                            errors++;
+                        }
+                    } else {
+                        errors++;
+                    }
+                    
+                    const progress = (i / lines.length) * 100;
+                    progressFill.style.width = progress + '%';
+                }
+                
+                saveData();
+                renderCarriers();
+                updateStats();
+                
+                progressBar.classList.add('hidden');
+                progressFill.style.width = '0%';
+                input.value = '';
+                
+                showToast(`✅ Importación completada: ${added} carriers agregados, ${skipped} duplicados omitidos, ${errors} errores`, 'success');
+            };
+            reader.readAsText(file, 'UTF-8');
+        }
+        
+        // ============================================
+        // LOGIN
+        // ============================================
+        
+        function loadUsersList() {
+            const container = document.getElementById('usersGrid');
+            container.innerHTML = '';
+            
+            Object.keys(USERS_CONFIG).forEach(email => {
+                const user = USERS_CONFIG[email];
+                const card = document.createElement('div');
+                card.className = 'user-card';
+                card.onclick = () => {
+                    selectedUserEmail = email;
+                    if (!user.requierePassword) {
+                        loginUser(email, user);
+                    } else {
+                        showPasswordForm(email, user);
+                    }
+                };
+                card.innerHTML = `
+                    <div class="user-avatar">${user.role === 'admin' ? '👑' : (user.soloLectura ? '👀' : '👤')}</div>
+                    <div class="user-name">${user.name}</div>
+                    <div class="user-email">${email}</div>
+                    <div class="user-badge ${user.role === 'admin' ? 'badge-admin' : (user.soloLectura ? 'badge-readonly' : 'badge-user')}">
+                        ${user.role === 'admin' ? 'Administrador' : (user.soloLectura ? 'Solo Lectura' : 'Usuario')}
+                        ${user.requierePassword ? ' 🔒' : ' 🔓'}
+                    </div>
+                `;
+                container.appendChild(card);
+            });
+        }
+        
+        function showPasswordForm(email, user) {
+            selectedUserEmail = email;
+            document.getElementById('passwordForm').classList.remove('hidden');
+            document.getElementById('userPassword').value = '';
+            document.getElementById('userPassword').focus();
+        }
+        
+        function loginUser(email, user) {
+            currentUser = {
+                name: user.name,
+                email: email,
+                role: user.role,
+                soloLectura: user.soloLectura || false,
+                isAdmin: user.role === 'admin'
+            };
+            
+            document.getElementById('dashboardUserName').textContent = currentUser.name;
+            document.getElementById('dashboardUserEmail').textContent = currentUser.email;
+            document.getElementById('dashboardAvatar').textContent = currentUser.isAdmin ? '👑' : (currentUser.soloLectura ? '👀' : '👤');
+            
+            document.getElementById('loginContainer').style.display = 'none';
+            document.getElementById('dashboardContainer').style.display = 'block';
+            
+            if (currentUser.soloLectura) {
+                document.getElementById('clearHistoryBtn')?.classList.add('hidden');
+            }
+            
+            loadData();
+            updateStats();
             renderBrokers();
-            updateStats();
-            closeMassBrokerModal();
-            showToast(`✅ Se agregaron ${addedCount} brokers exitosamente`, 'success');
-        }
-        
-        // ============================================
-        // AGREGAR MÚLTIPLES CARRIERS
-        // ============================================
-        
-        function previewMassCarriers() {
-            const nameBase = document.getElementById('massCarrierNameBase').value.trim();
-            const startNum = parseInt(document.getElementById('massCarrierStartNum').value);
-            const endNum = parseInt(document.getElementById('massCarrierEndNum').value);
-            const powerUnits = parseInt(document.getElementById('massCarrierPowerUnits').value);
-            const tipoContrato = document.getElementById('massCarrierType').value;
-            const fechaContrato = document.getElementById('massCarrierDate').value;
-            
-            if (isNaN(startNum) || isNaN(endNum) || startNum > endNum) {
-                showToast('Rango inválido', 'error');
-                return;
-            }
-            
-            const limitePorUnidad = tipoContrato === 'nuevo' ? 30000 : 50000;
-            const limite = powerUnits * limitePorUnidad;
-            const count = endNum - startNum + 1;
-            
-            const previewDiv = document.getElementById('massCarrierPreview');
-            let html = `<div class="preview-item" style="background:#e6f7e6; padding:8px;">🚛 Se agregarán ${count} carriers:</div>`;
-            
-            for (let i = startNum; i <= Math.min(endNum, startNum + 9); i++) {
-                const nombre = `${nameBase} ${i}`;
-                const fecha = fechaContrato ? new Date(fechaContrato).toLocaleDateString('es-ES') : '-';
-                const tipoLabel = tipoContrato === 'nuevo' ? 'Nuevo (30k)' : 'Viejo (50k)';
-                html += `<div class="preview-item">• ${nombre} | ${powerUnits} unidades | ${fecha} | ${tipoLabel} | $${formatNumber(limite)}</div>`;
-            }
-            
-            if (count > 10) {
-                html += `<div class="preview-item">... y ${count - 10} carriers más</div>`;
-            }
-            
-            previewDiv.innerHTML = html;
-        }
-        
-        function addMassCarriers() {
-            const nameBase = document.getElementById('massCarrierNameBase').value.trim();
-            const startNum = parseInt(document.getElementById('massCarrierStartNum').value);
-            const endNum = parseInt(document.getElementById('massCarrierEndNum').value);
-            const powerUnits = parseInt(document.getElementById('massCarrierPowerUnits').value);
-            const tipoContrato = document.getElementById('massCarrierType').value;
-            const fechaContrato = document.getElementById('massCarrierDate').value;
-            
-            if (!nameBase || isNaN(startNum) || isNaN(endNum) || startNum > endNum || isNaN(powerUnits) || powerUnits <= 0) {
-                showToast('Complete todos los campos correctamente', 'error');
-                return;
-            }
-            
-            const limitePorUnidad = tipoContrato === 'nuevo' ? 30000 : 50000;
-            const limite = powerUnits * limitePorUnidad;
-            
-            const existingIds = carriers.map(c => c.id);
-            let nextId = existingIds.length > 0 ? Math.max(...existingIds) + 1 : 1;
-            let addedCount = 0;
-            
-            for (let i = startNum; i <= endNum; i++) {
-                const nombre = `${nameBase} ${i}`;
-                
-                carriers.push({
-                    id: nextId++,
-                    nombre: nombre,
-                    powerUnits: powerUnits,
-                    fechaContrato: fechaContrato || null,
-                    tipoContrato: tipoContrato,
-                    limitePorUnidad: limitePorUnidad,
-                    limite: limite
-                });
-                addedCount++;
-            }
-            
-            saveData();
             renderCarriers();
-            updateStats();
-            closeMassCarrierModal();
-            showToast(`✅ Se agregaron ${addedCount} carriers exitosamente`, 'success');
+            renderHistory();
+            switchSection('brokers');
+            
+            showToast(`✅ Bienvenido ${currentUser.name}`, 'success');
+        }
+        
+        function validatePassword() {
+            const password = document.getElementById('userPassword').value;
+            const user = USERS_CONFIG[selectedUserEmail];
+            
+            if (user && user.password === password) {
+                loginUser(selectedUserEmail, user);
+                document.getElementById('passwordForm').classList.add('hidden');
+            } else {
+                showToast('❌ Contraseña incorrecta', 'error');
+                document.getElementById('userPassword').value = '';
+                document.getElementById('userPassword').focus();
+            }
+        }
+        
+        function cancelPassword() {
+            document.getElementById('passwordForm').classList.add('hidden');
+            selectedUserEmail = null;
+        }
+        
+        function logout() {
+            if (confirm('¿Cerrar sesión?')) {
+                currentUser = null;
+                document.getElementById('loginContainer').style.display = 'block';
+                document.getElementById('dashboardContainer').style.display = 'none';
+                document.getElementById('passwordForm').classList.add('hidden');
+                loadUsersList();
+            }
         }
         
         // ============================================
-        // BROKERS (Individual)
+        // NAVEGACIÓN
+        // ============================================
+        
+        function switchSection(section) {
+            document.querySelectorAll('.feature-card').forEach(card => card.classList.remove('active'));
+            document.querySelectorAll('.section-panel').forEach(panel => panel.classList.remove('active'));
+            
+            if (section === 'brokers') {
+                document.getElementById('featureBrokers').classList.add('active');
+                document.getElementById('brokersPanel').classList.add('active');
+                renderBrokers();
+            } else if (section === 'carriers') {
+                document.getElementById('featureCarriers').classList.add('active');
+                document.getElementById('carriersPanel').classList.add('active');
+                renderCarriers();
+            } else if (section === 'history') {
+                document.getElementById('featureHistory').classList.add('active');
+                document.getElementById('historyPanel').classList.add('active');
+                renderHistory();
+            }
+        }
+        
+        // ============================================
+        // BROKERS
         // ============================================
         
         function renderBrokers() {
@@ -1248,13 +1253,13 @@
             
             filtered.forEach((b, idx) => {
                 html += `<tr>
-                    <td>${idx + 1}</td>
+                    <td style="width: 50px;">${idx + 1}</td>
                     <td><strong>${b.nombre}</strong></td>
                     <td><code>${b.mc}</code></td>
                     <td><strong>$${formatNumber(b.limite)}</strong></td>`;
                 if (!currentUser?.soloLectura) {
-                    html += `<td>
-                        <button class="btn btn-success btn-sm" onclick="openIncreaseModal('broker', ${b.id}, '${b.nombre}', ${b.limite})">➕ Aumentar</button>
+                    html += `<td style="width: 150px;">
+                        <button class="btn btn-success btn-sm" onclick="openIncreaseModal('broker', ${b.id}, '${b.nombre.replace(/'/g, "\\'")}', ${b.limite})">➕ Aumentar</button>
                         <button class="btn btn-danger btn-sm" onclick="deleteBroker(${b.id})">🗑️ Eliminar</button>
                     </td>`;
                 }
@@ -1304,7 +1309,7 @@
         }
         
         // ============================================
-        // CARRIERS (Individual)
+        // CARRIERS
         // ============================================
         
         function renderCarriers() {
@@ -1325,16 +1330,16 @@
                 const fecha = c.fechaContrato ? new Date(c.fechaContrato).toLocaleDateString('es-ES') : '-';
                 const tipoColor = c.tipoContrato === 'nuevo' ? '#10b981' : '#f59e0b';
                 html += `<tr>
-                    <td>${idx + 1}</td>
+                    <td style="width: 50px;">${idx + 1}</td>
                     <td><strong>${c.nombre}</strong></td>
-                    <td>${c.powerUnits}</td>
+                    <td style="text-align: center;">${c.powerUnits}</td>
                     <td>${fecha}</td>
                     <td style="color:${tipoColor}">${c.tipoContrato === 'nuevo' ? 'Nuevo (30k)' : 'Viejo (50k)'}</td>
                     <td>$${formatNumber(c.limitePorUnidad)}</td>
                     <td><strong>$${formatNumber(c.limite)}</strong></td>`;
                 if (!currentUser?.soloLectura) {
-                    html += `<td>
-                        <button class="btn btn-success btn-sm" onclick="openIncreaseModal('carrier', ${c.id}, '${c.nombre}', ${c.limite})">➕ Aumentar</button>
+                    html += `<td style="width: 150px;">
+                        <button class="btn btn-success btn-sm" onclick="openIncreaseModal('carrier', ${c.id}, '${c.nombre.replace(/'/g, "\\'")}', ${c.limite})">➕ Aumentar</button>
                         <button class="btn btn-danger btn-sm" onclick="deleteCarrier(${c.id})">🗑️ Eliminar</button>
                     </td>`;
                 }
@@ -1518,128 +1523,6 @@
         }
         
         // ============================================
-        // LOGIN
-        // ============================================
-        
-        function loadUsersList() {
-            const container = document.getElementById('usersGrid');
-            container.innerHTML = '';
-            
-            Object.keys(USERS_CONFIG).forEach(email => {
-                const user = USERS_CONFIG[email];
-                const card = document.createElement('div');
-                card.className = 'user-card';
-                card.onclick = () => {
-                    selectedUserEmail = email;
-                    if (!user.requierePassword) {
-                        loginUser(email, user);
-                    } else {
-                        showPasswordForm(email, user);
-                    }
-                };
-                card.innerHTML = `
-                    <div class="user-avatar">${user.role === 'admin' ? '👑' : (user.soloLectura ? '👀' : '👤')}</div>
-                    <div class="user-name">${user.name}</div>
-                    <div class="user-email">${email}</div>
-                    <div class="user-badge ${user.role === 'admin' ? 'badge-admin' : (user.soloLectura ? 'badge-readonly' : 'badge-user')}">
-                        ${user.role === 'admin' ? 'Administrador' : (user.soloLectura ? 'Solo Lectura' : 'Usuario')}
-                        ${user.requierePassword ? ' 🔒' : ' 🔓'}
-                    </div>
-                `;
-                container.appendChild(card);
-            });
-        }
-        
-        function showPasswordForm(email, user) {
-            selectedUserEmail = email;
-            document.getElementById('passwordForm').classList.remove('hidden');
-            document.getElementById('userPassword').value = '';
-            document.getElementById('userPassword').focus();
-        }
-        
-        function loginUser(email, user) {
-            currentUser = {
-                name: user.name,
-                email: email,
-                role: user.role,
-                soloLectura: user.soloLectura || false,
-                isAdmin: user.role === 'admin'
-            };
-            
-            document.getElementById('dashboardUserName').textContent = currentUser.name;
-            document.getElementById('dashboardUserEmail').textContent = currentUser.email;
-            document.getElementById('dashboardAvatar').textContent = currentUser.isAdmin ? '👑' : (currentUser.soloLectura ? '👀' : '👤');
-            
-            document.getElementById('loginContainer').style.display = 'none';
-            document.getElementById('dashboardContainer').style.display = 'block';
-            
-            if (currentUser.soloLectura) {
-                document.getElementById('clearHistoryBtn')?.classList.add('hidden');
-            }
-            
-            loadData();
-            updateStats();
-            renderBrokers();
-            renderCarriers();
-            renderHistory();
-            switchSection('brokers');
-            
-            showToast(`✅ Bienvenido ${currentUser.name}`, 'success');
-        }
-        
-        function validatePassword() {
-            const password = document.getElementById('userPassword').value;
-            const user = USERS_CONFIG[selectedUserEmail];
-            
-            if (user && user.password === password) {
-                loginUser(selectedUserEmail, user);
-                document.getElementById('passwordForm').classList.add('hidden');
-            } else {
-                showToast('❌ Contraseña incorrecta', 'error');
-                document.getElementById('userPassword').value = '';
-                document.getElementById('userPassword').focus();
-            }
-        }
-        
-        function cancelPassword() {
-            document.getElementById('passwordForm').classList.add('hidden');
-            selectedUserEmail = null;
-        }
-        
-        function logout() {
-            if (confirm('¿Cerrar sesión?')) {
-                currentUser = null;
-                document.getElementById('loginContainer').style.display = 'block';
-                document.getElementById('dashboardContainer').style.display = 'none';
-                document.getElementById('passwordForm').classList.add('hidden');
-                loadUsersList();
-            }
-        }
-        
-        // ============================================
-        // NAVEGACIÓN
-        // ============================================
-        
-        function switchSection(section) {
-            document.querySelectorAll('.feature-card').forEach(card => card.classList.remove('active'));
-            document.querySelectorAll('.section-panel').forEach(panel => panel.classList.remove('active'));
-            
-            if (section === 'brokers') {
-                document.getElementById('featureBrokers').classList.add('active');
-                document.getElementById('brokersPanel').classList.add('active');
-                renderBrokers();
-            } else if (section === 'carriers') {
-                document.getElementById('featureCarriers').classList.add('active');
-                document.getElementById('carriersPanel').classList.add('active');
-                renderCarriers();
-            } else if (section === 'history') {
-                document.getElementById('featureHistory').classList.add('active');
-                document.getElementById('historyPanel').classList.add('active');
-                renderHistory();
-            }
-        }
-        
-        // ============================================
         // EXPORTAR CSV
         // ============================================
         
@@ -1647,7 +1530,7 @@
             let csv = "Nombre,MC,Límite (USD)\n";
             brokers.forEach(b => csv += `"${b.nombre}","${b.mc}",${b.limite}\n`);
             downloadCSV(csv, `brokers_${new Date().toISOString().split('T')[0]}.csv`);
-            showToast('✅ Brokers exportados', 'success');
+            showToast(`✅ ${brokers.length} brokers exportados`, 'success');
         }
         
         function exportCarriersCSV() {
@@ -1658,7 +1541,7 @@
                 csv += `"${c.nombre}",${c.powerUnits},"${fecha}","${tipo}",${c.limitePorUnidad},${c.limite}\n`;
             });
             downloadCSV(csv, `carriers_${new Date().toISOString().split('T')[0]}.csv`);
-            showToast('✅ Carriers exportados', 'success');
+            showToast(`✅ ${carriers.length} carriers exportados`, 'success');
         }
         
         function exportHistoryCSV() {
@@ -1668,7 +1551,7 @@
                 csv += `"${fecha}","${h.tipo}","${h.entidad}",${h.monto},"${h.usuario}","${h.motivo}",${h.limiteAnterior},${h.limiteNuevo}\n`;
             });
             downloadCSV(csv, `historial_${new Date().toISOString().split('T')[0]}.csv`);
-            showToast('✅ Historial exportado', 'success');
+            showToast(`✅ ${history.length} registros exportados`, 'success');
         }
         
         function downloadCSV(content, filename) {
