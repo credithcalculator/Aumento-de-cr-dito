@@ -44,7 +44,6 @@
             font-size: 14px;
         }
 
-        /* Pantalla de login */
         .login-screen {
             padding: 40px;
             text-align: center;
@@ -132,7 +131,6 @@
             display: none;
         }
 
-        /* Panel superior */
         .top-panel {
             background: #f1f5f9;
             padding: 20px 30px;
@@ -188,7 +186,6 @@
             transform: translateY(-2px);
         }
 
-        /* Tarjetas de estadísticas */
         .stats-cards {
             display: grid;
             grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
@@ -218,7 +215,6 @@
             margin-top: 5px;
         }
 
-        /* Menú de iconos */
         .feature-menu {
             display: grid;
             grid-template-columns: repeat(3, 1fr);
@@ -272,7 +268,6 @@
             color: #64748b;
         }
 
-        /* Contenido de secciones */
         .section-panel {
             padding: 30px;
             display: none;
@@ -288,7 +283,6 @@
             to { opacity: 1; transform: translateY(0); }
         }
 
-        /* Barra de herramientas con import/export */
         .toolbar-section {
             display: flex;
             justify-content: space-between;
@@ -367,13 +361,13 @@
             filter: brightness(105%);
         }
 
-        /* Área de importación */
+        /* Área de importación - ESTILOS DESTACADOS */
         .import-area {
-            background: linear-gradient(135deg, #e0f2fe, #bae6fd);
+            background: linear-gradient(135deg, #dbeafe, #eff6ff);
             border-radius: 16px;
             padding: 20px;
             margin-bottom: 25px;
-            border: 2px solid #0ea5e9;
+            border: 2px solid #3b82f6;
         }
 
         .import-header {
@@ -384,18 +378,18 @@
         }
 
         .import-icon {
-            font-size: 32px;
+            font-size: 40px;
         }
 
         .import-title {
             font-size: 18px;
             font-weight: 700;
-            color: #0369a1;
+            color: #1e40af;
         }
 
         .import-desc {
             font-size: 12px;
-            color: #0284c7;
+            color: #2563eb;
             margin-top: 5px;
         }
 
@@ -407,9 +401,9 @@
         }
 
         .file-input-label {
-            background: #0ea5e9;
+            background: #3b82f6;
             color: white;
-            padding: 10px 20px;
+            padding: 12px 24px;
             border-radius: 40px;
             cursor: pointer;
             font-weight: 600;
@@ -418,7 +412,7 @@
         }
 
         .file-input-label:hover {
-            background: #0284c7;
+            background: #2563eb;
             transform: translateY(-2px);
         }
 
@@ -451,7 +445,6 @@
             transition: width 0.3s;
         }
 
-        /* Formulario para agregar individual */
         .add-item-form {
             background: #f8fafc;
             padding: 20px;
@@ -486,7 +479,6 @@
             font-size: 14px;
         }
 
-        /* Tabla de datos */
         .table-wrapper {
             overflow-x: auto;
             margin-top: 20px;
@@ -520,7 +512,6 @@
             background: #f8fafc;
         }
 
-        /* Historial */
         .history-timeline {
             display: flex;
             flex-direction: column;
@@ -566,7 +557,6 @@
             margin-top: 8px;
         }
 
-        /* Alertas */
         .alert-toast {
             position: fixed;
             bottom: 20px;
@@ -589,7 +579,6 @@
         .alert-error { border-left: 4px solid #ef4444; color: #991b1b; }
         .alert-info { border-left: 4px solid #0ea5e9; color: #0369a1; }
 
-        /* Modal */
         .modal-overlay {
             position: fixed;
             top: 0;
@@ -646,7 +635,6 @@
 
         <!-- Dashboard Principal -->
         <div id="dashboardContainer" style="display: none;">
-            <!-- Panel Superior -->
             <div class="top-panel">
                 <div class="user-info-panel">
                     <div class="user-avatar-sm" id="dashboardAvatar">👤</div>
@@ -658,7 +646,6 @@
                 <button class="btn-logout" onclick="logout()">🚪 Cerrar Sesión</button>
             </div>
 
-            <!-- Estadísticas -->
             <div class="stats-cards">
                 <div class="stat-card">
                     <div class="stat-number" id="statBrokers">0</div>
@@ -678,7 +665,6 @@
                 </div>
             </div>
 
-            <!-- Menú de características -->
             <div class="feature-menu">
                 <div class="feature-card" onclick="switchSection('brokers')" id="featureBrokers">
                     <div class="feature-icon">📊</div>
@@ -697,7 +683,7 @@
                 </div>
             </div>
 
-            <!-- Sección Brokers -->
+            <!-- Sección Brokers CON BOTONES DE IMPORTAR -->
             <div id="brokersPanel" class="section-panel">
                 <div class="toolbar-section">
                     <h2>📊 Gestión de Brokers</h2>
@@ -707,24 +693,28 @@
                     </div>
                 </div>
 
-                <!-- Área de importación masiva -->
+                <!-- ÁREA DE IMPORTACIÓN DE BROKERS - BOTÓN VISIBLE -->
                 <div class="import-area">
                     <div class="import-header">
                         <div class="import-icon">📤</div>
                         <div>
-                            <div class="import-title">Importar Brokers desde CSV</div>
-                            <div class="import-desc">Sube un archivo CSV con el formato: Nombre, MC, Límite</div>
+                            <div class="import-title">📥 IMPORTAR BROKERS DESDE CSV</div>
+                            <div class="import-desc">Sube un archivo CSV con miles de brokers de una sola vez</div>
                         </div>
                     </div>
                     <div class="import-buttons">
                         <label class="file-input-label" for="brokerFileInput">
-                            📂 Seleccionar archivo CSV
+                            📂 SELECCIONAR ARCHIVO CSV
                         </label>
                         <input type="file" id="brokerFileInput" accept=".csv" onchange="importBrokersCSV(this)">
-                        <button class="btn template-btn" onclick="downloadBrokerTemplate()">📄 Descargar plantilla</button>
+                        <button class="btn template-btn" onclick="downloadBrokerTemplate()">📄 DESCARGAR PLANTILLA</button>
                     </div>
                     <div id="brokerProgress" class="progress-bar hidden">
                         <div class="progress-fill" id="brokerProgressFill"></div>
+                    </div>
+                    <div class="import-desc" style="margin-top: 10px;">
+                        📌 Formato esperado: Nombre, MC, Límite<br>
+                        Ejemplo: "Global Logistics","MC123456",50000
                     </div>
                 </div>
 
@@ -737,7 +727,7 @@
                 <div class="table-wrapper" id="brokersTable"></div>
             </div>
 
-            <!-- Sección Carriers -->
+            <!-- Sección Carriers CON BOTONES DE IMPORTAR -->
             <div id="carriersPanel" class="section-panel">
                 <div class="toolbar-section">
                     <h2>🚛 Gestión de Carriers</h2>
@@ -747,24 +737,28 @@
                     </div>
                 </div>
 
-                <!-- Área de importación masiva -->
+                <!-- ÁREA DE IMPORTACIÓN DE CARRIERS - BOTÓN VISIBLE -->
                 <div class="import-area">
                     <div class="import-header">
                         <div class="import-icon">📤</div>
                         <div>
-                            <div class="import-title">Importar Carriers desde CSV</div>
-                            <div class="import-desc">Sube un archivo CSV con el formato: Nombre, Unidades Poder, Fecha Contrato, Tipo Contrato, Límite</div>
+                            <div class="import-title">📥 IMPORTAR CARRIERS DESDE CSV</div>
+                            <div class="import-desc">Sube un archivo CSV con miles de carriers de una sola vez</div>
                         </div>
                     </div>
                     <div class="import-buttons">
                         <label class="file-input-label" for="carrierFileInput">
-                            📂 Seleccionar archivo CSV
+                            📂 SELECCIONAR ARCHIVO CSV
                         </label>
                         <input type="file" id="carrierFileInput" accept=".csv" onchange="importCarriersCSV(this)">
-                        <button class="btn template-btn" onclick="downloadCarrierTemplate()">📄 Descargar plantilla</button>
+                        <button class="btn template-btn" onclick="downloadCarrierTemplate()">📄 DESCARGAR PLANTILLA</button>
                     </div>
                     <div id="carrierProgress" class="progress-bar hidden">
                         <div class="progress-fill" id="carrierProgressFill"></div>
+                    </div>
+                    <div class="import-desc" style="margin-top: 10px;">
+                        📌 Formato esperado: Nombre, Unidades Poder, Fecha Contrato, Tipo Contrato, Límite<br>
+                        Ejemplo: "Carrier Express",3,"2024-08-15","nuevo",90000
                     </div>
                 </div>
 
@@ -794,7 +788,6 @@
         </div>
     </div>
 
-    <!-- Modal para aumentar -->
     <div id="increaseModal" class="modal-overlay hidden">
         <div class="modal-container">
             <h3>💰 Aumentar Crédito</h3>
@@ -854,7 +847,6 @@
             }
         };
         
-        // Datos iniciales
         let brokers = [];
         let carriers = [];
         let history = [];
@@ -862,19 +854,14 @@
         let selectedUserEmail = null;
         let pendingIncrease = null;
         
-        // ============================================
-        // FUNCIONES DE PERSISTENCIA
-        // ============================================
-        
         function loadData() {
-            const savedBrokers = localStorage.getItem('nuko_brokers_import');
-            const savedCarriers = localStorage.getItem('nuko_carriers_import');
-            const savedHistory = localStorage.getItem('nuko_history_import');
+            const savedBrokers = localStorage.getItem('nuko_brokers_final');
+            const savedCarriers = localStorage.getItem('nuko_carriers_final');
+            const savedHistory = localStorage.getItem('nuko_history_final');
             
             if (savedBrokers) {
                 brokers = JSON.parse(savedBrokers);
             } else {
-                // Datos de ejemplo iniciales
                 brokers = [
                     { id: 1, nombre: "DELTA DEDICATED LLC", mc: "704324", limite: 5000 },
                     { id: 2, nombre: "1 SOLUTION LOGISTICS", mc: "157327", limite: 0 },
@@ -906,9 +893,9 @@
         }
         
         function saveData() {
-            localStorage.setItem('nuko_brokers_import', JSON.stringify(brokers));
-            localStorage.setItem('nuko_carriers_import', JSON.stringify(carriers));
-            localStorage.setItem('nuko_history_import', JSON.stringify(history));
+            localStorage.setItem('nuko_brokers_final', JSON.stringify(brokers));
+            localStorage.setItem('nuko_carriers_final', JSON.stringify(carriers));
+            localStorage.setItem('nuko_history_final', JSON.stringify(history));
         }
         
         function formatNumber(num) {
@@ -942,7 +929,7 @@
         }
         
         // ============================================
-        // IMPORTACIÓN DE BROKERS DESDE CSV
+        // IMPORTAR BROKERS
         // ============================================
         
         function downloadBrokerTemplate() {
@@ -987,7 +974,6 @@
                         const limite = parseFloat(parts[2]);
                         
                         if (nombre && mc && !isNaN(limite) && limite >= 0) {
-                            // Verificar si ya existe por MC
                             const exists = brokers.some(b => b.mc === mc);
                             if (!exists) {
                                 brokers.push({ id: nextId++, nombre, mc, limite });
@@ -1020,7 +1006,7 @@
         }
         
         // ============================================
-        // IMPORTACIÓN DE CARRIERS DESDE CSV
+        // IMPORTAR CARRIERS
         // ============================================
         
         function downloadCarrierTemplate() {
@@ -1067,7 +1053,6 @@
                         const limite = parseFloat(parts[4]);
                         
                         if (nombre && !isNaN(powerUnits) && !isNaN(limite) && (tipoContrato === 'nuevo' || tipoContrato === 'viejo')) {
-                            // Verificar si ya existe por nombre
                             const exists = carriers.some(c => c.nombre === nombre);
                             if (!exists) {
                                 const limitePorUnidad = tipoContrato === 'nuevo' ? 30000 : 50000;
@@ -1329,7 +1314,7 @@
             filtered.forEach((c, idx) => {
                 const fecha = c.fechaContrato ? new Date(c.fechaContrato).toLocaleDateString('es-ES') : '-';
                 const tipoColor = c.tipoContrato === 'nuevo' ? '#10b981' : '#f59e0b';
-                html += `<tr>
+                html += `运转
                     <td style="width: 50px;">${idx + 1}</td>
                     <td><strong>${c.nombre}</strong></td>
                     <td style="text-align: center;">${c.powerUnits}</td>
@@ -1563,7 +1548,6 @@
             URL.revokeObjectURL(link.href);
         }
         
-        // Inicializar
         loadUsersList();
     </script>
 </body>
