@@ -1620,7 +1620,7 @@
             
             filtered.forEach((b, idx) => {
                 html += '<tr>';
-                html += '<td style="width: 50px;">' + (idx + 1) + ' </td>';
+                html += '<td style="width: 50px;">' + (idx + 1) + '</td>';
                 html += '<td><strong>' + b.nombre + '</strong></td>';
                 html += '<td><code>' + b.mc + '</code></td>';
                 html += '<td><strong>$' + formatNumber(b.limite) + '</strong></td>';
@@ -1698,7 +1698,7 @@
                 const fecha = c.fechaContrato ? new Date(c.fechaContrato).toLocaleDateString('es-ES') : '-';
                 const tipoColor = c.tipoContrato === 'nuevo' ? '#10b981' : '#f59e0b';
                 html += '<tr>';
-                html += '<td style="width: 50px;">' + (idx + 1) + ' </td>';
+                html += '<td style="width: 50px;">' + (idx + 1) + '</td>';
                 html += '<td><strong>' + c.nombre + '</strong></td>';
                 html += '<td style="text-align: center;">' + c.powerUnits + '</td>';
                 html += '<td>' + fecha + '</td>';
@@ -1783,19 +1783,27 @@
             document.getElementById('modalReason').value = '';
             document.getElementById('modalWarning').classList.add('hidden');
             
+            // Obtener referencias a los elementos del formulario que queremos mostrar/ocultar
+            const powerUnitsRow = document.getElementById('modalPowerUnits').closest('.form-field');
+            const contractTypeRow = document.getElementById('modalContractType').closest('.form-field');
+            const maxLimitRow = document.getElementById('modalMaxLimit').closest('.form-field');
+            
             if (type === 'carrier' && powerUnits && tipoContrato) {
                 const limitPerUnit = tipoContrato === 'nuevo' ? 30000 : 50000;
                 const maxAllowed = powerUnits * limitPerUnit;
                 document.getElementById('modalPowerUnits').value = powerUnits;
                 document.getElementById('modalContractType').value = tipoContrato === 'nuevo' ? 'New (30k per unit)' : 'Old (50k per unit)';
                 document.getElementById('modalMaxLimit').value = '$' + formatNumber(maxAllowed);
-                document.getElementById('modalPowerUnits').parentElement.parentElement.classList.remove('hidden');
-                document.getElementById('modalContractType').parentElement.parentElement.classList.remove('hidden');
-                document.getElementById('modalMaxLimit').parentElement.parentElement.classList.remove('hidden');
+                
+                // Mostrar los campos
+                if (powerUnitsRow) powerUnitsRow.style.display = 'block';
+                if (contractTypeRow) contractTypeRow.style.display = 'block';
+                if (maxLimitRow) maxLimitRow.style.display = 'block';
             } else {
-                document.getElementById('modalPowerUnits').parentElement.parentElement.classList.add('hidden');
-                document.getElementById('modalContractType').parentElement.parentElement.classList.add('hidden');
-                document.getElementById('modalMaxLimit').parentElement.parentElement.classList.add('hidden');
+                // Ocultar los campos
+                if (powerUnitsRow) powerUnitsRow.style.display = 'none';
+                if (contractTypeRow) contractTypeRow.style.display = 'none';
+                if (maxLimitRow) maxLimitRow.style.display = 'none';
             }
             
             document.getElementById('increaseModal').classList.remove('hidden');
