@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html>
+<html lang="es">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -1054,10 +1054,6 @@
             document.getElementById('featureHistoryCount').textContent = formatNumber(totalHistory) + ' records';
         }
         
-        // ============================================
-        // VALIDATION FUNCTION FOR CARRIER LIMIT
-        // ============================================
-        
         function validateCarrierLimit(powerUnits, tipoContrato, currentLimit, increaseAmount) {
             const limitPerUnit = tipoContrato === 'nuevo' ? 30000 : 50000;
             const maxAllowedLimit = powerUnits * limitPerUnit;
@@ -1606,25 +1602,25 @@
                 return;
             }
             
-            let html = '<table class="data-grid"><thead><th>#</th><th>Name</th><th>MC Number</th><th>Current Limit</th>';
+            let html = '<table class="data-grid"><thead><tr><th>#</th><th>Name</th><th>MC Number</th><th>Current Limit</th>';
             if (!currentUser?.soloLectura) html += '<th>Actions</th>';
-            html += '</thead><tbody>';
+            html += '</tr></thead><tbody>';
             
             filtered.forEach((b, idx) => {
-                html += '处';
-                html += '<td style="width: 50px;">' + (idx + 1) + '处';
-                html += '处<strong>' + b.nombre + '</strong>处';
-                html += '处<code>' + b.mc + '</code>处';
-                html += '处<strong>$' + formatNumber(b.limite) + '</strong>处';
+                html += '<tr>';
+                html += '<td style="width: 50px;">' + (idx + 1) + '</td>';
+                html += '<td><strong>' + b.nombre + '</strong></td>';
+                html += '<td><code>' + b.mc + '</code></td>';
+                html += '<td><strong>$' + formatNumber(b.limite) + '</strong></td>';
                 if (!currentUser?.soloLectura) {
                     html += '<td style="width: 150px;">';
                     html += '<button class="btn btn-success btn-sm" onclick="openIncreaseModal(\'broker\', ' + b.id + ', \'' + b.nombre.replace(/'/g, "\\'") + '\', ' + b.limite + ')">➕ Increase</button> ';
                     html += '<button class="btn btn-danger btn-sm" onclick="deleteBroker(' + b.id + ')">🗑️ Delete</button>';
-                    html += '处';
+                    html += '</td>';
                 }
-                html += '处';
+                html += '</tr>';
             });
-            html += '</tbody>表';
+            html += '</tbody></table>';
             container.innerHTML = html;
         }
         
@@ -1681,30 +1677,30 @@
                 return;
             }
             
-            let html = '<table class="data-grid"><thead><th>#</th><th>Name</th><th>Units</th><th>Date</th><th>Type</th><th>Limit/Unit</th><th>Total Limit</th>';
+            let html = '<table class="data-grid"><thead><tr><th>#</th><th>Name</th><th>Units</th><th>Date</th><th>Type</th><th>Limit/Unit</th><th>Total Limit</th>';
             if (!currentUser?.soloLectura) html += '<th>Actions</th>';
-            html += '</thead><tbody>';
+            html += '</tr></thead><tbody>';
             
             filtered.forEach((c, idx) => {
                 const fecha = c.fechaContrato ? new Date(c.fechaContrato).toLocaleDateString('es-ES') : '-';
                 const tipoColor = c.tipoContrato === 'nuevo' ? '#10b981' : '#f59e0b';
-                html += '处';
-                html += '<td style="width: 50px;">' + (idx + 1) + '处';
-                html += '处<strong>' + c.nombre + '</strong>处';
-                html += '<td style="text-align: center;">' + c.powerUnits + '处';
-                html += '处' + fecha + '处';
-                html += '<td style="color:' + tipoColor + '">' + (c.tipoContrato === 'nuevo' ? 'New (30k)' : 'Old (50k)') + '处';
-                html += '处$' + formatNumber(c.limitePorUnidad) + '处';
-                html += '处<strong>$' + formatNumber(c.limite) + '</strong>处';
+                html += '<tr>';
+                html += '<td style="width: 50px;">' + (idx + 1) + '</td>';
+                html += '<td><strong>' + c.nombre + '</strong></td>';
+                html += '<td style="text-align: center;">' + c.powerUnits + '</td>';
+                html += '<td>' + fecha + '</td>';
+                html += '<td style="color:' + tipoColor + '">' + (c.tipoContrato === 'nuevo' ? 'New (30k)' : 'Old (50k)') + '</td>';
+                html += '<td>$' + formatNumber(c.limitePorUnidad) + '</td>';
+                html += '<td><strong>$' + formatNumber(c.limite) + '</strong></td>';
                 if (!currentUser?.soloLectura) {
                     html += '<td style="width: 150px;">';
                     html += '<button class="btn btn-success btn-sm" onclick="openIncreaseModal(\'carrier\', ' + c.id + ', \'' + c.nombre.replace(/'/g, "\\'") + '\', ' + c.limite + ', ' + c.powerUnits + ', \'' + c.tipoContrato + '\')">➕ Increase</button> ';
                     html += '<button class="btn btn-danger btn-sm" onclick="deleteCarrier(' + c.id + ')">🗑️ Delete</button>';
-                    html += '处';
+                    html += '</td>';
                 }
-                html += '处';
+                html += '</tr>';
             });
-            html += '</tbody>表';
+            html += '</tbody></table>';
             container.innerHTML = html;
         }
         
@@ -1801,14 +1797,12 @@
                     
                     if (!validation.valid) {
                         if (currentUser?.isAdmin) {
-                            // ADMIN: Solo muestra advertencia, NO bloquea
                             warningDiv.innerHTML = '<span class="warning-icon">⚠️</span> <strong>ADMIN NOTICE - You can continue</strong><br>' + validation.message;
                             warningDiv.classList.remove('hidden');
                             applyBtn.disabled = false;
                             applyBtn.style.opacity = '1';
                             applyBtn.style.cursor = 'pointer';
                         } else {
-                            // Usuarios normales: Bloquea
                             warningDiv.innerHTML = '<span class="warning-icon">⚠️</span> <strong>NOTA 031 REQUIRED</strong><br>' + validation.message;
                             warningDiv.classList.remove('hidden');
                             applyBtn.disabled = true;
@@ -1844,7 +1838,6 @@
                 return;
             }
             
-            // ADMIN puede saltar la validación de carriers
             if (pendingIncrease.type === 'carrier' && pendingIncrease.powerUnits && pendingIncrease.tipoContrato) {
                 const validation = validateCarrierLimit(
                     pendingIncrease.powerUnits, 
