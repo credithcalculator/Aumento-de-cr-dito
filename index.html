@@ -573,6 +573,7 @@
 
         .alert-success { border-left: 4px solid #10b981; color: #065f46; }
         .alert-error { border-left: 4px solid #ef4444; color: #991b1b; }
+        .alert-warning-toast { border-left: 4px solid #f59e0b; color: #92400e; background: #fffbeb; }
         .alert-info { border-left: 4px solid #0ea5e9; color: #0369a1; }
 
         .modal-overlay {
@@ -604,6 +605,21 @@
         .hidden {
             display: none;
         }
+        
+        .limit-warning {
+            background: #fef3c7;
+            border: 1px solid #f59e0b;
+            border-radius: 8px;
+            padding: 12px;
+            margin-top: 10px;
+            font-size: 13px;
+            color: #92400e;
+        }
+        
+        .warning-icon {
+            font-size: 18px;
+            margin-right: 8px;
+        }
     </style>
 </head>
 <body>
@@ -629,7 +645,7 @@
             </div>
         </div>
 
-        <!-- Main Dashboard (hidden initially) -->
+        <!-- Main Dashboard -->
         <div id="dashboardContainer" style="display: none;">
             <div class="top-panel">
                 <div class="user-info-panel">
@@ -775,11 +791,18 @@
             <h3>💰 Increase Credit</h3>
             <div class="form-field" style="margin-bottom: 15px;"><label>Entity</label><input type="text" id="modalEntity" readonly style="background:#f1f5f9;"></div>
             <div class="form-field" style="margin-bottom: 15px;"><label>Current Limit</label><input type="text" id="modalCurrentLimit" readonly style="background:#f1f5f9;"></div>
+            <div class="form-field" style="margin-bottom: 15px;"><label>Power Units</label><input type="text" id="modalPowerUnits" readonly style="background:#f1f5f9;"></div>
+            <div class="form-field" style="margin-bottom: 15px;"><label>Contract Type</label><input type="text" id="modalContractType" readonly style="background:#f1f5f9;"></div>
+            <div class="form-field" style="margin-bottom: 15px;"><label>Max Allowed Limit</label><input type="text" id="modalMaxLimit" readonly style="background:#f1f5f9;"></div>
             <div class="form-field" style="margin-bottom: 15px;"><label>Increase Amount (USD)</label><input type="number" id="modalAmount" placeholder="Enter amount"></div>
             <div class="form-field" style="margin-bottom: 20px;"><label>Reason</label><textarea id="modalReason" rows="3" style="width:100%; padding:10px; border:1px solid #e2e8f0; border-radius:10px;"></textarea></div>
-            <div style="display: flex; gap: 10px; justify-content: flex-end;">
+            <div id="modalWarning" class="limit-warning hidden">
+                <span class="warning-icon">⚠️</span> <strong>NOTA 031 REQUERIDA</strong><br>
+                El nuevo límite excede el máximo permitido por unidad de poder.
+            </div>
+            <div style="display: flex; gap: 10px; justify-content: flex-end; margin-top: 15px;">
                 <button class="btn" onclick="closeModal()">Cancel</button>
-                <button class="btn btn-primary" onclick="applyIncrease()">Apply Increase</button>
+                <button class="btn btn-primary" id="applyIncreaseBtn" onclick="applyIncrease()">Apply Increase</button>
             </div>
         </div>
     </div>
@@ -788,7 +811,7 @@
 
     <script>
         // ============================================
-        // USER CONFIGURATION - ALL USERS WITH COLORS
+        // USER CONFIGURATION
         // ============================================
         
         const USERS_LIST = [
@@ -807,9 +830,9 @@
         let pendingIncrease = null;
         
         function loadData() {
-            const savedBrokers = localStorage.getItem('nuko_brokers_v5');
-            const savedCarriers = localStorage.getItem('nuko_carriers_v5');
-            const savedHistory = localStorage.getItem('nuko_history_v5');
+            const savedBrokers = localStorage.getItem('nuko_brokers_v6');
+            const savedCarriers = localStorage.getItem('nuko_carriers_v6');
+            const savedHistory = localStorage.getItem('nuko_history_v6');
             
             if (savedBrokers) {
                 brokers = JSON.parse(savedBrokers);
@@ -829,7 +852,9 @@
                 carriers = [
                     { id: 1, nombre: "042 FREIGHT LLC", powerUnits: 1, fechaContrato: "2024-03-11", tipoContrato: "nuevo", limitePorUnidad: 30000, limite: 10000 },
                     { id: 2, nombre: "1 HAUL INC", powerUnits: 2, fechaContrato: "2021-08-27", tipoContrato: "viejo", limitePorUnidad: 50000, limite: 5000 },
-                    { id: 3, nombre: "1STGEN LOGISTIC LLC", powerUnits: 1, fechaContrato: "2025-11-26", tipoContrato: "nuevo", limitePorUnidad: 30000, limite: 25000 }
+                    { id: 3, nombre: "1STGEN LOGISTIC LLC", powerUnits: 1, fechaContrato: "2025-11-26", tipoContrato: "nuevo", limitePorUnidad: 30000, limite: 25000 },
+                    { id: 4, nombre: "2 BROTHER'S TRANSPORT LLC", powerUnits: 3, fechaContrato: "2025-08-26", tipoContrato: "nuevo", limitePorUnidad: 30000, limite: 25000 },
+                    { id: 5, nombre: "222 TRUCKING INC", powerUnits: 2, fechaContrato: "2023-11-20", tipoContrato: "nuevo", limitePorUnidad: 30000, limite: 26000 }
                 ];
             }
             
@@ -843,9 +868,9 @@
         }
         
         function saveData() {
-            localStorage.setItem('nuko_brokers_v5', JSON.stringify(brokers));
-            localStorage.setItem('nuko_carriers_v5', JSON.stringify(carriers));
-            localStorage.setItem('nuko_history_v5', JSON.stringify(history));
+            localStorage.setItem('nuko_brokers_v6', JSON.stringify(brokers));
+            localStorage.setItem('nuko_carriers_v6', JSON.stringify(carriers));
+            localStorage.setItem('nuko_history_v6', JSON.stringify(history));
         }
         
         function formatNumber(num) {
@@ -868,7 +893,7 @@
             toast.style.display = 'block';
             setTimeout(() => {
                 toast.style.display = 'none';
-            }, 4000);
+            }, 5000);
         }
         
         function updateStats() {
@@ -888,7 +913,28 @@
         }
         
         // ============================================
-        // LOAD USERS - THIS IS THE FIX
+        // VALIDATION FUNCTION FOR CARRIER LIMIT
+        // ============================================
+        
+        function validateCarrierLimit(powerUnits, tipoContrato, currentLimit, increaseAmount) {
+            const limitPerUnit = tipoContrato === 'nuevo' ? 30000 : 50000;
+            const maxAllowedLimit = powerUnits * limitPerUnit;
+            const newLimit = currentLimit + increaseAmount;
+            
+            return {
+                valid: newLimit <= maxAllowedLimit,
+                maxAllowed: maxAllowedLimit,
+                limitPerUnit: limitPerUnit,
+                newLimit: newLimit,
+                currentLimit: currentLimit,
+                message: newLimit > maxAllowedLimit ? 
+                    `⚠️ NOTA 031 REQUERIDA: El nuevo límite ($${formatNumber(newLimit)}) excede el máximo permitido de $${formatNumber(maxAllowedLimit)} para ${powerUnits} unidad(es) con contrato ${tipoContrato === 'nuevo' ? 'Nuevo (30k/unidad)' : 'Viejo (50k/unidad)'}.` : 
+                    null
+            };
+        }
+        
+        // ============================================
+        // LOAD USERS
         // ============================================
         
         function loadUsersList() {
@@ -906,7 +952,6 @@
                 card.onclick = () => {
                     selectedUser = user;
                     if (user.password === null) {
-                        // No password required (Valeria)
                         loginUser(user);
                     } else {
                         showPasswordForm(user);
@@ -1262,12 +1307,12 @@
             
             filtered.forEach((b, idx) => {
                 html += `<tr>
-                    <td>${idx + 1}</td>
+                    <td style="width: 50px;">${idx + 1}</td>
                     <td><strong>${b.nombre}</strong></td>
                     <td><code>${b.mc}</code></td>
                     <td><strong>$${formatNumber(b.limite)}</strong></td>`;
                 if (!currentUser?.soloLectura) {
-                    html += `<td>
+                    html += `<td style="width: 150px;">
                         <button class="btn btn-success btn-sm" onclick="openIncreaseModal('broker', ${b.id}, '${b.nombre.replace(/'/g, "\\'")}', ${b.limite})">➕ Increase</button>
                         <button class="btn btn-danger btn-sm" onclick="deleteBroker(${b.id})">🗑️ Delete</button>
                     </td>`;
@@ -1339,7 +1384,7 @@
                 const fecha = c.fechaContrato ? new Date(c.fechaContrato).toLocaleDateString('es-ES') : '-';
                 const tipoColor = c.tipoContrato === 'nuevo' ? '#10b981' : '#f59e0b';
                 html += `<tr>
-                    <td>${idx + 1}</td>
+                    <td style="width: 50px;">${idx + 1}</td>
                     <td><strong>${c.nombre}</strong></td>
                     <td style="text-align: center;">${c.powerUnits}</td>
                     <td>${fecha}</td>
@@ -1347,8 +1392,8 @@
                     <td>$${formatNumber(c.limitePorUnidad)}</td>
                     <td><strong>$${formatNumber(c.limite)}</strong></td>`;
                 if (!currentUser?.soloLectura) {
-                    html += `<td>
-                        <button class="btn btn-success btn-sm" onclick="openIncreaseModal('carrier', ${c.id}, '${c.nombre.replace(/'/g, "\\'")}', ${c.limite})">➕ Increase</button>
+                    html += `<td style="width: 150px;">
+                        <button class="btn btn-success btn-sm" onclick="openIncreaseModal('carrier', ${c.id}, '${c.nombre.replace(/'/g, "\\'")}', ${c.limite}, ${c.powerUnits}, '${c.tipoContrato}')">➕ Increase</button>
                         <button class="btn btn-danger btn-sm" onclick="deleteCarrier(${c.id})">🗑️ Delete</button>
                     </td>`;
                 }
@@ -1407,20 +1452,66 @@
         }
         
         // ============================================
-        // INCREASE AND HISTORY
+        // INCREASE MODAL WITH VALIDATION
         // ============================================
         
-        function openIncreaseModal(type, id, name, currentLimit) {
+        function openIncreaseModal(type, id, name, currentLimit, powerUnits = null, tipoContrato = null) {
             if (currentUser?.soloLectura) {
                 showToast('You do not have permission to make increases', 'error');
                 return;
             }
-            pendingIncrease = { type, id, name, currentLimit };
+            
+            pendingIncrease = { type, id, name, currentLimit, powerUnits, tipoContrato };
+            
             document.getElementById('modalEntity').value = name;
             document.getElementById('modalCurrentLimit').value = '$' + formatNumber(currentLimit);
             document.getElementById('modalAmount').value = '';
             document.getElementById('modalReason').value = '';
+            document.getElementById('modalWarning').classList.add('hidden');
+            
+            if (type === 'carrier' && powerUnits && tipoContrato) {
+                const limitPerUnit = tipoContrato === 'nuevo' ? 30000 : 50000;
+                const maxAllowed = powerUnits * limitPerUnit;
+                document.getElementById('modalPowerUnits').value = powerUnits;
+                document.getElementById('modalContractType').value = tipoContrato === 'nuevo' ? 'New (30k per unit)' : 'Old (50k per unit)';
+                document.getElementById('modalMaxLimit').value = '$' + formatNumber(maxAllowed);
+                document.getElementById('modalPowerUnits').parentElement.parentElement.classList.remove('hidden');
+                document.getElementById('modalContractType').parentElement.parentElement.classList.remove('hidden');
+                document.getElementById('modalMaxLimit').parentElement.parentElement.classList.remove('hidden');
+            } else {
+                document.getElementById('modalPowerUnits').parentElement.parentElement.classList.add('hidden');
+                document.getElementById('modalContractType').parentElement.parentElement.classList.add('hidden');
+                document.getElementById('modalMaxLimit').parentElement.parentElement.classList.add('hidden');
+            }
+            
             document.getElementById('increaseModal').classList.remove('hidden');
+            
+            // Add real-time validation for amount input
+            const amountInput = document.getElementById('modalAmount');
+            const checkLimit = () => {
+                if (type === 'carrier' && powerUnits && tipoContrato) {
+                    const amount = parseFloat(amountInput.value) || 0;
+                    const validation = validateCarrierLimit(powerUnits, tipoContrato, currentLimit, amount);
+                    const warningDiv = document.getElementById('modalWarning');
+                    const applyBtn = document.getElementById('applyIncreaseBtn');
+                    
+                    if (!validation.valid) {
+                        warningDiv.innerHTML = `<span class="warning-icon">⚠️</span> <strong>NOTA 031 REQUERIDA</strong><br>${validation.message}`;
+                        warningDiv.classList.remove('hidden');
+                        applyBtn.disabled = true;
+                        applyBtn.style.opacity = '0.5';
+                        applyBtn.style.cursor = 'not-allowed';
+                    } else {
+                        warningDiv.classList.add('hidden');
+                        applyBtn.disabled = false;
+                        applyBtn.style.opacity = '1';
+                        applyBtn.style.cursor = 'pointer';
+                    }
+                }
+            };
+            
+            amountInput.oninput = checkLimit;
+            amountInput.onchange = checkLimit;
         }
         
         function closeModal() {
@@ -1437,6 +1528,21 @@
             if (!amount || amount <= 0) {
                 showToast('Enter a valid amount', 'error');
                 return;
+            }
+            
+            // Double-check validation for carriers
+            if (pendingIncrease.type === 'carrier' && pendingIncrease.powerUnits && pendingIncrease.tipoContrato) {
+                const validation = validateCarrierLimit(
+                    pendingIncrease.powerUnits, 
+                    pendingIncrease.tipoContrato, 
+                    pendingIncrease.currentLimit, 
+                    amount
+                );
+                
+                if (!validation.valid) {
+                    showToast('❌ ' + validation.message, 'warning-toast');
+                    return;
+                }
             }
             
             let oldLimit = pendingIncrease.currentLimit;
