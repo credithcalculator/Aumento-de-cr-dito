@@ -72,12 +72,40 @@
             transition: all 0.3s;
             border: 2px solid #e2e8f0;
             text-align: center;
+            position: relative;
         }
 
         .user-card:hover {
             transform: translateY(-5px);
             border-color: #2a5298;
             box-shadow: 0 10px 25px -5px rgba(0,0,0,0.1);
+        }
+
+        .user-card .delete-user {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            background: #ef4444;
+            color: white;
+            width: 28px;
+            height: 28px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 14px;
+            cursor: pointer;
+            opacity: 0;
+            transition: all 0.3s;
+        }
+
+        .user-card:hover .delete-user {
+            opacity: 1;
+        }
+
+        .user-card .delete-user:hover {
+            background: #dc2626;
+            transform: scale(1.1);
         }
 
         .user-avatar {
@@ -118,6 +146,17 @@
         .badge-admin { background: #fef3c7; color: #d97706; }
         .badge-user { background: #dbeafe; color: #2563eb; }
         .badge-readonly { background: #dcfce7; color: #16a34a; }
+
+        .add-user-card {
+            background: linear-gradient(135deg, #f0fdf4, #dcfce7);
+            border: 2px dashed #22c55e;
+            cursor: pointer;
+        }
+
+        .add-user-card:hover {
+            background: linear-gradient(135deg, #dcfce7, #bbf7d0);
+            transform: translateY(-5px);
+        }
 
         .login-form {
             max-width: 400px;
@@ -184,6 +223,23 @@
 
         .btn-logout:hover {
             background: #dc2626;
+            transform: translateY(-2px);
+        }
+
+        .btn-change-password {
+            background: #f59e0b;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 40px;
+            cursor: pointer;
+            font-weight: 600;
+            transition: all 0.3s;
+            margin-right: 10px;
+        }
+
+        .btn-change-password:hover {
+            background: #d97706;
             transform: translateY(-2px);
         }
 
@@ -669,7 +725,10 @@
                         <p id="dashboardUserEmail">email@example.com</p>
                     </div>
                 </div>
-                <button class="btn-logout" onclick="logout()">🚪 Logout</button>
+                <div>
+                    <button class="btn-change-password" onclick="openChangePasswordModal()">🔑 Change Password</button>
+                    <button class="btn-logout" onclick="logout()">🚪 Logout</button>
+                </div>
             </div>
 
             <div class="stats-cards">
@@ -802,6 +861,63 @@
         </div>
     </div>
 
+    <!-- Modal para crear nuevo usuario -->
+    <div id="createUserModal" class="modal-overlay hidden">
+        <div class="modal-container">
+            <h3>➕ Create New User</h3>
+            <div class="form-field" style="margin-bottom: 15px;">
+                <label>Full Name</label>
+                <input type="text" id="newUserName" placeholder="Ex: John Doe">
+            </div>
+            <div class="form-field" style="margin-bottom: 15px;">
+                <label>Email</label>
+                <input type="email" id="newUserEmail" placeholder="user@example.com">
+            </div>
+            <div class="form-field" style="margin-bottom: 15px;">
+                <label>Password</label>
+                <input type="password" id="newUserPassword" placeholder="Enter password">
+            </div>
+            <div class="form-field" style="margin-bottom: 15px;">
+                <label>Confirm Password</label>
+                <input type="password" id="newUserConfirmPassword" placeholder="Confirm password">
+            </div>
+            <div class="form-field" style="margin-bottom: 20px;">
+                <label>User Type</label>
+                <select id="newUserType">
+                    <option value="user">Normal User</option>
+                    <option value="readonly">Read Only (Auditor)</option>
+                </select>
+            </div>
+            <div style="display: flex; gap: 10px; justify-content: flex-end;">
+                <button class="btn" onclick="closeCreateUserModal()">Cancel</button>
+                <button class="btn btn-primary" onclick="createUser()">Create User</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal para cambiar contraseña -->
+    <div id="changePasswordModal" class="modal-overlay hidden">
+        <div class="modal-container">
+            <h3>🔑 Change Password</h3>
+            <div class="form-field" style="margin-bottom: 15px;">
+                <label>Current Password</label>
+                <input type="password" id="currentPassword" placeholder="Enter current password">
+            </div>
+            <div class="form-field" style="margin-bottom: 15px;">
+                <label>New Password</label>
+                <input type="password" id="newPassword" placeholder="Enter new password">
+            </div>
+            <div class="form-field" style="margin-bottom: 20px;">
+                <label>Confirm New Password</label>
+                <input type="password" id="confirmNewPassword" placeholder="Confirm new password">
+            </div>
+            <div style="display: flex; gap: 10px; justify-content: flex-end;">
+                <button class="btn" onclick="closeChangePasswordModal()">Cancel</button>
+                <button class="btn btn-primary" onclick="changePassword()">Change Password</button>
+            </div>
+        </div>
+    </div>
+
     <div id="increaseModal" class="modal-overlay hidden">
         <div class="modal-container">
             <h3>💰 Increase Credit</h3>
@@ -827,15 +943,15 @@
 
     <script>
         // ============================================
-        // USER CONFIGURATION WITH ICONS
+        // USER CONFIGURATION WITH DYNAMIC USERS
         // ============================================
         
-        const USERS_LIST = [
-            { email: "admin@nukocapital.com", name: "Administrator", password: "YRAC26", role: "admin", soloLectura: false, icon: "👑", iconBg: "#d97706", isAdmin: true },
-            { email: "valeria.romero@nukocapital.com", name: "Valeria Romero - Auditor", password: null, role: "auditor", soloLectura: true, icon: "👀", iconBg: "#16a34a", isAdmin: false },
-            { email: "yeimy.gaviria@nukocapital.com", name: "Yeimy Gaviria", password: "YEIMY2024", role: "user", soloLectura: false, icon: "👤", iconBg: "#2563eb", isAdmin: false },
-            { email: "andres.acosta@nukocapital.com", name: "Andres Acosta", password: "ANDRES2024", role: "user", soloLectura: false, icon: "👤", iconBg: "#2563eb", isAdmin: false },
-            { email: "roberto.morante@nukocapital.com", name: "Roberto Morante", password: "ROBERTO2024", role: "user", soloLectura: false, icon: "👤", iconBg: "#2563eb", isAdmin: false }
+        let USERS_LIST = [
+            { email: "admin@nukocapital.com", name: "Administrator", password: "YRAC26", role: "admin", soloLectura: false, icon: "👑", iconBg: "#d97706", isAdmin: true, canDelete: false },
+            { email: "valeria.romero@nukocapital.com", name: "Valeria Romero - Auditor", password: null, role: "auditor", soloLectura: true, icon: "👀", iconBg: "#16a34a", isAdmin: false, canDelete: true },
+            { email: "yeimy.gaviria@nukocapital.com", name: "Yeimy Gaviria", password: "YEIMY2024", role: "user", soloLectura: false, icon: "👤", iconBg: "#2563eb", isAdmin: false, canDelete: true },
+            { email: "andres.acosta@nukocapital.com", name: "Andres Acosta", password: "ANDRES2024", role: "user", soloLectura: false, icon: "👤", iconBg: "#2563eb", isAdmin: false, canDelete: true },
+            { email: "roberto.morante@nukocapital.com", name: "Roberto Morante", password: "ROBERTO2024", role: "user", soloLectura: false, icon: "👤", iconBg: "#2563eb", isAdmin: false, canDelete: true }
         ];
         
         let brokers = [];
@@ -844,6 +960,21 @@
         let currentUser = null;
         let selectedUser = null;
         let pendingIncrease = null;
+        
+        function loadUsersFromStorage() {
+            const savedUsers = localStorage.getItem('nuko_users');
+            if (savedUsers) {
+                USERS_LIST.length = 0;
+                const parsed = JSON.parse(savedUsers);
+                parsed.forEach(u => USERS_LIST.push(u));
+            } else {
+                saveUsersToStorage();
+            }
+        }
+        
+        function saveUsersToStorage() {
+            localStorage.setItem('nuko_users', JSON.stringify(USERS_LIST));
+        }
         
         function loadData() {
             const savedBrokers = localStorage.getItem('nuko_brokers_final');
@@ -948,6 +1079,128 @@
         }
         
         // ============================================
+        // USER MANAGEMENT FUNCTIONS
+        // ============================================
+        
+        function openCreateUserModal() {
+            document.getElementById('createUserModal').classList.remove('hidden');
+            document.getElementById('newUserName').value = '';
+            document.getElementById('newUserEmail').value = '';
+            document.getElementById('newUserPassword').value = '';
+            document.getElementById('newUserConfirmPassword').value = '';
+        }
+        
+        function closeCreateUserModal() {
+            document.getElementById('createUserModal').classList.add('hidden');
+        }
+        
+        function createUser() {
+            const name = document.getElementById('newUserName').value.trim();
+            const email = document.getElementById('newUserEmail').value.trim().toLowerCase();
+            const password = document.getElementById('newUserPassword').value;
+            const confirmPassword = document.getElementById('newUserConfirmPassword').value;
+            const userType = document.getElementById('newUserType').value;
+            
+            if (!name || !email) {
+                showToast('Please enter name and email', 'error');
+                return;
+            }
+            
+            if (password !== confirmPassword) {
+                showToast('Passwords do not match', 'error');
+                return;
+            }
+            
+            if (USERS_LIST.some(u => u.email === email)) {
+                showToast('Email already exists', 'error');
+                return;
+            }
+            
+            const newUser = {
+                email: email,
+                name: name,
+                password: password || null,
+                role: userType === 'readonly' ? 'auditor' : 'user',
+                soloLectura: userType === 'readonly',
+                icon: userType === 'readonly' ? '👀' : '👤',
+                iconBg: userType === 'readonly' ? '#16a34a' : '#2563eb',
+                isAdmin: false,
+                canDelete: true
+            };
+            
+            USERS_LIST.push(newUser);
+            saveUsersToStorage();
+            loadUsersList();
+            closeCreateUserModal();
+            showToast(`✅ User "${name}" created successfully`, 'success');
+        }
+        
+        function deleteUser(email, event) {
+            event.stopPropagation();
+            
+            if (currentUser && currentUser.email === email) {
+                showToast('You cannot delete yourself', 'error');
+                return;
+            }
+            
+            if (email === 'admin@nukocapital.com') {
+                showToast('Cannot delete the main administrator', 'error');
+                return;
+            }
+            
+            if (confirm('Are you sure you want to delete this user?')) {
+                const index = USERS_LIST.findIndex(u => u.email === email);
+                if (index !== -1) {
+                    USERS_LIST.splice(index, 1);
+                    saveUsersToStorage();
+                    loadUsersList();
+                    showToast('✅ User deleted successfully', 'success');
+                }
+            }
+        }
+        
+        function openChangePasswordModal() {
+            document.getElementById('changePasswordModal').classList.remove('hidden');
+            document.getElementById('currentPassword').value = '';
+            document.getElementById('newPassword').value = '';
+            document.getElementById('confirmNewPassword').value = '';
+        }
+        
+        function closeChangePasswordModal() {
+            document.getElementById('changePasswordModal').classList.add('hidden');
+        }
+        
+        function changePassword() {
+            const currentPwd = document.getElementById('currentPassword').value;
+            const newPwd = document.getElementById('newPassword').value;
+            const confirmPwd = document.getElementById('confirmNewPassword').value;
+            
+            if (currentUser.password !== null && currentUser.password !== currentPwd) {
+                showToast('Current password is incorrect', 'error');
+                return;
+            }
+            
+            if (!newPwd) {
+                showToast('Please enter a new password', 'error');
+                return;
+            }
+            
+            if (newPwd !== confirmPwd) {
+                showToast('New passwords do not match', 'error');
+                return;
+            }
+            
+            const userIndex = USERS_LIST.findIndex(u => u.email === currentUser.email);
+            if (userIndex !== -1) {
+                USERS_LIST[userIndex].password = newPwd;
+                currentUser.password = newPwd;
+                saveUsersToStorage();
+                closeChangePasswordModal();
+                showToast('✅ Password changed successfully', 'success');
+            }
+        }
+        
+        // ============================================
         // LOAD USERS - WITH ICONS VISIBLE
         // ============================================
         
@@ -956,13 +1209,14 @@
             if (!container) return;
             container.innerHTML = '';
             
+            // Add user card for each existing user
             for (const user of USERS_LIST) {
                 const card = document.createElement('div');
                 card.className = 'user-card';
                 card.style.borderTop = `4px solid ${user.iconBg}`;
                 card.onclick = () => {
                     selectedUser = user;
-                    if (user.password === null) {
+                    if (user.password === null && user.email !== 'admin@nukocapital.com') {
                         loginUser(user);
                     } else {
                         showPasswordForm(user);
@@ -982,8 +1236,8 @@
                     badgeText = 'User';
                 }
                 
-                // ICONO VISIBLE EN LA TARJETA DEL USUARIO
                 card.innerHTML = `
+                    ${user.canDelete ? `<div class="delete-user" onclick="deleteUser('${user.email}', event)">✖</div>` : ''}
                     <div class="user-avatar" style="background: ${user.iconBg}; color: white;">${user.icon}</div>
                     <div class="user-name">${user.name}</div>
                     <div class="user-email">${user.email}</div>
@@ -994,9 +1248,22 @@
                 
                 container.appendChild(card);
             }
+            
+            // Add "Create User" card
+            const addCard = document.createElement('div');
+            addCard.className = 'user-card add-user-card';
+            addCard.onclick = () => openCreateUserModal();
+            addCard.innerHTML = `
+                <div class="user-avatar" style="background: #22c55e; color: white;">➕</div>
+                <div class="user-name">Create New User</div>
+                <div class="user-email">Add a new user to the system</div>
+                <div class="user-badge" style="background: #dcfce7; color: #166534;">Click to add</div>
+            `;
+            container.appendChild(addCard);
         }
         
         function showPasswordForm(user) {
+            selectedUser = user;
             document.getElementById('passwordForm').classList.remove('hidden');
             document.getElementById('userPassword').value = '';
             document.getElementById('userPassword').focus();
@@ -1010,7 +1277,8 @@
                 soloLectura: user.soloLectura,
                 isAdmin: user.role === 'admin',
                 icon: user.icon,
-                iconBg: user.iconBg
+                iconBg: user.iconBg,
+                password: user.password
             };
             
             document.getElementById('dashboardUserName').textContent = currentUser.name;
@@ -1022,7 +1290,7 @@
             document.getElementById('loginContainer').style.display = 'none';
             document.getElementById('dashboardContainer').style.display = 'block';
             
-            // Mostrar import areas solo si es admin
+            // Show import areas only if admin
             const brokerImportArea = document.getElementById('brokerImportArea');
             const carrierImportArea = document.getElementById('carrierImportArea');
             
@@ -1707,6 +1975,7 @@
         }
         
         // Initialize
+        loadUsersFromStorage();
         loadUsersList();
     </script>
 </body>
