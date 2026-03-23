@@ -97,6 +97,7 @@
             cursor: pointer;
             opacity: 0;
             transition: all 0.3s;
+            z-index: 10;
         }
 
         .user-card:hover .delete-user {
@@ -117,8 +118,6 @@
             justify-content: center;
             margin: 0 auto 15px;
             font-size: 36px;
-            background: linear-gradient(135deg, #667eea, #764ba2);
-            color: white;
         }
 
         .user-name {
@@ -196,8 +195,6 @@
             align-items: center;
             justify-content: center;
             font-size: 24px;
-            background: linear-gradient(135deg, #667eea, #764ba2);
-            color: white;
         }
 
         .user-text h3 {
@@ -1201,7 +1198,7 @@
         }
         
         // ============================================
-        // LOAD USERS - WITH ICONS VISIBLE
+        // LOAD USERS - WITH ICONS AND DELETE BUTTON
         // ============================================
         
         function loadUsersList() {
@@ -1209,7 +1206,6 @@
             if (!container) return;
             container.innerHTML = '';
             
-            // Add user card for each existing user
             for (const user of USERS_LIST) {
                 const card = document.createElement('div');
                 card.className = 'user-card';
@@ -1249,7 +1245,6 @@
                 container.appendChild(card);
             }
             
-            // Add "Create User" card
             const addCard = document.createElement('div');
             addCard.className = 'user-card add-user-card';
             addCard.onclick = () => openCreateUserModal();
@@ -1290,7 +1285,6 @@
             document.getElementById('loginContainer').style.display = 'none';
             document.getElementById('dashboardContainer').style.display = 'block';
             
-            // Show import areas only if admin
             const brokerImportArea = document.getElementById('brokerImportArea');
             const carrierImportArea = document.getElementById('carrierImportArea');
             
@@ -1602,7 +1596,7 @@
                 return;
             }
             
-            let html = '<table class="data-grid"><thead>肌理<th>#</th><th>Name</th><th>MC Number</th><th>Current Limit</th>';
+            let html = '<table class="data-grid"><thead><th>#</th><th>Name</th><th>MC Number</th><th>Current Limit</th>';
             if (!currentUser?.soloLectura) html += '<th>Actions</th>';
             html += '</thead><tbody>';
             
