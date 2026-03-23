@@ -723,7 +723,7 @@
                     </div>
                 </div>
                 <div id="actionButtons">
-                    <button class="btn-change-password" onclick="openChangePasswordModal()">🔑 Change Password</button>
+                    <button class="btn-change-password" onclick="openChangePasswordModal()" style="display: none;">🔑 Change Password</button>
                     <button class="btn-logout" onclick="logout()">🚪 Logout</button>
                 </div>
             </div>
@@ -940,7 +940,7 @@
 
     <script>
         // ============================================
-        // USER CONFIGURATION WITH DYNAMIC USERS
+        // USER CONFIGURATION
         // ============================================
         
         let USERS_LIST = [
@@ -1285,11 +1285,10 @@
             document.getElementById('loginContainer').style.display = 'none';
             document.getElementById('dashboardContainer').style.display = 'block';
             
-            // MOSTRAR U OCULTAR BOTÓN DE CAMBIO DE CONTRASEÑA SEGÚN EL USUARIO
+            // SOLO VALERIA no puede cambiar contraseña
             const changePasswordBtn = document.querySelector('.btn-change-password');
             if (changePasswordBtn) {
-                // VALERIA (soloLectura) NO puede cambiar contraseña
-                if (currentUser.soloLectura === true) {
+                if (currentUser.email === 'valeria.romero@nukocapital.com') {
                     changePasswordBtn.style.display = 'none';
                 } else {
                     changePasswordBtn.style.display = 'inline-block';
@@ -1758,7 +1757,7 @@
         }
         
         // ============================================
-        // INCREASE MODAL - ADMIN NO TIENE RESTRICCIONES
+        // INCREASE MODAL - ADMIN SIN RESTRICCIONES
         // ============================================
         
         function openIncreaseModal(type, id, name, currentLimit, powerUnits, tipoContrato) {
@@ -1802,14 +1801,14 @@
                     
                     if (!validation.valid) {
                         if (currentUser?.isAdmin) {
-                            // ADMIN: Solo muestra advertencia pero NO bloquea
+                            // ADMIN: Solo muestra advertencia, NO bloquea
                             warningDiv.innerHTML = '<span class="warning-icon">⚠️</span> <strong>ADMIN NOTICE - You can continue</strong><br>' + validation.message;
                             warningDiv.classList.remove('hidden');
                             applyBtn.disabled = false;
                             applyBtn.style.opacity = '1';
                             applyBtn.style.cursor = 'pointer';
                         } else {
-                            // Usuarios normales: Bloquea el botón
+                            // Usuarios normales: Bloquea
                             warningDiv.innerHTML = '<span class="warning-icon">⚠️</span> <strong>NOTA 031 REQUIRED</strong><br>' + validation.message;
                             warningDiv.classList.remove('hidden');
                             applyBtn.disabled = true;
@@ -1845,7 +1844,7 @@
                 return;
             }
             
-            // Validación para carriers - ADMIN puede saltarla
+            // ADMIN puede saltar la validación de carriers
             if (pendingIncrease.type === 'carrier' && pendingIncrease.powerUnits && pendingIncrease.tipoContrato) {
                 const validation = validateCarrierLimit(
                     pendingIncrease.powerUnits, 
