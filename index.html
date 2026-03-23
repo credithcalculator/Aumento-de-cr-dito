@@ -714,7 +714,7 @@
 
         <!-- Main Dashboard -->
         <div id="dashboardContainer" style="display: none;">
-            <div class="top-panel">
+            <div class="top-panel" id="topPanel">
                 <div class="user-info-panel">
                     <div class="user-avatar-sm" id="dashboardAvatar">👤</div>
                     <div class="user-text">
@@ -722,7 +722,7 @@
                         <p id="dashboardUserEmail">email@example.com</p>
                     </div>
                 </div>
-                <div>
+                <div id="actionButtons">
                     <button class="btn-change-password" onclick="openChangePasswordModal()">🔑 Change Password</button>
                     <button class="btn-logout" onclick="logout()">🚪 Logout</button>
                 </div>
@@ -1198,7 +1198,7 @@
         }
         
         // ============================================
-        // LOAD USERS - WITH ICONS AND DELETE BUTTON
+        // LOAD USERS
         // ============================================
         
         function loadUsersList() {
@@ -1284,6 +1284,16 @@
             
             document.getElementById('loginContainer').style.display = 'none';
             document.getElementById('dashboardContainer').style.display = 'block';
+            
+            // Mostrar u ocultar el botón de cambio de contraseña según el tipo de usuario
+            const changePasswordBtn = document.querySelector('.btn-change-password');
+            if (changePasswordBtn) {
+                if (currentUser.soloLectura) {
+                    changePasswordBtn.style.display = 'none';
+                } else {
+                    changePasswordBtn.style.display = 'inline-block';
+                }
+            }
             
             const brokerImportArea = document.getElementById('brokerImportArea');
             const carrierImportArea = document.getElementById('carrierImportArea');
@@ -1747,7 +1757,7 @@
         }
         
         // ============================================
-        // INCREASE MODAL WITH VALIDATION
+        // INCREASE MODAL WITH VALIDATION (ADMIN NO RESTRICTIONS)
         // ============================================
         
         function openIncreaseModal(type, id, name, currentLimit, powerUnits, tipoContrato) {
@@ -1790,11 +1800,19 @@
                     const applyBtn = document.getElementById('applyIncreaseBtn');
                     
                     if (!validation.valid) {
-                        warningDiv.innerHTML = '<span class="warning-icon">⚠️</span> <strong>NOTA 031 REQUIRED</strong><br>' + validation.message;
-                        warningDiv.classList.remove('hidden');
-                        applyBtn.disabled = true;
-                        applyBtn.style.opacity = '0.5';
-                        applyBtn.style.cursor = 'not-allowed';
+                        if (currentUser?.isAdmin) {
+                            warningDiv.innerHTML = '<span class="warning-icon">⚠️</span> <strong>ADMIN - NOTA 031 REQUIRED (You can continue)</strong><br>' + validation.message;
+                            warningDiv.classList.remove('hidden');
+                            applyBtn.disabled = false;
+                            applyBtn.style.opacity = '1';
+                            applyBtn.style.cursor = 'pointer';
+                        } else {
+                            warningDiv.innerHTML = '<span class="warning-icon">⚠️</span> <strong>NOTA 031 REQUIRED</strong><br>' + validation.message;
+                            warningDiv.classList.remove('hidden');
+                            applyBtn.disabled = true;
+                            applyBtn.style.opacity = '0.5';
+                            applyBtn.style.cursor = 'not-allowed';
+                        }
                     } else {
                         warningDiv.classList.add('hidden');
                         applyBtn.disabled = false;
@@ -1824,6 +1842,7 @@
                 return;
             }
             
+            // Validación para carriers - ADMIN puede saltarla
             if (pendingIncrease.type === 'carrier' && pendingIncrease.powerUnits && pendingIncrease.tipoContrato) {
                 const validation = validateCarrierLimit(
                     pendingIncrease.powerUnits, 
@@ -1832,9 +1851,11 @@
                     amount
                 );
                 
-                if (!validation.valid) {
+                if (!validation.valid && !currentUser.isAdmin) {
                     showToast(validation.message, 'warning');
                     return;
+                } else if (!validation.valid && currentUser.isAdmin) {
+                    showToast('⚠️ ADMIN: ' + validation.message + ' (Increase applied)', 'warning');
                 }
             }
             
