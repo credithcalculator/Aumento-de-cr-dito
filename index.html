@@ -687,6 +687,14 @@
             margin-left: 8px;
             vertical-align: middle;
         }
+        
+        .carrier-fields {
+            display: block;
+        }
+        
+        .carrier-fields.hidden-fields {
+            display: none;
+        }
     </style>
 </head>
 <body>
@@ -922,9 +930,11 @@
             <h3>💰 Increase Credit</h3>
             <div class="form-field" style="margin-bottom: 15px;"><label>Entity</label><input type="text" id="modalEntity" readonly style="background:#f1f5f9;"></div>
             <div class="form-field" style="margin-bottom: 15px;"><label>Current Limit</label><input type="text" id="modalCurrentLimit" readonly style="background:#f1f5f9;"></div>
-            <div class="form-field" style="margin-bottom: 15px;"><label>Power Units</label><input type="text" id="modalPowerUnits" readonly style="background:#f1f5f9;"></div>
-            <div class="form-field" style="margin-bottom: 15px;"><label>Contract Type</label><input type="text" id="modalContractType" readonly style="background:#f1f5f9;"></div>
-            <div class="form-field" style="margin-bottom: 15px;"><label>Max Allowed Limit</label><input type="text" id="modalMaxLimit" readonly style="background:#f1f5f9;"></div>
+            <div id="carrierFieldsContainer">
+                <div class="form-field" style="margin-bottom: 15px;"><label>Power Units</label><input type="text" id="modalPowerUnits" readonly style="background:#f1f5f9;"></div>
+                <div class="form-field" style="margin-bottom: 15px;"><label>Contract Type</label><input type="text" id="modalContractType" readonly style="background:#f1f5f9;"></div>
+                <div class="form-field" style="margin-bottom: 15px;"><label>Max Allowed Limit</label><input type="text" id="modalMaxLimit" readonly style="background:#f1f5f9;"></div>
+            </div>
             <div class="form-field" style="margin-bottom: 15px;"><label>Increase Amount (USD)</label><input type="number" id="modalAmount" placeholder="Enter amount"></div>
             <div class="form-field" style="margin-bottom: 20px;"><label>Reason</label><textarea id="modalReason" rows="3" style="width:100%; padding:10px; border:1px solid #e2e8f0; border-radius:10px;"></textarea></div>
             <div id="modalWarning" class="limit-warning hidden">
@@ -1613,10 +1623,10 @@
                 return;
             }
             
-            let html = '<table class="data-grid"><thead>';
+            let html = '<table class="data-grid"><thead><tr>';
             html += '<th>#</th><th>Name</th><th>MC Number</th><th>Current Limit</th>';
             if (!currentUser?.soloLectura) html += '<th>Actions</th>';
-            html += '</thead><tbody>';
+            html += '</tr></thead><tbody>';
             
             filtered.forEach((b, idx) => {
                 html += '<tr>';
@@ -1689,10 +1699,10 @@
                 return;
             }
             
-            let html = '<table class="data-grid"><thead>';
+            let html = '<table class="data-grid"><thead><tr>';
             html += '<th>#</th><th>Name</th><th>Units</th><th>Date</th><th>Type</th><th>Limit/Unit</th><th>Total Limit</th>';
             if (!currentUser?.soloLectura) html += '<th>Actions</th>';
-            html += '</thead><tbody>';
+            html += '</tr></thead><tbody>';
             
             filtered.forEach((c, idx) => {
                 const fecha = c.fechaContrato ? new Date(c.fechaContrato).toLocaleDateString('es-ES') : '-';
@@ -1766,10 +1776,12 @@
         }
         
         // ============================================
-        // INCREASE MODAL - ADMIN SIN RESTRICCIONES
+        // INCREASE MODAL - CORREGIDO
         // ============================================
         
         function openIncreaseModal(type, id, name, currentLimit, powerUnits, tipoContrato) {
+            console.log("Opening modal for:", type, id, name);
+            
             if (currentUser?.soloLectura) {
                 showToast('You do not have permission to make increases', 'error');
                 return;
@@ -1783,10 +1795,7 @@
             document.getElementById('modalReason').value = '';
             document.getElementById('modalWarning').classList.add('hidden');
             
-            // Obtener referencias a los elementos del formulario que queremos mostrar/ocultar
-            const powerUnitsRow = document.getElementById('modalPowerUnits').closest('.form-field');
-            const contractTypeRow = document.getElementById('modalContractType').closest('.form-field');
-            const maxLimitRow = document.getElementById('modalMaxLimit').closest('.form-field');
+            const carrierFieldsContainer = document.getElementById('carrierFieldsContainer');
             
             if (type === 'carrier' && powerUnits && tipoContrato) {
                 const limitPerUnit = tipoContrato === 'nuevo' ? 30000 : 50000;
@@ -1794,16 +1803,9 @@
                 document.getElementById('modalPowerUnits').value = powerUnits;
                 document.getElementById('modalContractType').value = tipoContrato === 'nuevo' ? 'New (30k per unit)' : 'Old (50k per unit)';
                 document.getElementById('modalMaxLimit').value = '$' + formatNumber(maxAllowed);
-                
-                // Mostrar los campos
-                if (powerUnitsRow) powerUnitsRow.style.display = 'block';
-                if (contractTypeRow) contractTypeRow.style.display = 'block';
-                if (maxLimitRow) maxLimitRow.style.display = 'block';
+                carrierFieldsContainer.style.display = 'block';
             } else {
-                // Ocultar los campos
-                if (powerUnitsRow) powerUnitsRow.style.display = 'none';
-                if (contractTypeRow) contractTypeRow.style.display = 'none';
-                if (maxLimitRow) maxLimitRow.style.display = 'none';
+                carrierFieldsContainer.style.display = 'none';
             }
             
             document.getElementById('increaseModal').classList.remove('hidden');
@@ -1849,7 +1851,10 @@
         }
         
         function applyIncrease() {
-            if (!pendingIncrease) return;
+            if (!pendingIncrease) {
+                showToast('No pending increase', 'error');
+                return;
+            }
             
             const amount = parseFloat(document.getElementById('modalAmount').value);
             const reason = document.getElementById('modalReason').value;
@@ -1915,6 +1920,8 @@
                 updateStats();
                 
                 showToast('✅ Increase of $' + formatNumber(amount) + ' applied to ' + pendingIncrease.name, 'success');
+            } else {
+                showToast('Entity not found', 'error');
             }
         }
         
