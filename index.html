@@ -361,7 +361,6 @@
             filter: brightness(105%);
         }
 
-        /* Área de importación - ESTILOS DESTACADOS */
         .import-area {
             background: linear-gradient(135deg, #dbeafe, #eff6ff);
             border-radius: 16px;
@@ -608,6 +607,15 @@
         .hidden {
             display: none;
         }
+        
+        .info-note {
+            background: #fef9c3;
+            padding: 10px;
+            border-radius: 8px;
+            margin-top: 10px;
+            font-size: 12px;
+            color: #854d0e;
+        }
     </style>
 </head>
 <body>
@@ -683,7 +691,7 @@
                 </div>
             </div>
 
-            <!-- Sección Brokers CON BOTONES DE IMPORTAR -->
+            <!-- Sección Brokers -->
             <div id="brokersPanel" class="section-panel">
                 <div class="toolbar-section">
                     <h2>📊 Gestión de Brokers</h2>
@@ -693,28 +701,21 @@
                     </div>
                 </div>
 
-                <!-- ÁREA DE IMPORTACIÓN DE BROKERS - BOTÓN VISIBLE -->
                 <div class="import-area">
                     <div class="import-header">
                         <div class="import-icon">📤</div>
                         <div>
                             <div class="import-title">📥 IMPORTAR BROKERS DESDE CSV</div>
-                            <div class="import-desc">Sube un archivo CSV con miles de brokers de una sola vez</div>
+                            <div class="import-desc">Sube un archivo CSV con formato: Nombre, MC, Límite</div>
                         </div>
                     </div>
                     <div class="import-buttons">
-                        <label class="file-input-label" for="brokerFileInput">
-                            📂 SELECCIONAR ARCHIVO CSV
-                        </label>
+                        <label class="file-input-label" for="brokerFileInput">📂 SELECCIONAR ARCHIVO CSV</label>
                         <input type="file" id="brokerFileInput" accept=".csv" onchange="importBrokersCSV(this)">
                         <button class="btn template-btn" onclick="downloadBrokerTemplate()">📄 DESCARGAR PLANTILLA</button>
                     </div>
                     <div id="brokerProgress" class="progress-bar hidden">
                         <div class="progress-fill" id="brokerProgressFill"></div>
-                    </div>
-                    <div class="import-desc" style="margin-top: 10px;">
-                        📌 Formato esperado: Nombre, MC, Límite<br>
-                        Ejemplo: "Global Logistics","MC123456",50000
                     </div>
                 </div>
 
@@ -727,7 +728,7 @@
                 <div class="table-wrapper" id="brokersTable"></div>
             </div>
 
-            <!-- Sección Carriers CON BOTONES DE IMPORTAR -->
+            <!-- Sección Carriers - CORREGIDA PARA TU FORMATO -->
             <div id="carriersPanel" class="section-panel">
                 <div class="toolbar-section">
                     <h2>🚛 Gestión de Carriers</h2>
@@ -737,28 +738,25 @@
                     </div>
                 </div>
 
-                <!-- ÁREA DE IMPORTACIÓN DE CARRIERS - BOTÓN VISIBLE -->
                 <div class="import-area">
                     <div class="import-header">
                         <div class="import-icon">📤</div>
                         <div>
                             <div class="import-title">📥 IMPORTAR CARRIERS DESDE CSV</div>
-                            <div class="import-desc">Sube un archivo CSV con miles de carriers de una sola vez</div>
+                            <div class="import-desc">Sube un archivo CSV con el formato de tu archivo: Name, Buy Limit, Unidades de poder, Fecha de contrato</div>
                         </div>
                     </div>
                     <div class="import-buttons">
-                        <label class="file-input-label" for="carrierFileInput">
-                            📂 SELECCIONAR ARCHIVO CSV
-                        </label>
+                        <label class="file-input-label" for="carrierFileInput">📂 SELECCIONAR ARCHIVO CSV</label>
                         <input type="file" id="carrierFileInput" accept=".csv" onchange="importCarriersCSV(this)">
                         <button class="btn template-btn" onclick="downloadCarrierTemplate()">📄 DESCARGAR PLANTILLA</button>
                     </div>
                     <div id="carrierProgress" class="progress-bar hidden">
                         <div class="progress-fill" id="carrierProgressFill"></div>
                     </div>
-                    <div class="import-desc" style="margin-top: 10px;">
-                        📌 Formato esperado: Nombre, Unidades Poder, Fecha Contrato, Tipo Contrato, Límite<br>
-                        Ejemplo: "Carrier Express",3,"2024-08-15","nuevo",90000
+                    <div class="info-note">
+                        💡 Tu archivo debe tener las columnas: Name, Buy Limit, Open A/R, Available, Unidades de poder, Fecha de contrato<br>
+                        (Se tomará el "Buy Limit" como límite y "Unidades de poder" como unidades)
                     </div>
                 </div>
 
@@ -855,9 +853,9 @@
         let pendingIncrease = null;
         
         function loadData() {
-            const savedBrokers = localStorage.getItem('nuko_brokers_final');
-            const savedCarriers = localStorage.getItem('nuko_carriers_final');
-            const savedHistory = localStorage.getItem('nuko_history_final');
+            const savedBrokers = localStorage.getItem('nuko_brokers_v2');
+            const savedCarriers = localStorage.getItem('nuko_carriers_v2');
+            const savedHistory = localStorage.getItem('nuko_history_v2');
             
             if (savedBrokers) {
                 brokers = JSON.parse(savedBrokers);
@@ -893,13 +891,22 @@
         }
         
         function saveData() {
-            localStorage.setItem('nuko_brokers_final', JSON.stringify(brokers));
-            localStorage.setItem('nuko_carriers_final', JSON.stringify(carriers));
-            localStorage.setItem('nuko_history_final', JSON.stringify(history));
+            localStorage.setItem('nuko_brokers_v2', JSON.stringify(brokers));
+            localStorage.setItem('nuko_carriers_v2', JSON.stringify(carriers));
+            localStorage.setItem('nuko_history_v2', JSON.stringify(history));
         }
         
         function formatNumber(num) {
+            if (isNaN(num)) num = 0;
             return num.toLocaleString('es-CO');
+        }
+        
+        function limpiarNumero(valor) {
+            if (!valor && valor !== 0) return 0;
+            if (typeof valor === 'number') return valor;
+            let str = valor.toString().replace(/[$,]/g, '').trim();
+            let num = parseFloat(str);
+            return isNaN(num) ? 0 : num;
         }
         
         function showToast(message, type) {
@@ -971,9 +978,9 @@
                     if (parts.length >= 3) {
                         const nombre = parts[0];
                         const mc = parts[1];
-                        const limite = parseFloat(parts[2]);
+                        const limite = limpiarNumero(parts[2]);
                         
-                        if (nombre && mc && !isNaN(limite) && limite >= 0) {
+                        if (nombre && mc) {
                             const exists = brokers.some(b => b.mc === mc);
                             if (!exists) {
                                 brokers.push({ id: nextId++, nombre, mc, limite });
@@ -1006,13 +1013,13 @@
         }
         
         // ============================================
-        // IMPORTAR CARRIERS
+        // IMPORTAR CARRIERS - CORREGIDO PARA TU FORMATO
         // ============================================
         
         function downloadCarrierTemplate() {
-            const template = "Nombre,Unidades Poder,Fecha Contrato,Tipo Contrato,Límite\n\"Carrier Express\",3,\"2024-08-15\",\"nuevo\",90000\n\"Carrier Plus\",5,\"2023-05-20\",\"viejo\",250000\n\"Carrier Logistics\",2,\"2024-09-10\",\"nuevo\",60000";
+            const template = "Name,Buy Limit,Open A/R,Available,Unidades de poder,Fecha de contrato\n\"042 FREIGHT LLC\",10000,0,\"10,000.00\",1,\"2024-03-11\"\n\"1 HAUL INC\",5000,0,\"5,000.00\",2,\"2021-08-27\"\n\"1STGEN LOGISTIC LLC\",25000,0,\"25,000.00\",1,\"2025-11-26\"";
             downloadCSV(template, "plantilla_carriers.csv");
-            showToast('📄 Plantilla descargada', 'info');
+            showToast('📄 Plantilla descargada con el formato correcto', 'info');
         }
         
         function importCarriersCSV(input) {
@@ -1040,30 +1047,84 @@
                 const existingIds = carriers.map(c => c.id);
                 let nextId = existingIds.length > 0 ? Math.max(...existingIds) + 1 : 1;
                 
+                // Saltar encabezado (primera línea)
                 for (let i = 1; i < lines.length; i++) {
                     const line = lines[i].trim();
                     if (!line) continue;
                     
-                    const parts = line.split(',').map(p => p.replace(/^"|"$/g, '').trim());
-                    if (parts.length >= 5) {
-                        const nombre = parts[0];
-                        const powerUnits = parseFloat(parts[1]);
-                        const fechaContrato = parts[2];
-                        const tipoContrato = parts[3].toLowerCase();
-                        const limite = parseFloat(parts[4]);
+                    // Dividir por coma respetando comillas
+                    const parts = [];
+                    let current = '';
+                    let inQuotes = false;
+                    
+                    for (let j = 0; j < line.length; j++) {
+                        const char = line[j];
+                        if (char === '"') {
+                            inQuotes = !inQuotes;
+                        } else if (char === ',' && !inQuotes) {
+                            parts.push(current.trim());
+                            current = '';
+                        } else {
+                            current += char;
+                        }
+                    }
+                    parts.push(current.trim());
+                    
+                    if (parts.length >= 6) {
+                        const nombre = parts[0].replace(/^"|"$/g, '').trim();
+                        const buyLimit = limpiarNumero(parts[1]);
+                        const powerUnits = limpiarNumero(parts[4]);
+                        let fechaContrato = parts[5].replace(/^"|"$/g, '').trim();
                         
-                        if (nombre && !isNaN(powerUnits) && !isNaN(limite) && (tipoContrato === 'nuevo' || tipoContrato === 'viejo')) {
+                        // Convertir fecha a formato YYYY-MM-DD
+                        if (fechaContrato && fechaContrato.includes('/')) {
+                            const fechaParts = fechaContrato.split('/');
+                            if (fechaParts.length === 3) {
+                                fechaContrato = `${fechaParts[2]}-${fechaParts[0].padStart(2, '0')}-${fechaParts[1].padStart(2, '0')}`;
+                            }
+                        }
+                        
+                        // Determinar tipo de contrato basado en fecha (después de 2024-07-01 es nuevo)
+                        let tipoContrato = 'viejo';
+                        let limitePorUnidad = 50000;
+                        
+                        if (fechaContrato) {
+                            const fecha = new Date(fechaContrato);
+                            const fechaLimite = new Date('2024-07-01');
+                            if (!isNaN(fecha) && fecha >= fechaLimite) {
+                                tipoContrato = 'nuevo';
+                                limitePorUnidad = 30000;
+                            }
+                        }
+                        
+                        if (nombre && buyLimit > 0) {
                             const exists = carriers.some(c => c.nombre === nombre);
                             if (!exists) {
-                                const limitePorUnidad = tipoContrato === 'nuevo' ? 30000 : 50000;
                                 carriers.push({
                                     id: nextId++,
                                     nombre: nombre,
-                                    powerUnits: powerUnits,
+                                    powerUnits: powerUnits || 1,
                                     fechaContrato: fechaContrato || null,
                                     tipoContrato: tipoContrato,
                                     limitePorUnidad: limitePorUnidad,
-                                    limite: limite
+                                    limite: buyLimit
+                                });
+                                added++;
+                            } else {
+                                skipped++;
+                            }
+                        } else if (nombre && buyLimit === 0) {
+                            // También agregar carriers con límite 0
+                            const exists = carriers.some(c => c.nombre === nombre);
+                            if (!exists) {
+                                carriers.push({
+                                    id: nextId++,
+                                    nombre: nombre,
+                                    powerUnits: powerUnits || 1,
+                                    fechaContrato: fechaContrato || null,
+                                    tipoContrato: tipoContrato,
+                                    limitePorUnidad: limitePorUnidad,
+                                    limite: 0
                                 });
                                 added++;
                             } else {
@@ -1192,10 +1253,6 @@
             }
         }
         
-        // ============================================
-        // NAVEGACIÓN
-        // ============================================
-        
         function switchSection(section) {
             document.querySelectorAll('.feature-card').forEach(card => card.classList.remove('active'));
             document.querySelectorAll('.section-panel').forEach(panel => panel.classList.remove('active'));
@@ -1237,16 +1294,16 @@
             html += `</thead><tbody>`;
             
             filtered.forEach((b, idx) => {
-                html += `<tr>
-                    <td style="width: 50px;">${idx + 1}</td>
-                    <td><strong>${b.nombre}</strong></td>
-                    <td><code>${b.mc}</code></td>
-                    <td><strong>$${formatNumber(b.limite)}</strong></td>`;
+                html += `一头
+                    <td style="width: 50px;">${idx + 1}一头
+                    <td><strong>${b.nombre}</strong>一头
+                    <td><code>${b.mc}</code>一头
+                    <td><strong>$${formatNumber(b.limite)}</strong>一头`;
                 if (!currentUser?.soloLectura) {
                     html += `<td style="width: 150px;">
                         <button class="btn btn-success btn-sm" onclick="openIncreaseModal('broker', ${b.id}, '${b.nombre.replace(/'/g, "\\'")}', ${b.limite})">➕ Aumentar</button>
                         <button class="btn btn-danger btn-sm" onclick="deleteBroker(${b.id})">🗑️ Eliminar</button>
-                    </td>`;
+                    一头`;
                 }
                 html += `</tr>`;
             });
@@ -1314,19 +1371,19 @@
             filtered.forEach((c, idx) => {
                 const fecha = c.fechaContrato ? new Date(c.fechaContrato).toLocaleDateString('es-ES') : '-';
                 const tipoColor = c.tipoContrato === 'nuevo' ? '#10b981' : '#f59e0b';
-                html += `运转
-                    <td style="width: 50px;">${idx + 1}</td>
-                    <td><strong>${c.nombre}</strong></td>
-                    <td style="text-align: center;">${c.powerUnits}</td>
-                    <td>${fecha}</td>
-                    <td style="color:${tipoColor}">${c.tipoContrato === 'nuevo' ? 'Nuevo (30k)' : 'Viejo (50k)'}</td>
-                    <td>$${formatNumber(c.limitePorUnidad)}</td>
-                    <td><strong>$${formatNumber(c.limite)}</strong></td>`;
+                html += `一头
+                    <td style="width: 50px;">${idx + 1}一头
+                    <td><strong>${c.nombre}</strong>一头
+                    <td style="text-align: center;">${c.powerUnits}一头
+                    <td>${fecha}一头
+                    <td style="color:${tipoColor}">${c.tipoContrato === 'nuevo' ? 'Nuevo (30k)' : 'Viejo (50k)'}一头
+                    <td>$${formatNumber(c.limitePorUnidad)}一头
+                    <td><strong>$${formatNumber(c.limite)}</strong>一头`;
                 if (!currentUser?.soloLectura) {
                     html += `<td style="width: 150px;">
                         <button class="btn btn-success btn-sm" onclick="openIncreaseModal('carrier', ${c.id}, '${c.nombre.replace(/'/g, "\\'")}', ${c.limite})">➕ Aumentar</button>
                         <button class="btn btn-danger btn-sm" onclick="deleteCarrier(${c.id})">🗑️ Eliminar</button>
-                    </td>`;
+                    一头`;
                 }
                 html += `</tr>`;
             });
