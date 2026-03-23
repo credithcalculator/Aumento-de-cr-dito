@@ -358,12 +358,13 @@
             filter: brightness(105%);
         }
 
+        /* Solo Admin puede ver esto */
         .import-area {
-            background: linear-gradient(135deg, #dbeafe, #eff6ff);
+            background: linear-gradient(135deg, #fef3c7, #fde68a);
             border-radius: 16px;
             padding: 20px;
             margin-bottom: 25px;
-            border: 2px solid #3b82f6;
+            border: 2px solid #f59e0b;
         }
 
         .import-header {
@@ -380,12 +381,12 @@
         .import-title {
             font-size: 18px;
             font-weight: 700;
-            color: #1e40af;
+            color: #92400e;
         }
 
         .import-desc {
             font-size: 12px;
-            color: #2563eb;
+            color: #b45309;
             margin-top: 5px;
         }
 
@@ -397,7 +398,7 @@
         }
 
         .file-input-label {
-            background: #3b82f6;
+            background: #f59e0b;
             color: white;
             padding: 12px 24px;
             border-radius: 40px;
@@ -408,7 +409,7 @@
         }
 
         .file-input-label:hover {
-            background: #2563eb;
+            background: #d97706;
             transform: translateY(-2px);
         }
 
@@ -620,6 +621,16 @@
             font-size: 18px;
             margin-right: 8px;
         }
+        
+        .admin-only-badge {
+            background: #f59e0b;
+            color: white;
+            font-size: 10px;
+            padding: 2px 8px;
+            border-radius: 12px;
+            margin-left: 8px;
+            vertical-align: middle;
+        }
     </style>
 </head>
 <body>
@@ -705,11 +716,12 @@
                     </div>
                 </div>
 
-                <div class="import-area">
+                <!-- IMPORT AREA - SOLO ADMIN -->
+                <div id="brokerImportArea" class="import-area hidden">
                     <div class="import-header">
                         <div class="import-icon">📤</div>
                         <div>
-                            <div class="import-title">📥 IMPORT BROKERS FROM CSV</div>
+                            <div class="import-title">📥 IMPORT BROKERS FROM CSV <span class="admin-only-badge">ADMIN ONLY</span></div>
                             <div class="import-desc">Upload a CSV file with format: Name, MC, Limit</div>
                         </div>
                     </div>
@@ -742,11 +754,12 @@
                     </div>
                 </div>
 
-                <div class="import-area">
+                <!-- IMPORT AREA - SOLO ADMIN -->
+                <div id="carrierImportArea" class="import-area hidden">
                     <div class="import-header">
                         <div class="import-icon">📤</div>
                         <div>
-                            <div class="import-title">📥 IMPORT CARRIERS FROM CSV</div>
+                            <div class="import-title">📥 IMPORT CARRIERS FROM CSV <span class="admin-only-badge">ADMIN ONLY</span></div>
                             <div class="import-desc">Upload your carriers file with format: Name, Buy Limit, Power Units, Contract Date</div>
                         </div>
                     </div>
@@ -798,7 +811,7 @@
             <div class="form-field" style="margin-bottom: 20px;"><label>Reason</label><textarea id="modalReason" rows="3" style="width:100%; padding:10px; border:1px solid #e2e8f0; border-radius:10px;"></textarea></div>
             <div id="modalWarning" class="limit-warning hidden">
                 <span class="warning-icon">⚠️</span> <strong>NOTA 031 REQUERIDA</strong><br>
-                El nuevo límite excede el máximo permitido por unidad de poder.
+                The new limit exceeds the maximum allowed per power unit.
             </div>
             <div style="display: flex; gap: 10px; justify-content: flex-end; margin-top: 15px;">
                 <button class="btn" onclick="closeModal()">Cancel</button>
@@ -830,9 +843,9 @@
         let pendingIncrease = null;
         
         function loadData() {
-            const savedBrokers = localStorage.getItem('nuko_brokers_v6');
-            const savedCarriers = localStorage.getItem('nuko_carriers_v6');
-            const savedHistory = localStorage.getItem('nuko_history_v6');
+            const savedBrokers = localStorage.getItem('nuko_brokers_v7');
+            const savedCarriers = localStorage.getItem('nuko_carriers_v7');
+            const savedHistory = localStorage.getItem('nuko_history_v7');
             
             if (savedBrokers) {
                 brokers = JSON.parse(savedBrokers);
@@ -868,9 +881,9 @@
         }
         
         function saveData() {
-            localStorage.setItem('nuko_brokers_v6', JSON.stringify(brokers));
-            localStorage.setItem('nuko_carriers_v6', JSON.stringify(carriers));
-            localStorage.setItem('nuko_history_v6', JSON.stringify(history));
+            localStorage.setItem('nuko_brokers_v7', JSON.stringify(brokers));
+            localStorage.setItem('nuko_carriers_v7', JSON.stringify(carriers));
+            localStorage.setItem('nuko_history_v7', JSON.stringify(history));
         }
         
         function formatNumber(num) {
@@ -928,7 +941,7 @@
                 newLimit: newLimit,
                 currentLimit: currentLimit,
                 message: newLimit > maxAllowedLimit ? 
-                    `⚠️ NOTA 031 REQUERIDA: El nuevo límite ($${formatNumber(newLimit)}) excede el máximo permitido de $${formatNumber(maxAllowedLimit)} para ${powerUnits} unidad(es) con contrato ${tipoContrato === 'nuevo' ? 'Nuevo (30k/unidad)' : 'Viejo (50k/unidad)'}.` : 
+                    `⚠️ NOTA 031 REQUERIDA: New limit ($${formatNumber(newLimit)}) exceeds maximum allowed of $${formatNumber(maxAllowedLimit)} for ${powerUnits} unit(s) with ${tipoContrato === 'nuevo' ? 'New (30k/unit)' : 'Old (50k/unit)'} contract.` : 
                     null
             };
         }
@@ -1009,6 +1022,18 @@
             document.getElementById('loginContainer').style.display = 'none';
             document.getElementById('dashboardContainer').style.display = 'block';
             
+            // Mostrar u ocultar áreas de importación según si es ADMIN
+            const brokerImportArea = document.getElementById('brokerImportArea');
+            const carrierImportArea = document.getElementById('carrierImportArea');
+            
+            if (currentUser.isAdmin) {
+                brokerImportArea.classList.remove('hidden');
+                carrierImportArea.classList.remove('hidden');
+            } else {
+                brokerImportArea.classList.add('hidden');
+                carrierImportArea.classList.add('hidden');
+            }
+            
             if (currentUser.soloLectura) {
                 document.getElementById('clearHistoryBtn')?.classList.add('hidden');
             }
@@ -1052,18 +1077,22 @@
         }
         
         // ============================================
-        // IMPORT FUNCTIONS
+        // IMPORT FUNCTIONS - SOLO EJECUTABLES POR ADMIN
         // ============================================
         
         function downloadBrokerTemplate() {
+            if (!currentUser?.isAdmin) {
+                showToast('Only administrators can download templates', 'error');
+                return;
+            }
             const template = "Name,MC,Limit\n\"Global Logistics\",\"MC123456\",50000\n\"Express Freight\",\"MC789012\",75000\n\"Pacific Transport\",\"MC345678\",100000";
             downloadCSV(template, "brokers_template.csv");
             showToast('📄 Template downloaded', 'info');
         }
         
         function importBrokersCSV(input) {
-            if (currentUser?.soloLectura) {
-                showToast('You do not have permission to import data', 'error');
+            if (!currentUser?.isAdmin) {
+                showToast('Only administrators can import data', 'error');
                 return;
             }
             
@@ -1129,6 +1158,10 @@
         }
         
         function downloadCarrierTemplate() {
+            if (!currentUser?.isAdmin) {
+                showToast('Only administrators can download templates', 'error');
+                return;
+            }
             const template = "Name,Buy Limit,Power Units,Contract Date\n\"042 FREIGHT LLC\",10000,1,\"2024-03-11\"\n\"1 HAUL INC\",5000,2,\"2021-08-27\"\n\"1STGEN LOGISTIC LLC\",25000,1,\"2025-11-26\"";
             downloadCSV(template, "carriers_template.csv");
             showToast('📄 Template downloaded', 'info');
@@ -1155,8 +1188,8 @@
         }
         
         function importCarriersCSV(input) {
-            if (currentUser?.soloLectura) {
-                showToast('You do not have permission to import data', 'error');
+            if (!currentUser?.isAdmin) {
+                showToast('Only administrators can import data', 'error');
                 return;
             }
             
@@ -1306,20 +1339,20 @@
             html += `</thead><tbody>`;
             
             filtered.forEach((b, idx) => {
-                html += `<tr>
-                    <td style="width: 50px;">${idx + 1}</td>
-                    <td><strong>${b.nombre}</strong></td>
-                    <td><code>${b.mc}</code></td>
-                    <td><strong>$${formatNumber(b.limite)}</strong></td>`;
+                html += `一头
+                    <td style="width: 50px;">${idx + 1}一头
+                    <td><strong>${b.nombre}</strong>一头
+                    <td><code>${b.mc}</code>一头
+                    <td><strong>$${formatNumber(b.limite)}</strong>一头`;
                 if (!currentUser?.soloLectura) {
                     html += `<td style="width: 150px;">
                         <button class="btn btn-success btn-sm" onclick="openIncreaseModal('broker', ${b.id}, '${b.nombre.replace(/'/g, "\\'")}', ${b.limite})">➕ Increase</button>
                         <button class="btn btn-danger btn-sm" onclick="deleteBroker(${b.id})">🗑️ Delete</button>
-                    </td>`;
+                    一头`;
                 }
-                html += `</tr>`;
+                html += `)`);
             });
-            html += `</tbody></table>`;
+            html += `</tbody>×`;
             container.innerHTML = html;
         }
         
@@ -1383,23 +1416,23 @@
             filtered.forEach((c, idx) => {
                 const fecha = c.fechaContrato ? new Date(c.fechaContrato).toLocaleDateString('es-ES') : '-';
                 const tipoColor = c.tipoContrato === 'nuevo' ? '#10b981' : '#f59e0b';
-                html += `<tr>
-                    <td style="width: 50px;">${idx + 1}</td>
-                    <td><strong>${c.nombre}</strong></td>
-                    <td style="text-align: center;">${c.powerUnits}</td>
-                    <td>${fecha}</td>
-                    <td style="color:${tipoColor}">${c.tipoContrato === 'nuevo' ? 'New (30k)' : 'Old (50k)'}</td>
-                    <td>$${formatNumber(c.limitePorUnidad)}</td>
-                    <td><strong>$${formatNumber(c.limite)}</strong></td>`;
+                html += `一头
+                    <td style="width: 50px;">${idx + 1}一头
+                    <td><strong>${c.nombre}</strong>一头
+                    <td style="text-align: center;">${c.powerUnits}一头
+                    <td>${fecha}一头
+                    <td style="color:${tipoColor}">${c.tipoContrato === 'nuevo' ? 'New (30k)' : 'Old (50k)'}一头
+                    <td>$${formatNumber(c.limitePorUnidad)}一头
+                    <td><strong>$${formatNumber(c.limite)}</strong>一头`;
                 if (!currentUser?.soloLectura) {
                     html += `<td style="width: 150px;">
                         <button class="btn btn-success btn-sm" onclick="openIncreaseModal('carrier', ${c.id}, '${c.nombre.replace(/'/g, "\\'")}', ${c.limite}, ${c.powerUnits}, '${c.tipoContrato}')">➕ Increase</button>
                         <button class="btn btn-danger btn-sm" onclick="deleteCarrier(${c.id})">🗑️ Delete</button>
-                    </td>`;
+                    一头`;
                 }
-                html += `</tr>`;
+                html += `)`);
             });
-            html += `</tbody></table>`;
+            html += `</tbody>×`;
             container.innerHTML = html;
         }
         
@@ -1486,7 +1519,6 @@
             
             document.getElementById('increaseModal').classList.remove('hidden');
             
-            // Add real-time validation for amount input
             const amountInput = document.getElementById('modalAmount');
             const checkLimit = () => {
                 if (type === 'carrier' && powerUnits && tipoContrato) {
@@ -1530,7 +1562,6 @@
                 return;
             }
             
-            // Double-check validation for carriers
             if (pendingIncrease.type === 'carrier' && pendingIncrease.powerUnits && pendingIncrease.tipoContrato) {
                 const validation = validateCarrierLimit(
                     pendingIncrease.powerUnits, 
