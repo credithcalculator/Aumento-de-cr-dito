@@ -60,7 +60,7 @@
             display: grid;
             grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
             gap: 20px;
-            max-width: 900px;
+            max-width: 1000px;
             margin: 0 auto 30px;
         }
 
@@ -104,6 +104,7 @@
             font-size: 12px;
             color: #64748b;
             margin-bottom: 10px;
+            word-break: break-all;
         }
 
         .user-badge {
@@ -629,7 +630,7 @@
         <div id="loginContainer">
             <div class="login-screen">
                 <h2 class="login-title">🔐 System Access</h2>
-                <div class="users-grid" id="usersGrid"></div>
+                <div id="usersGrid" class="users-grid"></div>
                 <div id="passwordForm" class="login-form hidden">
                     <h3 style="margin-bottom: 20px;">🔑 Enter your password</h3>
                     <input type="password" id="userPassword" class="search-input" style="width: 100%; margin-bottom: 15px;" placeholder="Password">
@@ -800,7 +801,7 @@
 
     <script>
         // ============================================
-        // USER CONFIGURATION
+        // USER CONFIGURATION - ALL USERS WITH ICONS
         // ============================================
         
         const USERS_CONFIG = {
@@ -809,35 +810,40 @@
                 password: "YRAC26", 
                 role: "admin", 
                 soloLectura: false,
-                requierePassword: true
+                requierePassword: true,
+                icon: "👑"
             },
             "valeria.romero@nukocapital.com": { 
                 name: "Valeria Romero - Auditor", 
                 password: null, 
                 role: "auditor", 
                 soloLectura: true,
-                requierePassword: false
+                requierePassword: false,
+                icon: "👀"
             },
             "yeimy.gaviria@nukocapital.com": { 
                 name: "Yeimy Gaviria", 
                 password: "YEIMY2024", 
                 role: "user", 
                 soloLectura: false,
-                requierePassword: true
+                requierePassword: true,
+                icon: "👤"
             },
             "andres.acosta@nukocapital.com": { 
                 name: "Andres Acosta", 
                 password: "ANDRES2024", 
                 role: "user", 
                 soloLectura: false,
-                requierePassword: true
+                requierePassword: true,
+                icon: "👤"
             },
             "roberto.morante@nukocapital.com": { 
                 name: "Roberto Morante", 
                 password: "ROBERTO2024", 
                 role: "user", 
                 soloLectura: false,
-                requierePassword: true
+                requierePassword: true,
+                icon: "👤"
             }
         };
         
@@ -849,9 +855,9 @@
         let pendingIncrease = null;
         
         function loadData() {
-            const savedBrokers = localStorage.getItem('nuko_brokers_final_v3');
-            const savedCarriers = localStorage.getItem('nuko_carriers_final_v3');
-            const savedHistory = localStorage.getItem('nuko_history_final_v3');
+            const savedBrokers = localStorage.getItem('nuko_brokers_final_v4');
+            const savedCarriers = localStorage.getItem('nuko_carriers_final_v4');
+            const savedHistory = localStorage.getItem('nuko_history_final_v4');
             
             if (savedBrokers) {
                 brokers = JSON.parse(savedBrokers);
@@ -887,9 +893,9 @@
         }
         
         function saveData() {
-            localStorage.setItem('nuko_brokers_final_v3', JSON.stringify(brokers));
-            localStorage.setItem('nuko_carriers_final_v3', JSON.stringify(carriers));
-            localStorage.setItem('nuko_history_final_v3', JSON.stringify(history));
+            localStorage.setItem('nuko_brokers_final_v4', JSON.stringify(brokers));
+            localStorage.setItem('nuko_carriers_final_v4', JSON.stringify(carriers));
+            localStorage.setItem('nuko_history_final_v4', JSON.stringify(history));
         }
         
         function formatNumber(num) {
@@ -1147,15 +1153,18 @@
         }
         
         // ============================================
-        // LOGIN FUNCTIONS
+        // LOGIN FUNCTIONS - ALL USERS VISIBLE
         // ============================================
         
         function loadUsersList() {
             const container = document.getElementById('usersGrid');
             container.innerHTML = '';
             
-            Object.keys(USERS_CONFIG).forEach(email => {
+            const sortedUsers = Object.keys(USERS_CONFIG).sort();
+            
+            for (const email of sortedUsers) {
                 const user = USERS_CONFIG[email];
+                
                 const card = document.createElement('div');
                 card.className = 'user-card';
                 card.onclick = () => {
@@ -1166,17 +1175,33 @@
                         showPasswordForm(email, user);
                     }
                 };
+                
+                let badgeClass = '';
+                let badgeText = '';
+                let userIcon = user.icon || (user.role === 'admin' ? '👑' : (user.soloLectura ? '👀' : '👤'));
+                
+                if (user.role === 'admin') {
+                    badgeClass = 'badge-admin';
+                    badgeText = 'Administrator';
+                } else if (user.soloLectura) {
+                    badgeClass = 'badge-readonly';
+                    badgeText = 'Read Only';
+                } else {
+                    badgeClass = 'badge-user';
+                    badgeText = 'User';
+                }
+                
                 card.innerHTML = `
-                    <div class="user-avatar">${user.role === 'admin' ? '👑' : (user.soloLectura ? '👀' : '👤')}</div>
+                    <div class="user-avatar">${userIcon}</div>
                     <div class="user-name">${user.name}</div>
                     <div class="user-email">${email}</div>
-                    <div class="user-badge ${user.role === 'admin' ? 'badge-admin' : (user.soloLectura ? 'badge-readonly' : 'badge-user')}">
-                        ${user.role === 'admin' ? 'Administrator' : (user.soloLectura ? 'Read Only' : 'User')}
-                        ${user.requierePassword ? ' 🔒' : ' 🔓'}
+                    <div class="user-badge ${badgeClass}">
+                        ${badgeText} ${user.requierePassword ? '🔒' : '🔓'}
                     </div>
                 `;
+                
                 container.appendChild(card);
-            });
+            }
         }
         
         function showPasswordForm(email, user) {
@@ -1197,7 +1222,7 @@
             
             document.getElementById('dashboardUserName').textContent = currentUser.name;
             document.getElementById('dashboardUserEmail').textContent = currentUser.email;
-            document.getElementById('dashboardAvatar').textContent = currentUser.isAdmin ? '👑' : (currentUser.soloLectura ? '👀' : '👤');
+            document.getElementById('dashboardAvatar').textContent = user.icon || (currentUser.isAdmin ? '👑' : (currentUser.soloLectura ? '👀' : '👤'));
             
             document.getElementById('loginContainer').style.display = 'none';
             document.getElementById('dashboardContainer').style.display = 'block';
@@ -1597,6 +1622,7 @@
             URL.revokeObjectURL(link.href);
         }
         
+        // Initialize
         loadUsersList();
     </script>
 </body>
