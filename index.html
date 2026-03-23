@@ -622,54 +622,54 @@
     <div class="main-container">
         <div class="header">
             <h1>🏦 Nuko Capital</h1>
-            <p>Sistema de Gestión de Límites de Crédito</p>
+            <p>Credit Limit Management System</p>
         </div>
 
-        <!-- Pantalla de Login -->
+        <!-- Login Screen -->
         <div id="loginContainer">
             <div class="login-screen">
-                <h2 class="login-title">🔐 Acceso al Sistema</h2>
+                <h2 class="login-title">🔐 System Access</h2>
                 <div class="users-grid" id="usersGrid"></div>
                 <div id="passwordForm" class="login-form hidden">
-                    <h3 style="margin-bottom: 20px;">🔑 Ingrese su clave</h3>
-                    <input type="password" id="userPassword" class="search-input" style="width: 100%; margin-bottom: 15px;" placeholder="Contraseña">
+                    <h3 style="margin-bottom: 20px;">🔑 Enter your password</h3>
+                    <input type="password" id="userPassword" class="search-input" style="width: 100%; margin-bottom: 15px;" placeholder="Password">
                     <div style="display: flex; gap: 10px;">
-                        <button class="btn btn-primary" onclick="validatePassword()">✅ Validar</button>
-                        <button class="btn" onclick="cancelPassword()">↩️ Cancelar</button>
+                        <button class="btn btn-primary" onclick="validatePassword()">✅ Validate</button>
+                        <button class="btn" onclick="cancelPassword()">↩️ Cancel</button>
                     </div>
                 </div>
             </div>
         </div>
 
-        <!-- Dashboard Principal -->
+        <!-- Main Dashboard -->
         <div id="dashboardContainer" style="display: none;">
             <div class="top-panel">
                 <div class="user-info-panel">
                     <div class="user-avatar-sm" id="dashboardAvatar">👤</div>
                     <div class="user-text">
-                        <h3 id="dashboardUserName">Usuario</h3>
-                        <p id="dashboardUserEmail">correo@ejemplo.com</p>
+                        <h3 id="dashboardUserName">User</h3>
+                        <p id="dashboardUserEmail">email@example.com</p>
                     </div>
                 </div>
-                <button class="btn-logout" onclick="logout()">🚪 Cerrar Sesión</button>
+                <button class="btn-logout" onclick="logout()">🚪 Logout</button>
             </div>
 
             <div class="stats-cards">
                 <div class="stat-card">
                     <div class="stat-number" id="statBrokers">0</div>
-                    <div class="stat-label">Brokers Registrados</div>
+                    <div class="stat-label">Brokers Registered</div>
                 </div>
                 <div class="stat-card">
                     <div class="stat-number" id="statCarriers">0</div>
-                    <div class="stat-label">Carriers Registrados</div>
+                    <div class="stat-label">Carriers Registered</div>
                 </div>
                 <div class="stat-card">
                     <div class="stat-number" id="statTotalLimit">$0</div>
-                    <div class="stat-label">Límite Total</div>
+                    <div class="stat-label">Total Limit</div>
                 </div>
                 <div class="stat-card">
                     <div class="stat-number" id="statHistory">0</div>
-                    <div class="stat-label">Movimientos</div>
+                    <div class="stat-label">Movements</div>
                 </div>
             </div>
 
@@ -677,27 +677,27 @@
                 <div class="feature-card" onclick="switchSection('brokers')" id="featureBrokers">
                     <div class="feature-icon">📊</div>
                     <div class="feature-title">Brokers</div>
-                    <div class="feature-count" id="featureBrokersCount">0 registros</div>
+                    <div class="feature-count" id="featureBrokersCount">0 records</div>
                 </div>
                 <div class="feature-card" onclick="switchSection('carriers')" id="featureCarriers">
                     <div class="feature-icon">🚛</div>
                     <div class="feature-title">Carriers</div>
-                    <div class="feature-count" id="featureCarriersCount">0 registros</div>
+                    <div class="feature-count" id="featureCarriersCount">0 records</div>
                 </div>
                 <div class="feature-card" onclick="switchSection('history')" id="featureHistory">
                     <div class="feature-icon">📋</div>
-                    <div class="feature-title">Historial</div>
-                    <div class="feature-count" id="featureHistoryCount">0 registros</div>
+                    <div class="feature-title">History</div>
+                    <div class="feature-count" id="featureHistoryCount">0 records</div>
                 </div>
             </div>
 
-            <!-- Sección Brokers -->
+            <!-- Brokers Section -->
             <div id="brokersPanel" class="section-panel">
                 <div class="toolbar-section">
-                    <h2>📊 Gestión de Brokers</h2>
+                    <h2>📊 Brokers Management</h2>
                     <div class="search-wrapper">
-                        <input type="text" id="brokerSearch" class="search-input" placeholder="🔍 Buscar por nombre o MC..." onkeyup="filterBrokers()">
-                        <button class="btn btn-success" onclick="exportBrokersCSV()">📥 Exportar CSV</button>
+                        <input type="text" id="brokerSearch" class="search-input" placeholder="🔍 Search by name or MC..." onkeyup="filterBrokers()">
+                        <button class="btn btn-success" onclick="exportBrokersCSV()">📥 Export CSV</button>
                     </div>
                 </div>
 
@@ -705,14 +705,14 @@
                     <div class="import-header">
                         <div class="import-icon">📤</div>
                         <div>
-                            <div class="import-title">📥 IMPORTAR BROKERS DESDE CSV</div>
-                            <div class="import-desc">Sube un archivo CSV con formato: Nombre, MC, Límite</div>
+                            <div class="import-title">📥 IMPORT BROKERS FROM CSV</div>
+                            <div class="import-desc">Upload a CSV file with format: Name, MC, Limit</div>
                         </div>
                     </div>
                     <div class="import-buttons">
-                        <label class="file-input-label" for="brokerFileInput">📂 SELECCIONAR ARCHIVO CSV</label>
+                        <label class="file-input-label" for="brokerFileInput">📂 SELECT CSV FILE</label>
                         <input type="file" id="brokerFileInput" accept=".csv" onchange="importBrokersCSV(this)">
-                        <button class="btn template-btn" onclick="downloadBrokerTemplate()">📄 DESCARGAR PLANTILLA</button>
+                        <button class="btn template-btn" onclick="downloadBrokerTemplate()">📄 DOWNLOAD TEMPLATE</button>
                     </div>
                     <div id="brokerProgress" class="progress-bar hidden">
                         <div class="progress-fill" id="brokerProgressFill"></div>
@@ -720,21 +720,21 @@
                 </div>
 
                 <div class="add-item-form">
-                    <div class="form-field"><label>🏢 Nombre Broker</label><input type="text" id="newBrokerName" placeholder="Ej: Global Logistics"></div>
-                    <div class="form-field"><label>🔢 MC Number</label><input type="text" id="newBrokerMC" placeholder="Ej: MC123456"></div>
-                    <div class="form-field"><label>💰 Límite (USD)</label><input type="number" id="newBrokerLimit" placeholder="0"></div>
-                    <button class="btn btn-primary" onclick="addBroker()">➕ Agregar Individual</button>
+                    <div class="form-field"><label>🏢 Broker Name</label><input type="text" id="newBrokerName" placeholder="Ex: Global Logistics"></div>
+                    <div class="form-field"><label>🔢 MC Number</label><input type="text" id="newBrokerMC" placeholder="Ex: MC123456"></div>
+                    <div class="form-field"><label>💰 Limit (USD)</label><input type="number" id="newBrokerLimit" placeholder="0"></div>
+                    <button class="btn btn-primary" onclick="addBroker()">➕ Add Individual</button>
                 </div>
                 <div class="table-wrapper" id="brokersTable"></div>
             </div>
 
-            <!-- Sección Carriers - CORREGIDA -->
+            <!-- Carriers Section -->
             <div id="carriersPanel" class="section-panel">
                 <div class="toolbar-section">
-                    <h2>🚛 Gestión de Carriers</h2>
+                    <h2>🚛 Carriers Management</h2>
                     <div class="search-wrapper">
-                        <input type="text" id="carrierSearch" class="search-input" placeholder="🔍 Buscar por nombre..." onkeyup="filterCarriers()">
-                        <button class="btn btn-success" onclick="exportCarriersCSV()">📥 Exportar CSV</button>
+                        <input type="text" id="carrierSearch" class="search-input" placeholder="🔍 Search by name..." onkeyup="filterCarriers()">
+                        <button class="btn btn-success" onclick="exportCarriersCSV()">📥 Export CSV</button>
                     </div>
                 </div>
 
@@ -742,14 +742,14 @@
                     <div class="import-header">
                         <div class="import-icon">📤</div>
                         <div>
-                            <div class="import-title">📥 IMPORTAR CARRIERS DESDE CSV</div>
-                            <div class="import-desc">Sube tu archivo de carriers con el formato: Name, Buy Limit, Open A/R, Available, Unidades de poder, Fecha de contrato</div>
+                            <div class="import-title">📥 IMPORT CARRIERS FROM CSV</div>
+                            <div class="import-desc">Upload your carriers file with format: Name, Buy Limit, Open A/R, Available, Power Units, Contract Date</div>
                         </div>
                     </div>
                     <div class="import-buttons">
-                        <label class="file-input-label" for="carrierFileInput">📂 SELECCIONAR ARCHIVO CSV</label>
+                        <label class="file-input-label" for="carrierFileInput">📂 SELECT CSV FILE</label>
                         <input type="file" id="carrierFileInput" accept=".csv" onchange="importCarriersCSV(this)">
-                        <button class="btn template-btn" onclick="downloadCarrierTemplate()">📄 DESCARGAR PLANTILLA</button>
+                        <button class="btn template-btn" onclick="downloadCarrierTemplate()">📄 DOWNLOAD TEMPLATE</button>
                     </div>
                     <div id="carrierProgress" class="progress-bar hidden">
                         <div class="progress-fill" id="carrierProgressFill"></div>
@@ -757,24 +757,24 @@
                 </div>
 
                 <div class="add-item-form">
-                    <div class="form-field"><label>🚛 Nombre Carrier</label><input type="text" id="newCarrierName" placeholder="Ej: Carrier Express"></div>
-                    <div class="form-field"><label>⚡ Unidades Poder</label><input type="number" id="newCarrierUnits" placeholder="0"></div>
-                    <div class="form-field"><label>📅 Fecha Contrato</label><input type="date" id="newCarrierDate"></div>
-                    <div class="form-field"><label>📋 Tipo</label><select id="newCarrierType"><option value="viejo">Viejo (50k/unidad)</option><option value="nuevo">Nuevo (30k/unidad)</option></select></div>
-                    <div class="form-field"><label>💰 Límite (USD)</label><input type="number" id="newCarrierLimit" placeholder="0"></div>
-                    <button class="btn btn-primary" onclick="addCarrier()">➕ Agregar Individual</button>
+                    <div class="form-field"><label>🚛 Carrier Name</label><input type="text" id="newCarrierName" placeholder="Ex: Carrier Express"></div>
+                    <div class="form-field"><label>⚡ Power Units</label><input type="number" id="newCarrierUnits" placeholder="0"></div>
+                    <div class="form-field"><label>📅 Contract Date</label><input type="date" id="newCarrierDate"></div>
+                    <div class="form-field"><label>📋 Type</label><select id="newCarrierType"><option value="viejo">Old (50k/unit)</option><option value="nuevo">New (30k/unit)</option></select></div>
+                    <div class="form-field"><label>💰 Limit (USD)</label><input type="number" id="newCarrierLimit" placeholder="0"></div>
+                    <button class="btn btn-primary" onclick="addCarrier()">➕ Add Individual</button>
                 </div>
                 <div class="table-wrapper" id="carriersTable"></div>
             </div>
 
-            <!-- Sección Historial -->
+            <!-- History Section -->
             <div id="historyPanel" class="section-panel">
                 <div class="toolbar-section">
-                    <h2>📋 Historial de Aumentos</h2>
+                    <h2>📋 Increase History</h2>
                     <div class="search-wrapper">
-                        <input type="text" id="historySearch" class="search-input" placeholder="🔍 Buscar..." onkeyup="filterHistory()">
-                        <button class="btn btn-success" onclick="exportHistoryCSV()">📥 Exportar CSV</button>
-                        <button class="btn btn-danger" onclick="clearHistory()" id="clearHistoryBtn">🗑️ Limpiar</button>
+                        <input type="text" id="historySearch" class="search-input" placeholder="🔍 Search..." onkeyup="filterHistory()">
+                        <button class="btn btn-success" onclick="exportHistoryCSV()">📥 Export CSV</button>
+                        <button class="btn btn-danger" onclick="clearHistory()" id="clearHistoryBtn">🗑️ Clear</button>
                     </div>
                 </div>
                 <div id="historyList" class="history-timeline"></div>
@@ -784,14 +784,14 @@
 
     <div id="increaseModal" class="modal-overlay hidden">
         <div class="modal-container">
-            <h3>💰 Aumentar Crédito</h3>
-            <div class="form-field" style="margin-bottom: 15px;"><label>Entidad</label><input type="text" id="modalEntity" readonly style="background:#f1f5f9;"></div>
-            <div class="form-field" style="margin-bottom: 15px;"><label>Límite Actual</label><input type="text" id="modalCurrentLimit" readonly style="background:#f1f5f9;"></div>
-            <div class="form-field" style="margin-bottom: 15px;"><label>Monto a Aumentar (USD)</label><input type="number" id="modalAmount" placeholder="Ingrese el monto"></div>
-            <div class="form-field" style="margin-bottom: 20px;"><label>Motivo</label><textarea id="modalReason" rows="3" style="width:100%; padding:10px; border:1px solid #e2e8f0; border-radius:10px;"></textarea></div>
+            <h3>💰 Increase Credit</h3>
+            <div class="form-field" style="margin-bottom: 15px;"><label>Entity</label><input type="text" id="modalEntity" readonly style="background:#f1f5f9;"></div>
+            <div class="form-field" style="margin-bottom: 15px;"><label>Current Limit</label><input type="text" id="modalCurrentLimit" readonly style="background:#f1f5f9;"></div>
+            <div class="form-field" style="margin-bottom: 15px;"><label>Increase Amount (USD)</label><input type="number" id="modalAmount" placeholder="Enter amount"></div>
+            <div class="form-field" style="margin-bottom: 20px;"><label>Reason</label><textarea id="modalReason" rows="3" style="width:100%; padding:10px; border:1px solid #e2e8f0; border-radius:10px;"></textarea></div>
             <div style="display: flex; gap: 10px; justify-content: flex-end;">
-                <button class="btn" onclick="closeModal()">Cancelar</button>
-                <button class="btn btn-primary" onclick="applyIncrease()">Aplicar Aumento</button>
+                <button class="btn" onclick="closeModal()">Cancel</button>
+                <button class="btn btn-primary" onclick="applyIncrease()">Apply Increase</button>
             </div>
         </div>
     </div>
@@ -800,19 +800,19 @@
 
     <script>
         // ============================================
-        // CONFIGURACIÓN DE USUARIOS
+        // USER CONFIGURATION
         // ============================================
         
         const USERS_CONFIG = {
             "admin@nukocapital.com": { 
-                name: "Administrador", 
+                name: "Administrator", 
                 password: "YRAC26", 
                 role: "admin", 
                 soloLectura: false,
                 requierePassword: true
             },
             "valeria.romero@nukocapital.com": { 
-                name: "Valeria Romero - Auditora", 
+                name: "Valeria Romero - Auditor", 
                 password: null, 
                 role: "auditor", 
                 soloLectura: true,
@@ -897,7 +897,7 @@
             return num.toLocaleString('es-CO');
         }
         
-        function limpiarNumero(valor) {
+        function cleanNumber(valor) {
             if (!valor && valor !== 0) return 0;
             if (typeof valor === 'number') return valor;
             let str = valor.toString().replace(/[$,]/g, '').replace(/"/g, '').trim();
@@ -926,24 +926,24 @@
             document.getElementById('statTotalLimit').textContent = '$' + formatNumber(totalLimit);
             document.getElementById('statHistory').textContent = formatNumber(totalHistory);
             
-            document.getElementById('featureBrokersCount').textContent = formatNumber(totalBrokers) + ' registros';
-            document.getElementById('featureCarriersCount').textContent = formatNumber(totalCarriers) + ' registros';
-            document.getElementById('featureHistoryCount').textContent = formatNumber(totalHistory) + ' registros';
+            document.getElementById('featureBrokersCount').textContent = formatNumber(totalBrokers) + ' records';
+            document.getElementById('featureCarriersCount').textContent = formatNumber(totalCarriers) + ' records';
+            document.getElementById('featureHistoryCount').textContent = formatNumber(totalHistory) + ' records';
         }
         
         // ============================================
-        // IMPORTAR BROKERS
+        // IMPORT BROKERS
         // ============================================
         
         function downloadBrokerTemplate() {
-            const template = "Nombre,MC,Límite\n\"Global Logistics\",\"MC123456\",50000\n\"Express Freight\",\"MC789012\",75000\n\"Pacific Transport\",\"MC345678\",100000";
-            downloadCSV(template, "plantilla_brokers.csv");
-            showToast('📄 Plantilla descargada', 'info');
+            const template = "Name,MC,Limit\n\"Global Logistics\",\"MC123456\",50000\n\"Express Freight\",\"MC789012\",75000\n\"Pacific Transport\",\"MC345678\",100000";
+            downloadCSV(template, "brokers_template.csv");
+            showToast('📄 Template downloaded', 'info');
         }
         
         function importBrokersCSV(input) {
             if (currentUser?.soloLectura) {
-                showToast('No tienes permisos para importar datos', 'error');
+                showToast('You do not have permission to import data', 'error');
                 return;
             }
             
@@ -974,7 +974,7 @@
                     if (parts.length >= 3) {
                         const nombre = parts[0];
                         const mc = parts[1];
-                        const limite = limpiarNumero(parts[2]);
+                        const limite = cleanNumber(parts[2]);
                         
                         if (nombre && mc) {
                             const exists = brokers.some(b => b.mc === mc);
@@ -1003,19 +1003,19 @@
                 progressFill.style.width = '0%';
                 input.value = '';
                 
-                showToast(`✅ Importación completada: ${added} brokers agregados, ${skipped} duplicados omitidos, ${errors} errores`, 'success');
+                showToast(`✅ Import completed: ${added} brokers added, ${skipped} duplicates skipped, ${errors} errors`, 'success');
             };
             reader.readAsText(file, 'UTF-8');
         }
         
         // ============================================
-        // IMPORTAR CARRIERS - CORREGIDO PARA TU FORMATO
+        // IMPORT CARRIERS
         // ============================================
         
         function downloadCarrierTemplate() {
-            const template = "Name,Buy Limit,Open A/R,Available,Unidades de poder,Fecha de contrato\n\"042 FREIGHT LLC\",10000,0,\"10,000.00\",1,\"3/11/2024\"\n\"1 HAUL INC\",5000,0,\"5,000.00\",2,\"8/27/2021\"\n\"1STGEN LOGISTIC LLC\",25000,0,\"25,000.00\",1,\"11/26/2025\"";
-            downloadCSV(template, "plantilla_carriers.csv");
-            showToast('📄 Plantilla descargada con el formato correcto', 'info');
+            const template = "Name,Buy Limit,Open A/R,Available,Power Units,Contract Date\n\"042 FREIGHT LLC\",10000,0,\"10,000.00\",1,\"3/11/2024\"\n\"1 HAUL INC\",5000,0,\"5,000.00\",2,\"8/27/2021\"\n\"1STGEN LOGISTIC LLC\",25000,0,\"25,000.00\",1,\"11/26/2025\"";
+            downloadCSV(template, "carriers_template.csv");
+            showToast('📄 Template downloaded', 'info');
         }
         
         function parseCSVLine(line) {
@@ -1040,7 +1040,7 @@
         
         function importCarriersCSV(input) {
             if (currentUser?.soloLectura) {
-                showToast('No tienes permisos para importar datos', 'error');
+                showToast('You do not have permission to import data', 'error');
                 return;
             }
             
@@ -1063,7 +1063,6 @@
                 const existingIds = carriers.map(c => c.id);
                 let nextId = existingIds.length > 0 ? Math.max(...existingIds) + 1 : 1;
                 
-                // Saltar encabezado
                 for (let i = 1; i < lines.length; i++) {
                     const line = lines[i].trim();
                     if (!line) continue;
@@ -1073,17 +1072,15 @@
                         
                         if (parts.length >= 6) {
                             let nombre = parts[0].replace(/^"|"$/g, '').trim();
-                            let buyLimit = limpiarNumero(parts[1]);
+                            let buyLimit = cleanNumber(parts[1]);
                             let powerUnitsRaw = parts[4].replace(/^"|"$/g, '').trim();
-                            let powerUnits = limpiarNumero(powerUnitsRaw);
+                            let powerUnits = cleanNumber(powerUnitsRaw);
                             let fechaRaw = parts[5].replace(/^"|"$/g, '').trim();
                             
-                            // Si powerUnits está vacío o es 0, poner 1 por defecto
                             if (powerUnits === 0 && nombre) {
                                 powerUnits = 1;
                             }
                             
-                            // Convertir fecha de MM/DD/YYYY a YYYY-MM-DD
                             let fechaContrato = null;
                             if (fechaRaw && fechaRaw !== '') {
                                 const fechaParts = fechaRaw.split('/');
@@ -1094,7 +1091,6 @@
                                 }
                             }
                             
-                            // Determinar tipo de contrato basado en fecha
                             let tipoContrato = 'viejo';
                             let limitePorUnidad = 50000;
                             
@@ -1131,7 +1127,6 @@
                         }
                     } catch (err) {
                         errors++;
-                        console.log('Error procesando línea:', line, err);
                     }
                     
                     const progress = (i / lines.length) * 100;
@@ -1146,13 +1141,13 @@
                 progressFill.style.width = '0%';
                 input.value = '';
                 
-                showToast(`✅ Importación completada: ${added} carriers agregados, ${skipped} duplicados omitidos, ${errors} errores`, 'success');
+                showToast(`✅ Import completed: ${added} carriers added, ${skipped} duplicates skipped, ${errors} errors`, 'success');
             };
             reader.readAsText(file, 'UTF-8');
         }
         
         // ============================================
-        // LOGIN
+        // LOGIN FUNCTIONS
         // ============================================
         
         function loadUsersList() {
@@ -1176,7 +1171,7 @@
                     <div class="user-name">${user.name}</div>
                     <div class="user-email">${email}</div>
                     <div class="user-badge ${user.role === 'admin' ? 'badge-admin' : (user.soloLectura ? 'badge-readonly' : 'badge-user')}">
-                        ${user.role === 'admin' ? 'Administrador' : (user.soloLectura ? 'Solo Lectura' : 'Usuario')}
+                        ${user.role === 'admin' ? 'Administrator' : (user.soloLectura ? 'Read Only' : 'User')}
                         ${user.requierePassword ? ' 🔒' : ' 🔓'}
                     </div>
                 `;
@@ -1218,7 +1213,7 @@
             renderHistory();
             switchSection('brokers');
             
-            showToast(`✅ Bienvenido ${currentUser.name}`, 'success');
+            showToast(`✅ Welcome ${currentUser.name}`, 'success');
         }
         
         function validatePassword() {
@@ -1229,7 +1224,7 @@
                 loginUser(selectedUserEmail, user);
                 document.getElementById('passwordForm').classList.add('hidden');
             } else {
-                showToast('❌ Contraseña incorrecta', 'error');
+                showToast('❌ Incorrect password', 'error');
                 document.getElementById('userPassword').value = '';
                 document.getElementById('userPassword').focus();
             }
@@ -1241,7 +1236,7 @@
         }
         
         function logout() {
-            if (confirm('¿Cerrar sesión?')) {
+            if (confirm('Logout?')) {
                 currentUser = null;
                 document.getElementById('loginContainer').style.display = 'block';
                 document.getElementById('dashboardContainer').style.display = 'none';
@@ -1270,7 +1265,7 @@
         }
         
         // ============================================
-        // BROKERS
+        // BROKERS FUNCTIONS
         // ============================================
         
         function renderBrokers() {
@@ -1282,43 +1277,43 @@
             
             const container = document.getElementById('brokersTable');
             if (!filtered.length) {
-                container.innerHTML = '<div style="text-align:center; padding:40px;">📭 No hay brokers registrados</div>';
+                container.innerHTML = '<div style="text-align:center; padding:40px;">📭 No brokers registered</div>';
                 return;
             }
             
-            let html = `<table class="data-grid"><thead><th>#</th><th>Nombre</th><th>MC Number</th><th>Límite Actual</th>`;
-            if (!currentUser?.soloLectura) html += `<th>Acciones</th>`;
+            let html = `<table class="data-grid"><thead><th>#</th><th>Name</th><th>MC Number</th><th>Current Limit</th>`;
+            if (!currentUser?.soloLectura) html += `<th>Actions</th>`;
             html += `</thead><tbody>`;
             
             filtered.forEach((b, idx) => {
-                html += `一头
-                    <td style="width: 50px;">${idx + 1}一头
-                    <td><strong>${b.nombre}</strong>一头
-                    <td><code>${b.mc}</code>一头
-                    <td><strong>$${formatNumber(b.limite)}</strong>一头`;
+                html += `<tr>
+                    <td style="width: 50px;">${idx + 1}</td>
+                    <td><strong>${b.nombre}</strong></td>
+                    <td><code>${b.mc}</code></td>
+                    <td><strong>$${formatNumber(b.limite)}</strong></td>`;
                 if (!currentUser?.soloLectura) {
                     html += `<td style="width: 150px;">
-                        <button class="btn btn-success btn-sm" onclick="openIncreaseModal('broker', ${b.id}, '${b.nombre.replace(/'/g, "\\'")}', ${b.limite})">➕ Aumentar</button>
-                        <button class="btn btn-danger btn-sm" onclick="deleteBroker(${b.id})">🗑️ Eliminar</button>
-                    一头`;
+                        <button class="btn btn-success btn-sm" onclick="openIncreaseModal('broker', ${b.id}, '${b.nombre.replace(/'/g, "\\'")}', ${b.limite})">➕ Increase</button>
+                        <button class="btn btn-danger btn-sm" onclick="deleteBroker(${b.id})">🗑️ Delete</button>
+                    </td>`;
                 }
-                html += `)`);
+                html += `</tr>`;
             });
-            html += `</tbody>×`;
+            html += `</tbody></table>`;
             container.innerHTML = html;
         }
         
         function filterBrokers() { renderBrokers(); }
         
         function addBroker() {
-            if (currentUser?.soloLectura) { showToast('No tienes permisos', 'error'); return; }
+            if (currentUser?.soloLectura) { showToast('You do not have permission', 'error'); return; }
             
             const nombre = document.getElementById('newBrokerName').value.trim();
             const mc = document.getElementById('newBrokerMC').value.trim();
             const limite = parseFloat(document.getElementById('newBrokerLimit').value);
             
             if (!nombre || !mc || !limite) {
-                showToast('Complete todos los campos', 'error');
+                showToast('Complete all fields', 'error');
                 return;
             }
             
@@ -1332,23 +1327,23 @@
             
             renderBrokers();
             updateStats();
-            showToast(`✅ Broker "${nombre}" agregado`, 'success');
+            showToast(`✅ Broker "${nombre}" added`, 'success');
         }
         
         function deleteBroker(id) {
-            if (currentUser?.soloLectura) { showToast('No tienes permisos', 'error'); return; }
-            if (confirm('¿Eliminar este broker?')) {
+            if (currentUser?.soloLectura) { showToast('You do not have permission', 'error'); return; }
+            if (confirm('Delete this broker?')) {
                 const broker = brokers.find(b => b.id === id);
                 brokers = brokers.filter(b => b.id !== id);
                 saveData();
                 renderBrokers();
                 updateStats();
-                showToast(`✅ Broker "${broker.nombre}" eliminado`, 'success');
+                showToast(`✅ Broker "${broker.nombre}" deleted`, 'success');
             }
         }
         
         // ============================================
-        // CARRIERS
+        // CARRIERS FUNCTIONS
         // ============================================
         
         function renderCarriers() {
@@ -1357,41 +1352,41 @@
             
             const container = document.getElementById('carriersTable');
             if (!filtered.length) {
-                container.innerHTML = '<div style="text-align:center; padding:40px;">📭 No hay carriers registrados</div>';
+                container.innerHTML = '<div style="text-align:center; padding:40px;">📭 No carriers registered</div>';
                 return;
             }
             
-            let html = `<table class="data-grid"><thead><th>#</th><th>Nombre</th><th>Unidades</th><th>Fecha</th><th>Tipo</th><th>Límite/Unidad</th><th>Límite Total</th>`;
-            if (!currentUser?.soloLectura) html += `<th>Acciones</th>`;
+            let html = `<table class="data-grid"><thead><th>#</th><th>Name</th><th>Units</th><th>Date</th><th>Type</th><th>Limit/Unit</th><th>Total Limit</th>`;
+            if (!currentUser?.soloLectura) html += `<th>Actions</th>`;
             html += `</thead><tbody>`;
             
             filtered.forEach((c, idx) => {
                 const fecha = c.fechaContrato ? new Date(c.fechaContrato).toLocaleDateString('es-ES') : '-';
                 const tipoColor = c.tipoContrato === 'nuevo' ? '#10b981' : '#f59e0b';
-                html += `一头
-                    <td style="width: 50px;">${idx + 1}一头
-                    <td><strong>${c.nombre}</strong>一头
-                    <td style="text-align: center;">${c.powerUnits}一头
-                    <td>${fecha}一头
-                    <td style="color:${tipoColor}">${c.tipoContrato === 'nuevo' ? 'Nuevo (30k)' : 'Viejo (50k)'}一头
-                    <td>$${formatNumber(c.limitePorUnidad)}一头
-                    <td><strong>$${formatNumber(c.limite)}</strong>一头`;
+                html += `<tr>
+                    <td style="width: 50px;">${idx + 1}</td>
+                    <td><strong>${c.nombre}</strong></td>
+                    <td style="text-align: center;">${c.powerUnits}</td>
+                    <td>${fecha}</td>
+                    <td style="color:${tipoColor}">${c.tipoContrato === 'nuevo' ? 'New (30k)' : 'Old (50k)'}</td>
+                    <td>$${formatNumber(c.limitePorUnidad)}</td>
+                    <td><strong>$${formatNumber(c.limite)}</strong></td>`;
                 if (!currentUser?.soloLectura) {
                     html += `<td style="width: 150px;">
-                        <button class="btn btn-success btn-sm" onclick="openIncreaseModal('carrier', ${c.id}, '${c.nombre.replace(/'/g, "\\'")}', ${c.limite})">➕ Aumentar</button>
-                        <button class="btn btn-danger btn-sm" onclick="deleteCarrier(${c.id})">🗑️ Eliminar</button>
-                    一头`;
+                        <button class="btn btn-success btn-sm" onclick="openIncreaseModal('carrier', ${c.id}, '${c.nombre.replace(/'/g, "\\'")}', ${c.limite})">➕ Increase</button>
+                        <button class="btn btn-danger btn-sm" onclick="deleteCarrier(${c.id})">🗑️ Delete</button>
+                    </td>`;
                 }
-                html += `)`);
+                html += `</tr>`;
             });
-            html += `</tbody>×`;
+            html += `</tbody></table>`;
             container.innerHTML = html;
         }
         
         function filterCarriers() { renderCarriers(); }
         
         function addCarrier() {
-            if (currentUser?.soloLectura) { showToast('No tienes permisos', 'error'); return; }
+            if (currentUser?.soloLectura) { showToast('You do not have permission', 'error'); return; }
             
             const nombre = document.getElementById('newCarrierName').value.trim();
             const powerUnits = parseFloat(document.getElementById('newCarrierUnits').value);
@@ -1400,7 +1395,7 @@
             const limite = parseFloat(document.getElementById('newCarrierLimit').value);
             
             if (!nombre || !powerUnits || !limite) {
-                showToast('Complete los campos obligatorios', 'error');
+                showToast('Complete required fields', 'error');
                 return;
             }
             
@@ -1421,28 +1416,28 @@
             
             renderCarriers();
             updateStats();
-            showToast(`✅ Carrier "${nombre}" agregado`, 'success');
+            showToast(`✅ Carrier "${nombre}" added`, 'success');
         }
         
         function deleteCarrier(id) {
-            if (currentUser?.soloLectura) { showToast('No tienes permisos', 'error'); return; }
-            if (confirm('¿Eliminar este carrier?')) {
+            if (currentUser?.soloLectura) { showToast('You do not have permission', 'error'); return; }
+            if (confirm('Delete this carrier?')) {
                 const carrier = carriers.find(c => c.id === id);
                 carriers = carriers.filter(c => c.id !== id);
                 saveData();
                 renderCarriers();
                 updateStats();
-                showToast(`✅ Carrier "${carrier.nombre}" eliminado`, 'success');
+                showToast(`✅ Carrier "${carrier.nombre}" deleted`, 'success');
             }
         }
         
         // ============================================
-        // AUMENTOS E HISTORIAL
+        // INCREASE AND HISTORY
         // ============================================
         
         function openIncreaseModal(type, id, name, currentLimit) {
             if (currentUser?.soloLectura) {
-                showToast('No tienes permisos para realizar aumentos', 'error');
+                showToast('You do not have permission to make increases', 'error');
                 return;
             }
             pendingIncrease = { type, id, name, currentLimit };
@@ -1465,7 +1460,7 @@
             const reason = document.getElementById('modalReason').value;
             
             if (!amount || amount <= 0) {
-                showToast('Ingrese un monto válido', 'error');
+                showToast('Enter a valid amount', 'error');
                 return;
             }
             
@@ -1495,7 +1490,7 @@
                     entidad: pendingIncrease.name,
                     monto: amount,
                     usuario: currentUser.email,
-                    motivo: reason || 'Sin motivo',
+                    motivo: reason || 'No reason provided',
                     limiteAnterior: oldLimit,
                     limiteNuevo: newLimit
                 });
@@ -1508,7 +1503,7 @@
                 renderHistory();
                 updateStats();
                 
-                showToast(`✅ Aumento de $${formatNumber(amount)} aplicado a ${pendingIncrease.name}`, 'success');
+                showToast(`✅ Increase of $${formatNumber(amount)} applied to ${pendingIncrease.name}`, 'success');
             }
         }
         
@@ -1522,7 +1517,7 @@
             
             const container = document.getElementById('historyList');
             if (!filtered.length) {
-                container.innerHTML = '<div style="text-align:center; padding:40px;">📭 No hay registros en el historial</div>';
+                container.innerHTML = '<div style="text-align:center; padding:40px;">📭 No records in history</div>';
                 return;
             }
             
@@ -1549,48 +1544,48 @@
         
         function clearHistory() {
             if (currentUser?.soloLectura) {
-                showToast('No tienes permisos', 'error');
+                showToast('You do not have permission', 'error');
                 return;
             }
-            if (confirm('¿Eliminar todo el historial? Esta acción no se puede deshacer.')) {
+            if (confirm('Delete all history? This action cannot be undone.')) {
                 history = [];
                 saveData();
                 renderHistory();
                 updateStats();
-                showToast('✅ Historial limpiado', 'success');
+                showToast('✅ History cleared', 'success');
             }
         }
         
         // ============================================
-        // EXPORTAR CSV
+        // EXPORT CSV
         // ============================================
         
         function exportBrokersCSV() {
-            let csv = "Nombre,MC,Límite (USD)\n";
+            let csv = "Name,MC,Limit (USD)\n";
             brokers.forEach(b => csv += `"${b.nombre}","${b.mc}",${b.limite}\n`);
             downloadCSV(csv, `brokers_${new Date().toISOString().split('T')[0]}.csv`);
-            showToast(`✅ ${brokers.length} brokers exportados`, 'success');
+            showToast(`✅ ${brokers.length} brokers exported`, 'success');
         }
         
         function exportCarriersCSV() {
-            let csv = "Nombre,Unidades Poder,Fecha Contrato,Tipo Contrato,Límite por Unidad,Límite Total (USD)\n";
+            let csv = "Name,Power Units,Contract Date,Contract Type,Limit per Unit,Total Limit (USD)\n";
             carriers.forEach(c => {
                 const fecha = c.fechaContrato ? new Date(c.fechaContrato).toLocaleDateString('es-ES') : '';
-                const tipo = c.tipoContrato === 'nuevo' ? 'Nuevo (30k)' : 'Viejo (50k)';
+                const tipo = c.tipoContrato === 'nuevo' ? 'New (30k)' : 'Old (50k)';
                 csv += `"${c.nombre}",${c.powerUnits},"${fecha}","${tipo}",${c.limitePorUnidad},${c.limite}\n`;
             });
             downloadCSV(csv, `carriers_${new Date().toISOString().split('T')[0]}.csv`);
-            showToast(`✅ ${carriers.length} carriers exportados`, 'success');
+            showToast(`✅ ${carriers.length} carriers exported`, 'success');
         }
         
         function exportHistoryCSV() {
-            let csv = "Fecha,Tipo,Entidad,Monto,Usuario,Motivo,Límite Anterior,Límite Nuevo\n";
+            let csv = "Date,Type,Entity,Amount,User,Reason,Previous Limit,New Limit\n";
             history.forEach(h => {
                 const fecha = new Date(h.fecha).toLocaleString('es-ES');
                 csv += `"${fecha}","${h.tipo}","${h.entidad}",${h.monto},"${h.usuario}","${h.motivo}",${h.limiteAnterior},${h.limiteNuevo}\n`;
             });
-            downloadCSV(csv, `historial_${new Date().toISOString().split('T')[0]}.csv`);
-            showToast(`✅ ${history.length} registros exportados`, 'success');
+            downloadCSV(csv, `history_${new Date().toISOString().split('T')[0]}.csv`);
+            showToast(`✅ ${history.length} records exported`, 'success');
         }
         
         function downloadCSV(content, filename) {
