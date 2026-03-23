@@ -728,7 +728,7 @@
                 <div class="table-wrapper" id="brokersTable"></div>
             </div>
 
-            <!-- Sección Carriers - CORREGIDA PARA TU FORMATO -->
+            <!-- Sección Carriers - CORREGIDA -->
             <div id="carriersPanel" class="section-panel">
                 <div class="toolbar-section">
                     <h2>🚛 Gestión de Carriers</h2>
@@ -743,7 +743,7 @@
                         <div class="import-icon">📤</div>
                         <div>
                             <div class="import-title">📥 IMPORTAR CARRIERS DESDE CSV</div>
-                            <div class="import-desc">Sube un archivo CSV con el formato de tu archivo: Name, Buy Limit, Unidades de poder, Fecha de contrato</div>
+                            <div class="import-desc">Sube tu archivo de carriers con el formato: Name, Buy Limit, Open A/R, Available, Unidades de poder, Fecha de contrato</div>
                         </div>
                     </div>
                     <div class="import-buttons">
@@ -753,10 +753,6 @@
                     </div>
                     <div id="carrierProgress" class="progress-bar hidden">
                         <div class="progress-fill" id="carrierProgressFill"></div>
-                    </div>
-                    <div class="info-note">
-                        💡 Tu archivo debe tener las columnas: Name, Buy Limit, Open A/R, Available, Unidades de poder, Fecha de contrato<br>
-                        (Se tomará el "Buy Limit" como límite y "Unidades de poder" como unidades)
                     </div>
                 </div>
 
@@ -853,9 +849,9 @@
         let pendingIncrease = null;
         
         function loadData() {
-            const savedBrokers = localStorage.getItem('nuko_brokers_v2');
-            const savedCarriers = localStorage.getItem('nuko_carriers_v2');
-            const savedHistory = localStorage.getItem('nuko_history_v2');
+            const savedBrokers = localStorage.getItem('nuko_brokers_final_v3');
+            const savedCarriers = localStorage.getItem('nuko_carriers_final_v3');
+            const savedHistory = localStorage.getItem('nuko_history_final_v3');
             
             if (savedBrokers) {
                 brokers = JSON.parse(savedBrokers);
@@ -891,9 +887,9 @@
         }
         
         function saveData() {
-            localStorage.setItem('nuko_brokers_v2', JSON.stringify(brokers));
-            localStorage.setItem('nuko_carriers_v2', JSON.stringify(carriers));
-            localStorage.setItem('nuko_history_v2', JSON.stringify(history));
+            localStorage.setItem('nuko_brokers_final_v3', JSON.stringify(brokers));
+            localStorage.setItem('nuko_carriers_final_v3', JSON.stringify(carriers));
+            localStorage.setItem('nuko_history_final_v3', JSON.stringify(history));
         }
         
         function formatNumber(num) {
@@ -904,7 +900,7 @@
         function limpiarNumero(valor) {
             if (!valor && valor !== 0) return 0;
             if (typeof valor === 'number') return valor;
-            let str = valor.toString().replace(/[$,]/g, '').trim();
+            let str = valor.toString().replace(/[$,]/g, '').replace(/"/g, '').trim();
             let num = parseFloat(str);
             return isNaN(num) ? 0 : num;
         }
@@ -916,7 +912,7 @@
             toast.style.display = 'block';
             setTimeout(() => {
                 toast.style.display = 'none';
-            }, 4000);
+            }, 5000);
         }
         
         function updateStats() {
@@ -1017,9 +1013,29 @@
         // ============================================
         
         function downloadCarrierTemplate() {
-            const template = "Name,Buy Limit,Open A/R,Available,Unidades de poder,Fecha de contrato\n\"042 FREIGHT LLC\",10000,0,\"10,000.00\",1,\"2024-03-11\"\n\"1 HAUL INC\",5000,0,\"5,000.00\",2,\"2021-08-27\"\n\"1STGEN LOGISTIC LLC\",25000,0,\"25,000.00\",1,\"2025-11-26\"";
+            const template = "Name,Buy Limit,Open A/R,Available,Unidades de poder,Fecha de contrato\n\"042 FREIGHT LLC\",10000,0,\"10,000.00\",1,\"3/11/2024\"\n\"1 HAUL INC\",5000,0,\"5,000.00\",2,\"8/27/2021\"\n\"1STGEN LOGISTIC LLC\",25000,0,\"25,000.00\",1,\"11/26/2025\"";
             downloadCSV(template, "plantilla_carriers.csv");
             showToast('📄 Plantilla descargada con el formato correcto', 'info');
+        }
+        
+        function parseCSVLine(line) {
+            const result = [];
+            let current = '';
+            let inQuotes = false;
+            
+            for (let i = 0; i < line.length; i++) {
+                const char = line[i];
+                if (char === '"') {
+                    inQuotes = !inQuotes;
+                } else if (char === ',' && !inQuotes) {
+                    result.push(current.trim());
+                    current = '';
+                } else {
+                    current += char;
+                }
+            }
+            result.push(current.trim());
+            return result;
         }
         
         function importCarriersCSV(input) {
@@ -1047,94 +1063,75 @@
                 const existingIds = carriers.map(c => c.id);
                 let nextId = existingIds.length > 0 ? Math.max(...existingIds) + 1 : 1;
                 
-                // Saltar encabezado (primera línea)
+                // Saltar encabezado
                 for (let i = 1; i < lines.length; i++) {
                     const line = lines[i].trim();
                     if (!line) continue;
                     
-                    // Dividir por coma respetando comillas
-                    const parts = [];
-                    let current = '';
-                    let inQuotes = false;
-                    
-                    for (let j = 0; j < line.length; j++) {
-                        const char = line[j];
-                        if (char === '"') {
-                            inQuotes = !inQuotes;
-                        } else if (char === ',' && !inQuotes) {
-                            parts.push(current.trim());
-                            current = '';
-                        } else {
-                            current += char;
-                        }
-                    }
-                    parts.push(current.trim());
-                    
-                    if (parts.length >= 6) {
-                        const nombre = parts[0].replace(/^"|"$/g, '').trim();
-                        const buyLimit = limpiarNumero(parts[1]);
-                        const powerUnits = limpiarNumero(parts[4]);
-                        let fechaContrato = parts[5].replace(/^"|"$/g, '').trim();
+                    try {
+                        const parts = parseCSVLine(line);
                         
-                        // Convertir fecha a formato YYYY-MM-DD
-                        if (fechaContrato && fechaContrato.includes('/')) {
-                            const fechaParts = fechaContrato.split('/');
-                            if (fechaParts.length === 3) {
-                                fechaContrato = `${fechaParts[2]}-${fechaParts[0].padStart(2, '0')}-${fechaParts[1].padStart(2, '0')}`;
+                        if (parts.length >= 6) {
+                            let nombre = parts[0].replace(/^"|"$/g, '').trim();
+                            let buyLimit = limpiarNumero(parts[1]);
+                            let powerUnitsRaw = parts[4].replace(/^"|"$/g, '').trim();
+                            let powerUnits = limpiarNumero(powerUnitsRaw);
+                            let fechaRaw = parts[5].replace(/^"|"$/g, '').trim();
+                            
+                            // Si powerUnits está vacío o es 0, poner 1 por defecto
+                            if (powerUnits === 0 && nombre) {
+                                powerUnits = 1;
                             }
-                        }
-                        
-                        // Determinar tipo de contrato basado en fecha (después de 2024-07-01 es nuevo)
-                        let tipoContrato = 'viejo';
-                        let limitePorUnidad = 50000;
-                        
-                        if (fechaContrato) {
-                            const fecha = new Date(fechaContrato);
-                            const fechaLimite = new Date('2024-07-01');
-                            if (!isNaN(fecha) && fecha >= fechaLimite) {
-                                tipoContrato = 'nuevo';
-                                limitePorUnidad = 30000;
+                            
+                            // Convertir fecha de MM/DD/YYYY a YYYY-MM-DD
+                            let fechaContrato = null;
+                            if (fechaRaw && fechaRaw !== '') {
+                                const fechaParts = fechaRaw.split('/');
+                                if (fechaParts.length === 3) {
+                                    fechaContrato = `${fechaParts[2]}-${fechaParts[0].padStart(2, '0')}-${fechaParts[1].padStart(2, '0')}`;
+                                } else {
+                                    fechaContrato = fechaRaw;
+                                }
                             }
-                        }
-                        
-                        if (nombre && buyLimit > 0) {
-                            const exists = carriers.some(c => c.nombre === nombre);
-                            if (!exists) {
-                                carriers.push({
-                                    id: nextId++,
-                                    nombre: nombre,
-                                    powerUnits: powerUnits || 1,
-                                    fechaContrato: fechaContrato || null,
-                                    tipoContrato: tipoContrato,
-                                    limitePorUnidad: limitePorUnidad,
-                                    limite: buyLimit
-                                });
-                                added++;
+                            
+                            // Determinar tipo de contrato basado en fecha
+                            let tipoContrato = 'viejo';
+                            let limitePorUnidad = 50000;
+                            
+                            if (fechaContrato) {
+                                const fecha = new Date(fechaContrato);
+                                const fechaLimite = new Date('2024-07-01');
+                                if (!isNaN(fecha) && fecha >= fechaLimite) {
+                                    tipoContrato = 'nuevo';
+                                    limitePorUnidad = 30000;
+                                }
+                            }
+                            
+                            if (nombre && nombre !== '' && nombre !== 'Name') {
+                                const exists = carriers.some(c => c.nombre === nombre);
+                                if (!exists) {
+                                    carriers.push({
+                                        id: nextId++,
+                                        nombre: nombre,
+                                        powerUnits: powerUnits || 1,
+                                        fechaContrato: fechaContrato,
+                                        tipoContrato: tipoContrato,
+                                        limitePorUnidad: limitePorUnidad,
+                                        limite: buyLimit
+                                    });
+                                    added++;
+                                } else {
+                                    skipped++;
+                                }
                             } else {
-                                skipped++;
-                            }
-                        } else if (nombre && buyLimit === 0) {
-                            // También agregar carriers con límite 0
-                            const exists = carriers.some(c => c.nombre === nombre);
-                            if (!exists) {
-                                carriers.push({
-                                    id: nextId++,
-                                    nombre: nombre,
-                                    powerUnits: powerUnits || 1,
-                                    fechaContrato: fechaContrato || null,
-                                    tipoContrato: tipoContrato,
-                                    limitePorUnidad: limitePorUnidad,
-                                    limite: 0
-                                });
-                                added++;
-                            } else {
-                                skipped++;
+                                errors++;
                             }
                         } else {
                             errors++;
                         }
-                    } else {
+                    } catch (err) {
                         errors++;
+                        console.log('Error procesando línea:', line, err);
                     }
                     
                     const progress = (i / lines.length) * 100;
@@ -1305,9 +1302,9 @@
                         <button class="btn btn-danger btn-sm" onclick="deleteBroker(${b.id})">🗑️ Eliminar</button>
                     一头`;
                 }
-                html += `</tr>`;
+                html += `)`);
             });
-            html += `</tbody></table>`;
+            html += `</tbody>×`;
             container.innerHTML = html;
         }
         
@@ -1385,9 +1382,9 @@
                         <button class="btn btn-danger btn-sm" onclick="deleteCarrier(${c.id})">🗑️ Eliminar</button>
                     一头`;
                 }
-                html += `</tr>`;
+                html += `)`);
             });
-            html += `</tbody></table>`;
+            html += `</tbody>×`;
             container.innerHTML = html;
         }
         
