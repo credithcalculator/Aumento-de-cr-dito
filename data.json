@@ -3,60 +3,8 @@
     {
       "id": 1,
       "nombre": "DELTA DEDICATED LLC",
-      "mc": 704324,
+      "mc": "704324",
       "limite": 5000,
-      "ar": 0,
-      "firstInvoice": null,
-      "latestInvoice": null,
-      "expirationDate": null,
-      "nsf": "No",
-      "originals": "",
-      "restricted": "No"
-    },
-    {
-      "id": 2,
-      "nombre": "1 SOLUTION LOGISTICS",
-      "mc": 157327,
-      "limite": 0,
-      "ar": 0,
-      "firstInvoice": null,
-      "latestInvoice": null,
-      "expirationDate": null,
-      "nsf": "No",
-      "originals": "",
-      "restricted": "No"
-    },
-    {
-      "id": 3,
-      "nombre": "10-4 LOGISTICS LLC",
-      "mc": 27505,
-      "limite": 15000,
-      "ar": 0,
-      "firstInvoice": null,
-      "latestInvoice": null,
-      "expirationDate": null,
-      "nsf": "No",
-      "originals": "",
-      "restricted": "No"
-    },
-    {
-      "id": 4,
-      "nombre": "1ST CHOICE FREIGHT LLC",
-      "mc": 1341565,
-      "limite": 10000,
-      "ar": 0,
-      "firstInvoice": null,
-      "latestInvoice": null,
-      "expirationDate": null,
-      "nsf": "No",
-      "originals": "",
-      "restricted": "No"
-    },
-    {
-      "id": 5,
-      "nombre": "1ST CHOICE LOGISTICS LC",
-      "mc": 586997,
-      "limite": 26000,
       "ar": 0,
       "firstInvoice": null,
       "latestInvoice": null,
@@ -70,32 +18,12 @@
     {
       "id": 1,
       "nombre": "042 FREIGHT LLC",
-      "limite": 1,
+      "limite": 10000,
       "openAR": 0,
       "powerUnits": 1,
-      "fechaContrato": 10000,
-      "tipoContrato": "viejo",
-      "limitePorUnidad": 50000
-    },
-    {
-      "id": 2,
-      "nombre": "1 HAUL INC",
-      "limite": 2,
-      "openAR": 0,
-      "powerUnits": 1,
-      "fechaContrato": 5000,
-      "tipoContrato": "viejo",
-      "limitePorUnidad": 50000
-    },
-    {
-      "id": 3,
-      "nombre": "1STGEN LOGISTIC LLC",
-      "limite": 1,
-      "openAR": 0,
-      "powerUnits": 1,
-      "fechaContrato": 25000,
-      "tipoContrato": "viejo",
-      "limitePorUnidad": 50000
+      "fechaContrato": "2024-03-11",
+      "tipoContrato": "nuevo",
+      "limitePorUnidad": 30000
     }
   ],
   "history": []
