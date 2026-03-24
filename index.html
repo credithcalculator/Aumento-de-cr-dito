@@ -1293,7 +1293,6 @@
             document.getElementById('loginContainer').style.display = 'none';
             document.getElementById('dashboardContainer').style.display = 'block';
             
-            // SOLO VALERIA no puede cambiar contraseña
             const changePasswordBtn = document.querySelector('.btn-change-password');
             if (changePasswordBtn) {
                 if (currentUser.email === 'valeria.romero@nukocapital.com') {
@@ -1314,7 +1313,6 @@
                 carrierImportArea.style.display = 'none';
             }
             
-            // OCULTAR FORMULARIOS DE AGREGAR INDIVIDUAL PARA VALERIA (solo lectura)
             const brokerAddForm = document.getElementById('brokerAddForm');
             const carrierAddForm = document.getElementById('carrierAddForm');
             
@@ -1514,55 +1512,79 @@
                             let powerUnits = cleanNumber(parts[2]);
                             let fechaRaw = parts[3].replace(/^"|"$/g, '').trim();
                             
-                            if (powerUnits === 0 && nombre) {
+                            // Validar que el nombre no esté vacío
+                            if (!nombre || nombre === '' || nombre.toLowerCase() === 'name') {
+                                errors++;
+                                continue;
+                            }
+                            
+                            // Si powerUnits es 0 o NaN, asignar 1 por defecto
+                            if (isNaN(powerUnits) || powerUnits === 0) {
                                 powerUnits = 1;
                             }
                             
+                            // Procesar la fecha de contrato
                             let fechaContrato = null;
-                            if (fechaRaw && fechaRaw !== '') {
-                                const fechaParts = fechaRaw.split('/');
-                                if (fechaParts.length === 3) {
-                                    fechaContrato = `${fechaParts[2]}-${fechaParts[0].padStart(2, '0')}-${fechaParts[1].padStart(2, '0')}`;
-                                } else {
-                                    fechaContrato = fechaRaw;
-                                }
-                            }
-                            
                             let tipoContrato = 'viejo';
                             let limitePorUnidad = 50000;
                             
-                            if (fechaContrato) {
-                                const fecha = new Date(fechaContrato);
-                                const fechaLimite = new Date('2024-07-01');
-                                if (!isNaN(fecha) && fecha >= fechaLimite) {
-                                    tipoContrato = 'nuevo';
-                                    limitePorUnidad = 30000;
+                            if (fechaRaw && fechaRaw !== '' && fechaRaw.toLowerCase() !== 'contract date') {
+                                let fechaObj = null;
+                                
+                                // Formato YYYY-MM-DD
+                                if (fechaRaw.match(/^\d{4}-\d{2}-\d{2}$/)) {
+                                    fechaObj = new Date(fechaRaw);
+                                }
+                                // Formato DD/MM/YYYY
+                                else if (fechaRaw.match(/^\d{2}\/\d{2}\/\d{4}$/)) {
+                                    const partesFecha = fechaRaw.split('/');
+                                    fechaObj = new Date(partesFecha[2], partesFecha[1] - 1, partesFecha[0]);
+                                }
+                                // Formato MM/DD/YYYY
+                                else if (fechaRaw.match(/^\d{1,2}\/\d{1,2}\/\d{4}$/)) {
+                                    const partesFecha = fechaRaw.split('/');
+                                    fechaObj = new Date(partesFecha[2], partesFecha[0] - 1, partesFecha[1]);
+                                }
+                                // Intentar crear fecha directamente
+                                else {
+                                    fechaObj = new Date(fechaRaw);
+                                }
+                                
+                                if (!isNaN(fechaObj)) {
+                                    fechaContrato = fechaObj.toISOString().split('T')[0];
+                                    const fechaLimite = new Date('2024-07-01');
+                                    
+                                    if (fechaObj >= fechaLimite) {
+                                        tipoContrato = 'nuevo';
+                                        limitePorUnidad = 30000;
+                                    } else {
+                                        tipoContrato = 'viejo';
+                                        limitePorUnidad = 50000;
+                                    }
                                 }
                             }
                             
-                            if (nombre && nombre !== '' && nombre !== 'Name') {
-                                const exists = carriers.some(c => c.nombre === nombre);
-                                if (!exists) {
-                                    carriers.push({
-                                        id: nextId++,
-                                        nombre: nombre,
-                                        powerUnits: powerUnits || 1,
-                                        fechaContrato: fechaContrato,
-                                        tipoContrato: tipoContrato,
-                                        limitePorUnidad: limitePorUnidad,
-                                        limite: buyLimit
-                                    });
-                                    added++;
-                                } else {
-                                    skipped++;
-                                }
+                            // Verificar si el carrier ya existe
+                            const exists = carriers.some(c => c.nombre === nombre);
+                            if (!exists) {
+                                carriers.push({
+                                    id: nextId++,
+                                    nombre: nombre,
+                                    powerUnits: powerUnits,
+                                    fechaContrato: fechaContrato,
+                                    tipoContrato: tipoContrato,
+                                    limitePorUnidad: limitePorUnidad,
+                                    limite: buyLimit
+                                });
+                                added++;
                             } else {
-                                errors++;
+                                skipped++;
                             }
                         } else {
                             errors++;
                         }
                     } catch (err) {
+                        console.error('Error parsing line:', err);
                         errors++;
                     }
                     
