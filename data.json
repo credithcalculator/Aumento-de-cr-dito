@@ -1,0 +1,64 @@
+{
+  "brokers": [
+    {
+      "id": 1,
+      "nombre": "DELTA DEDICATED LLC",
+      "mc": "704324",
+      "limite": 5000
+    },
+    {
+      "id": 2,
+      "nombre": "1 SOLUTION LOGISTICS",
+      "mc": "157327",
+      "limite": 0
+    },
+    {
+      "id": 3,
+      "nombre": "10-4 LOGISTICS LLC",
+      "mc": "27505",
+      "limite": 15000
+    },
+    {
+      "id": 4,
+      "nombre": "1ST CHOICE FREIGHT LLC",
+      "mc": "1341565",
+      "limite": 10000
+    },
+    {
+      "id": 5,
+      "nombre": "1ST CHOICE LOGISTICS LC",
+      "mc": "586997",
+      "limite": 26000
+    }
+  ],
+  "carriers": [
+    {
+      "id": 1,
+      "nombre": "042 FREIGHT LLC",
+      "powerUnits": 1,
+      "fechaContrato": "2024-03-11",
+      "tipoContrato": "nuevo",
+      "limitePorUnidad": 30000,
+      "limite": 10000
+    },
+    {
+      "id": 2,
+      "nombre": "1 HAUL INC",
+      "powerUnits": 2,
+      "fechaContrato": "2021-08-27",
+      "tipoContrato": "viejo",
+      "limitePorUnidad": 50000,
+      "limite": 5000
+    },
+    {
+      "id": 3,
+      "nombre": "1STGEN LOGISTIC LLC",
+      "powerUnits": 1,
+      "fechaContrato": "2025-11-26",
+      "tipoContrato": "nuevo",
+      "limitePorUnidad": 30000,
+      "limite": 25000
+    }
+  ],
+  "history": []
+}
