@@ -12,6 +12,58 @@
       "nsf": "No",
       "originals": "",
       "restricted": "No"
+    },
+    {
+      "id": 2,
+      "nombre": "1 SOLUTION LOGISTICS",
+      "mc": "157327",
+      "limite": 0,
+      "ar": 0,
+      "firstInvoice": null,
+      "latestInvoice": null,
+      "expirationDate": null,
+      "nsf": "No",
+      "originals": "",
+      "restricted": "No"
+    },
+    {
+      "id": 3,
+      "nombre": "10-4 LOGISTICS LLC",
+      "mc": "27505",
+      "limite": 15000,
+      "ar": 0,
+      "firstInvoice": null,
+      "latestInvoice": null,
+      "expirationDate": null,
+      "nsf": "No",
+      "originals": "",
+      "restricted": "No"
+    },
+    {
+      "id": 4,
+      "nombre": "1ST CHOICE FREIGHT LLC",
+      "mc": "1341565",
+      "limite": 10000,
+      "ar": 0,
+      "firstInvoice": null,
+      "latestInvoice": null,
+      "expirationDate": null,
+      "nsf": "No",
+      "originals": "",
+      "restricted": "No"
+    },
+    {
+      "id": 5,
+      "nombre": "1ST CHOICE LOGISTICS LC",
+      "mc": "586997",
+      "limite": 26000,
+      "ar": 0,
+      "firstInvoice": null,
+      "latestInvoice": null,
+      "expirationDate": null,
+      "nsf": "No",
+      "originals": "",
+      "restricted": "No"
     }
   ],
   "carriers": [
@@ -22,6 +74,26 @@
       "openAR": 0,
       "powerUnits": 1,
       "fechaContrato": "2024-03-11",
+      "tipoContrato": "nuevo",
+      "limitePorUnidad": 30000
+    },
+    {
+      "id": 2,
+      "nombre": "1 HAUL INC",
+      "limite": 5000,
+      "openAR": 0,
+      "powerUnits": 2,
+      "fechaContrato": "2021-08-27",
+      "tipoContrato": "viejo",
+      "limitePorUnidad": 50000
+    },
+    {
+      "id": 3,
+      "nombre": "1STGEN LOGISTIC LLC",
+      "limite": 25000,
+      "openAR": 0,
+      "powerUnits": 1,
+      "fechaContrato": "2025-11-26",
       "tipoContrato": "nuevo",
       "limitePorUnidad": 30000
     }
