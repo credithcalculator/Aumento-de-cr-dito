@@ -695,6 +695,19 @@
         .carrier-fields.hidden-fields {
             display: none;
         }
+        
+        .debug-console {
+            background: #1e293b;
+            color: #10b981;
+            font-family: monospace;
+            font-size: 11px;
+            padding: 10px;
+            margin-top: 10px;
+            border-radius: 8px;
+            max-height: 200px;
+            overflow-y: auto;
+            display: none;
+        }
     </style>
 </head>
 <body>
@@ -839,6 +852,7 @@
                     <div id="carrierProgress" class="progress-bar hidden">
                         <div class="progress-fill" id="carrierProgressFill"></div>
                     </div>
+                    <div id="debugInfo" class="debug-console"></div>
                 </div>
 
                 <!-- Formulario para agregar individual - SOLO PARA NO LECTURA -->
@@ -1048,6 +1062,29 @@
             setTimeout(() => {
                 toast.style.display = 'none';
             }, 5000);
+        }
+        
+        function addDebugLog(message) {
+            const debugDiv = document.getElementById('debugInfo');
+            if (debugDiv) {
+                debugDiv.style.display = 'block';
+                const timestamp = new Date().toLocaleTimeString();
+                debugDiv.innerHTML += `<div>[${timestamp}] ${message}</div>`;
+                debugDiv.scrollTop = debugDiv.scrollHeight;
+                // Limitar a 50 líneas
+                if (debugDiv.children.length > 50) {
+                    debugDiv.removeChild(debugDiv.firstChild);
+                }
+            }
+            console.log(message);
+        }
+        
+        function clearDebugLog() {
+            const debugDiv = document.getElementById('debugInfo');
+            if (debugDiv) {
+                debugDiv.innerHTML = '';
+                debugDiv.style.display = 'none';
+            }
         }
         
         function updateStats() {
@@ -1480,13 +1517,20 @@
                 return;
             }
             
+            clearDebugLog();
+            addDebugLog('=== INICIANDO IMPORTACIÓN DE CARRIERS ===');
+            
             const file = input.files[0];
             if (!file) return;
+            
+            addDebugLog(`Archivo seleccionado: ${file.name}`);
             
             const reader = new FileReader();
             reader.onload = function(e) {
                 const content = e.target.result;
                 const lines = content.split('\n');
+                
+                addDebugLog(`Total líneas en el archivo: ${lines.length}`);
                 
                 let added = 0;
                 let errors = 0;
@@ -1499,12 +1543,20 @@
                 const existingIds = carriers.map(c => c.id);
                 let nextId = existingIds.length > 0 ? Math.max(...existingIds) + 1 : 1;
                 
+                // Mostrar la primera línea para ver el encabezado
+                if (lines.length > 0) {
+                    addDebugLog(`Encabezado (línea 1): "${lines[0].trim()}"`);
+                }
+                
                 for (let i = 1; i < lines.length; i++) {
                     const line = lines[i].trim();
                     if (!line) continue;
                     
+                    addDebugLog(`--- Procesando línea ${i}: "${line}" ---`);
+                    
                     try {
                         const parts = parseCSVLine(line);
+                        addDebugLog(`Columnas encontradas (${parts.length}): ${JSON.stringify(parts)}`);
                         
                         if (parts.length >= 4) {
                             let nombre = parts[0].replace(/^"|"$/g, '').trim();
@@ -1512,14 +1564,18 @@
                             let powerUnits = cleanNumber(parts[2]);
                             let fechaRaw = parts[3].replace(/^"|"$/g, '').trim();
                             
+                            addDebugLog(`Datos extraídos - Nombre: "${nombre}", BuyLimit: ${buyLimit}, PowerUnits: ${powerUnits}, Fecha: "${fechaRaw}"`);
+                            
                             // Validar que el nombre no esté vacío
                             if (!nombre || nombre === '' || nombre.toLowerCase() === 'name') {
+                                addDebugLog(`❌ ERROR: Nombre inválido o vacío`);
                                 errors++;
                                 continue;
                             }
                             
                             // Si powerUnits es 0 o NaN, asignar 1 por defecto
                             if (isNaN(powerUnits) || powerUnits === 0) {
+                                addDebugLog(`⚠️ PowerUnits inválido (${powerUnits}), se asigna 1 por defecto`);
                                 powerUnits = 1;
                             }
                             
@@ -1531,22 +1587,27 @@
                             if (fechaRaw && fechaRaw !== '' && fechaRaw.toLowerCase() !== 'contract date') {
                                 let fechaObj = null;
                                 
+                                // Intentar diferentes formatos de fecha
                                 // Formato YYYY-MM-DD
                                 if (fechaRaw.match(/^\d{4}-\d{2}-\d{2}$/)) {
+                                    addDebugLog(`Detectado formato YYYY-MM-DD: ${fechaRaw}`);
                                     fechaObj = new Date(fechaRaw);
                                 }
                                 // Formato DD/MM/YYYY
                                 else if (fechaRaw.match(/^\d{2}\/\d{2}\/\d{4}$/)) {
+                                    addDebugLog(`Detectado formato DD/MM/YYYY: ${fechaRaw}`);
                                     const partesFecha = fechaRaw.split('/');
                                     fechaObj = new Date(partesFecha[2], partesFecha[1] - 1, partesFecha[0]);
                                 }
                                 // Formato MM/DD/YYYY
                                 else if (fechaRaw.match(/^\d{1,2}\/\d{1,2}\/\d{4}$/)) {
+                                    addDebugLog(`Detectado formato MM/DD/YYYY: ${fechaRaw}`);
                                     const partesFecha = fechaRaw.split('/');
                                     fechaObj = new Date(partesFecha[2], partesFecha[0] - 1, partesFecha[1]);
                                 }
                                 // Intentar crear fecha directamente
                                 else {
+                                    addDebugLog(`Intentando parsear fecha directamente: ${fechaRaw}`);
                                     fechaObj = new Date(fechaRaw);
                                 }
                                 
@@ -1554,20 +1615,32 @@
                                     fechaContrato = fechaObj.toISOString().split('T')[0];
                                     const fechaLimite = new Date('2024-07-01');
                                     
+                                    addDebugLog(`Fecha parseada: ${fechaContrato}, comparando con fecha límite: 2024-07-01`);
+                                    
                                     if (fechaObj >= fechaLimite) {
                                         tipoContrato = 'nuevo';
                                         limitePorUnidad = 30000;
+                                        addDebugLog(`✅ Contrato NUEVO (después del 01/07/2024) - Límite por unidad: ${limitePorUnidad}`);
                                     } else {
                                         tipoContrato = 'viejo';
                                         limitePorUnidad = 50000;
+                                        addDebugLog(`✅ Contrato VIEJO (antes del 01/07/2024) - Límite por unidad: ${limitePorUnidad}`);
                                     }
+                                } else {
+                                    addDebugLog(`⚠️ No se pudo parsear la fecha: "${fechaRaw}", usando tipo viejo por defecto`);
+                                    tipoContrato = 'viejo';
+                                    limitePorUnidad = 50000;
                                 }
+                            } else {
+                                addDebugLog(`⚠️ Sin fecha de contrato válida, usando tipo viejo por defecto`);
+                                tipoContrato = 'viejo';
+                                limitePorUnidad = 50000;
                             }
                             
                             // Verificar si el carrier ya existe
                             const exists = carriers.some(c => c.nombre === nombre);
                             if (!exists) {
-                                carriers.push({
+                                const newCarrier = {
                                     id: nextId++,
                                     nombre: nombre,
                                     powerUnits: powerUnits,
@@ -1575,16 +1648,20 @@
                                     tipoContrato: tipoContrato,
                                     limitePorUnidad: limitePorUnidad,
                                     limite: buyLimit
-                                });
+                                };
+                                carriers.push(newCarrier);
                                 added++;
+                                addDebugLog(`✅ Carrier AGREGADO: ${nombre} | Units: ${powerUnits} | Tipo: ${tipoContrato} | Límite: ${buyLimit}`);
                             } else {
                                 skipped++;
+                                addDebugLog(`⚠️ Carrier DUPLICADO: ${nombre} - omitido`);
                             }
                         } else {
+                            addDebugLog(`❌ ERROR: Se esperaban al menos 4 columnas, se encontraron ${parts.length}`);
                             errors++;
                         }
                     } catch (err) {
-                        console.error('Error parsing line:', err);
+                        addDebugLog(`❌ ERROR al procesar línea: ${err.message}`);
                         errors++;
                     }
                     
@@ -1599,6 +1676,11 @@
                 progressBar.classList.add('hidden');
                 progressFill.style.width = '0%';
                 input.value = '';
+                
+                addDebugLog(`=== IMPORTACIÓN FINALIZADA ===`);
+                addDebugLog(`✅ Agregados: ${added}`);
+                addDebugLog(`⚠️ Duplicados omitidos: ${skipped}`);
+                addDebugLog(`❌ Errores: ${errors}`);
                 
                 showToast(`Import completed: ${added} carriers added, ${skipped} duplicates skipped, ${errors} errors`, 'success');
             };
@@ -1798,12 +1880,10 @@
         }
         
         // ============================================
-        // INCREASE MODAL - CORREGIDO
+        // INCREASE MODAL
         // ============================================
         
         function openIncreaseModal(type, id, name, currentLimit, powerUnits, tipoContrato) {
-            console.log("Opening modal for:", type, id, name);
-            
             if (currentUser?.soloLectura) {
                 showToast('You do not have permission to make increases', 'error');
                 return;
